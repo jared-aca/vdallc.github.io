@@ -1,3 +1,4 @@
+<!-- index.html (replace entire file) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,12 +9,21 @@
 
   <style>
     :root{
-      --bg: #0b1220;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.10);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --border: rgba(255,255,255,.14);
+      /* USA + Coyote palette */
+      --bg: #0a1f44;                /* navy */
+      --bg2: #071632;               /* deeper navy */
+      --red: #b22234;               /* old glory red */
+      --blue: #0a1f44;              /* navy */
+      --offwhite: #f5f5f5;          /* off-white */
+      --coyote: #7a5c3a;            /* coyote brown */
+      --tan: #b38b5d;               /* muted tan accent */
+
+      --card: rgba(245,245,245,.06);
+      --card2: rgba(245,245,245,.10);
+      --text: rgba(245,245,245,.94);
+      --muted: rgba(245,245,245,.72);
+      --border: rgba(245,245,245,.14);
+      --border2: rgba(179,139,93,.22);
       --shadow: 0 20px 60px rgba(0,0,0,.45);
       --radius: 18px;
       --radius2: 14px;
@@ -27,10 +37,10 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--text);
       background:
-        radial-gradient(900px 500px at 20% 10%, rgba(76,195,255,.18), transparent 55%),
-        radial-gradient(900px 520px at 90% 0%, rgba(255,179,0,.10), transparent 52%),
-        radial-gradient(900px 600px at 60% 110%, rgba(116,255,175,.10), transparent 60%),
-        var(--bg);
+        radial-gradient(900px 520px at 18% 8%, rgba(178,34,52,.22), transparent 56%),
+        radial-gradient(900px 520px at 90% 0%, rgba(122,92,58,.18), transparent 54%),
+        radial-gradient(900px 620px at 60% 112%, rgba(245,245,245,.08), transparent 62%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
       line-height: 1.55;
     }
 
@@ -49,7 +59,7 @@
     }
     .logo{
       width: 38px; height: 38px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(76,195,255,.9), rgba(255,179,0,.75));
+      background: linear-gradient(135deg, rgba(178,34,52,.95), rgba(179,139,93,.85));
       box-shadow: 0 12px 30px rgba(0,0,0,.35);
     }
     .nav{
@@ -57,12 +67,16 @@
       color: var(--muted); font-weight: 600; font-size: 14px;
     }
     .nav a{ padding: 8px 10px; border-radius: 10px; }
-    .nav a:hover{ background: rgba(255,255,255,.06); text-decoration: none; color: var(--text); }
+    .nav a:hover{
+      background: rgba(245,245,245,.06);
+      text-decoration: none;
+      color: var(--text);
+    }
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.06);
+      background: rgba(245,245,245,.06);
       color: var(--text);
       border-radius: 12px;
       padding: 10px 14px;
@@ -72,22 +86,22 @@
       white-space: nowrap;
     }
     .btn:hover{
-      background: rgba(255,255,255,.10);
-      border-color: rgba(255,255,255,.22);
+      background: rgba(245,245,245,.10);
+      border-color: rgba(245,245,245,.22);
       transform: translateY(-1px);
       text-decoration: none;
     }
     .btn.primary{
       border: none;
-      background: linear-gradient(135deg, rgba(76,195,255,.95), rgba(255,179,0,.85));
+      background: linear-gradient(135deg, rgba(178,34,52,.98), rgba(179,139,93,.92));
       color: #0b1220;
     }
 
     .hero{
       margin-top: 10px;
       border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border: 1px solid rgba(245,245,245,.10);
+      background: linear-gradient(180deg, rgba(245,245,245,.08), rgba(245,245,245,.04));
       box-shadow: var(--shadow);
       overflow: hidden;
       position: relative;
@@ -95,43 +109,44 @@
     .hero::before{
       content:"";
       position:absolute; inset: -120px -120px auto auto;
-      width: 320px; height: 320px;
-      background: radial-gradient(circle at 30% 30%, rgba(76,195,255,.35), transparent 55%);
+      width: 360px; height: 360px;
+      background: radial-gradient(circle at 30% 30%, rgba(178,34,52,.30), transparent 58%);
       filter: blur(2px);
       pointer-events: none;
     }
-    
     .hero::after{
       content:"";
-      position:absolute; inset: auto auto -120px -120px;
-      width: 380px; height: 380px;
-      background: radial-gradient(circle at 40% 40%, rgba(255,179,0,.20), transparent 60%);
+      position:absolute; inset: auto auto -140px -140px;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle at 40% 40%, rgba(122,92,58,.22), transparent 62%);
       pointer-events: none;
     }
 
     .hero-inner{
-      position: relative; z-index: 1;  }
+      position: relative;
+      z-index: 1;
       padding: 34px 28px;
       display: grid;
       grid-template-columns: 1.35fr .65fr;
       gap: 22px;
     }
+
     .kicker{
       display:inline-flex; gap: 10px; align-items:center;
-      color: rgba(255,255,255,.78);
+      color: rgba(245,245,245,.80);
       font-weight: 700;
       letter-spacing: .25px;
       font-size: 13px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(245,245,245,.06);
+      border: 1px solid rgba(179,139,93,.22);
       padding: 8px 12px;
       border-radius: 999px;
       width: fit-content;
     }
     .dot{
       width: 8px; height: 8px; border-radius: 999px;
-      background: rgba(116,255,175,.85);
-      box-shadow: 0 0 0 6px rgba(116,255,175,.12);
+      background: rgba(179,139,93,.92);
+      box-shadow: 0 0 0 6px rgba(179,139,93,.14);
     }
     h1{
       margin: 14px 0 10px;
@@ -152,27 +167,27 @@
       align-items:center;
     }
     .mini{
-      color: rgba(255,255,255,.68);
+      color: rgba(245,245,245,.70);
       font-size: 13px;
     }
     .panel{
       border-radius: var(--radius2);
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(179,139,93,.24);
+      background: rgba(245,245,245,.06);
       padding: 14px;
     }
     .panel h3{
       margin: 0 0 10px;
       font-size: 14px;
       letter-spacing: .2px;
-      color: rgba(255,255,255,.86);
+      color: rgba(245,245,245,.90);
     }
     .pill{
       display:flex; gap: 10px; align-items:flex-start;
       padding: 10px 10px;
       border-radius: 12px;
       background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(179,139,93,.18);
       margin-bottom: 10px;
     }
     .pill:last-child{ margin-bottom: 0; }
@@ -187,8 +202,8 @@
     }
     .card{
       border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(179,139,93,.18);
+      background: rgba(245,245,245,.05);
       box-shadow: 0 14px 40px rgba(0,0,0,.28);
       padding: 18px;
     }
@@ -213,7 +228,7 @@
     }
     .item{
       display:flex; gap: 12px; align-items:flex-start;
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(179,139,93,.18);
       background: rgba(0,0,0,.14);
       border-radius: 14px;
       padding: 12px;
@@ -221,7 +236,7 @@
     .badge{
       width: 34px; height: 34px; border-radius: 12px;
       flex: 0 0 auto;
-      background: linear-gradient(135deg, rgba(76,195,255,.95), rgba(255,179,0,.82));
+      background: linear-gradient(135deg, rgba(178,34,52,.98), rgba(179,139,93,.90));
       color: #0b1220;
       display:flex; align-items:center; justify-content:center;
       font-weight: 900;
@@ -238,15 +253,15 @@
       display:flex; gap: 10px; align-items:flex-start;
       padding: 12px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(179,139,93,.18);
       background: rgba(0,0,0,.14);
     }
     .num{
       width: 28px; height: 28px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
+      border: 1px solid rgba(245,245,245,.18);
       display:flex; align-items:center; justify-content:center;
       font-weight: 900;
-      color: rgba(255,255,255,.85);
+      color: rgba(245,245,245,.88);
       flex: 0 0 auto;
     }
 
@@ -257,25 +272,25 @@
       display:flex; justify-content: space-between; align-items:center;
       padding: 12px 14px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(179,139,93,.18);
       background: rgba(0,0,0,.14);
       text-decoration: none;
     }
-    .contactbox a:hover{ background: rgba(255,255,255,.08); }
-    .right{ color: rgba(255,255,255,.68); font-weight: 700; }
+    .contactbox a:hover{ background: rgba(245,245,245,.08); }
+    .right{ color: rgba(245,245,245,.70); font-weight: 700; }
 
     .fineprint{
       margin-top: 16px;
-      color: rgba(255,255,255,.58);
+      color: rgba(245,245,245,.60);
       font-size: 12px;
       line-height: 1.55;
-      border-top: 1px solid rgba(255,255,255,.10);
+      border-top: 1px solid rgba(179,139,93,.18);
       padding-top: 14px;
     }
 
     footer{
       margin-top: 18px;
-      color: rgba(255,255,255,.55);
+      color: rgba(245,245,245,.58);
       font-size: 12px;
       display:flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     }
@@ -295,7 +310,7 @@
         <div class="logo" aria-hidden="true"></div>
         <div>
           <div style="font-size:14px;opacity:.92;">Veterans Disability Advocates</div>
-          <div style="font-size:12px;opacity:.68;font-weight:700;">VA-Accredited Claims Agent</div>
+          <div style="font-size:12px;opacity:.72;font-weight:700;">VA-Accredited Claims Agent</div>
         </div>
       </div>
 
@@ -479,7 +494,7 @@
 
     <footer>
       <div>© <span id="y"></span> Veterans Disability Advocates</div>
-      <div style="opacity:.75;">vdallc.com</div>
+      <div style="opacity:.78;">vdallc.com</div>
     </footer>
   </div>
 
