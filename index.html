@@ -1,30 +1,497 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>VA Accredited Claims Agent | Veterans Disability Advocates</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VA-accredited claims agent assisting veterans nationwide with VA disability claims, appeals, and discharge upgrades. Based in the St. Louis, Missouri area." />
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.10);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --border: rgba(255,255,255,.14);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 14px;
+      --max: 1040px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(76,195,255,.18), transparent 55%),
+        radial-gradient(900px 520px at 90% 0%, rgba(255,179,0,.10), transparent 52%),
+        radial-gradient(900px 600px at 60% 110%, rgba(116,255,175,.10), transparent 60%),
+        var(--bg);
+      line-height: 1.55;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-underline-offset: 3px; }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 22px 18px 80px; }
+
+    /* Top bar */
+    .top{
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 10px 0 18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap: 10px;
+      font-weight: 700; letter-spacing: .2px;
+    }
+    .logo{
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(76,195,255,.9), rgba(255,179,0,.75));
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    .nav{
+      display:flex; gap: 14px; align-items:center;
+      color: var(--muted); font-weight: 600; font-size: 14px;
+    }
+    .nav a{ padding: 8px 10px; border-radius: 10px; }
+    .nav a:hover{ background: rgba(255,255,255,.06); text-decoration: none; color: var(--text); }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700; font-size: 14px;
+      text-decoration: none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.22);
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+    .btn.primary{
+      border: none;
+      background: linear-gradient(135deg, rgba(76,195,255,.95), rgba(255,179,0,.85));
+      color: #0b1220;
+    }
+
+    /* Hero */
+    .hero{
+      margin-top: 10px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset: -120px -120px auto auto;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle at 30% 30%, rgba(76,195,255,.35), transparent 55%);
+      filter: blur(2px);
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset: auto auto -120px -120px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle at 40% 40%, rgba(255,179,0,.20), transparent 60%);
+    }
+    .hero-inner{
+      position: relative;
+      padding: 34px 28px;
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 22px;
+    }
+    .kicker{
+      display:inline-flex; gap: 10px; align-items:center;
+      color: rgba(255,255,255,.78);
+      font-weight: 700;
+      letter-spacing: .25px;
+      font-size: 13px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 8px 12px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+    .dot{
+      width: 8px; height: 8px; border-radius: 999px;
+      background: rgba(116,255,175,.85);
+      box-shadow: 0 0 0 6px rgba(116,255,175,.12);
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 3.6vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -.6px;
+    }
+    .sub{
+      margin: 0;
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+    .cta-row{
+      display:flex; flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      align-items:center;
+    }
+    .mini{
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+    }
+    .panel{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      padding: 14px;
+    }
+    .panel h3{
+      margin: 0 0 10px;
+      font-size: 14px;
+      letter-spacing: .2px;
+      color: rgba(255,255,255,.86);
+    }
+    .pill{
+      display:flex; gap: 10px; align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+      margin-bottom: 10px;
+    }
+    .pill:last-child{ margin-bottom: 0; }
+    .pill b{ display:block; font-size: 14px; }
+    .pill span{ color: var(--muted); font-size: 13px; }
+
+    /* Sections */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 14px 40px rgba(0,0,0,.28);
+      padding: 18px;
+    }
+    .card h2{
+      margin: 0 0 12px;
+      font-size: 18px;
+      letter-spacing: -.2px;
+    }
+    .card p{ margin: 0; color: var(--muted); }
+
+    .services{ grid-column: span 7; }
+    .how{ grid-column: span 5; }
+    .areas{ grid-column: span 7; }
+    .contact{ grid-column: span 5; }
+
+    .list{
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      display:grid;
+      gap: 10px;
+    }
+    .item{
+      display:flex; gap: 12px; align-items:flex-start;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .badge{
+      width: 34px; height: 34px; border-radius: 12px;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, rgba(76,195,255,.95), rgba(255,179,0,.82));
+      color: #0b1220;
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 900;
+      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+    }
+    .item b{ display:block; font-size: 14px; margin-bottom: 2px; }
+    .item span{ color: var(--muted); font-size: 13px; }
+
+    .steps{
+      margin: 12px 0 0; padding: 0; list-style: none;
+      display:grid; gap: 10px;
+    }
+    .step{
+      display:flex; gap: 10px; align-items:flex-start;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+    }
+    .num{
+      width: 28px; height: 28px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 900;
+      color: rgba(255,255,255,.85);
+      flex: 0 0 auto;
+    }
+
+    .contactbox{
+      display:grid; gap: 10px; margin-top: 12px;
+    }
+    .contactbox a{
+      display:flex; justify-content: space-between; align-items:center;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      text-decoration: none;
+    }
+    .contactbox a:hover{ background: rgba(255,255,255,.08); }
+    .right{ color: rgba(255,255,255,.68); font-weight: 700; }
+
+    .fineprint{
+      margin-top: 16px;
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      line-height: 1.55;
+      border-top: 1px solid rgba(255,255,255,.10);
+      padding-top: 14px;
+    }
+
+    footer{
+      margin-top: 18px;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+      display:flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    }
+
+    /* Mobile */
+    @media (max-width: 860px){
+      .hero-inner{ grid-template-columns: 1fr; }
+      .services, .how, .areas, .contact{ grid-column: 1 / -1; }
+      .nav{ display:none; }
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; line-height: 1.6;">
 
-<h1>VA Accredited Claims Agent</h1>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div style="font-size:14px;opacity:.92;">Veterans Disability Advocates</div>
+          <div style="font-size:12px;opacity:.68;font-weight:700;">VA-Accredited Claims Agent</div>
+        </div>
+      </div>
 
-<p>I assist veterans nationwide with VA disability claims, appeals, and discharge upgrades. As a VA-accredited claims agent, I provide structured representation grounded in federal regulations and VA procedure.</p>
+      <div class="nav" aria-label="primary navigation">
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#areas">Service areas</a>
+        <a href="#contact">Contact</a>
+      </div>
 
-<h2>Services</h2>
-<ul>
-<li>Initial VA Disability Claims</li>
-<li>Supplemental Claims</li>
-<li>Higher-Level Review Appeals</li>
-<li>Board of Veterans Appeals</li>
-<li>Discharge Upgrade Assistance</li>
-</ul>
+      <a class="btn primary" href="#contact">Contact</a>
+    </div>
 
-<h2>Serving Veterans in Missouri and Nationwide</h2>
-<p>Based in the St. Louis area and serving veterans across the United States.</p>
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <div class="kicker"><span class="dot" aria-hidden="true"></span>Nationwide representation • Missouri-based</div>
+          <h1>VA disability claims, appeals, and discharge upgrades—handled with structure and accountability.</h1>
+          <p class="sub">
+            I assist veterans nationwide with VA disability claims and AMA appeals. I focus on clear evidence development,
+            strong theory of entitlement, and clean presentation to the VA.
+          </p>
 
-<h2>Contact</h2>
-<p>Email: jared@vdallc.com</p>
+          <div class="cta-row">
+            <a class="btn primary" href="mailto:jared@vdallc.com?subject=VA%20Claims%20Help%20Request">Email to get started</a>
+            <a class="btn" href="#services">See services</a>
+            <span class="mini">Based in the St. Louis, Missouri area • Serving veterans across the U.S.</span>
+          </div>
+        </div>
 
+        <aside class="panel" aria-label="quick facts">
+          <h3>Quick facts</h3>
+
+          <div class="pill">
+            <div class="badge" aria-hidden="true">VA</div>
+            <div>
+              <b>VA-accredited claims agent</b>
+              <span>Representation within VA rules and procedure.</span>
+            </div>
+          </div>
+
+          <div class="pill">
+            <div class="badge" aria-hidden="true">⚖</div>
+            <div>
+              <b>Evidence-first approach</b>
+              <span>Symptoms, records, and opinions organized for VA review.</span>
+            </div>
+          </div>
+
+          <div class="pill">
+            <div class="badge" aria-hidden="true">MO</div>
+            <div>
+              <b>Local presence, national reach</b>
+              <span>Missouri focus + nationwide client support.</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card services" id="services">
+        <h2>Services</h2>
+        <p>Focused representation for the most common claim and appeal paths.</p>
+
+        <ul class="list">
+          <li class="item">
+            <div class="badge" aria-hidden="true">1</div>
+            <div>
+              <b>Initial VA Disability Claims</b>
+              <span>Build the claim correctly from the start with organized medical and lay evidence.</span>
+            </div>
+          </li>
+          <li class="item">
+            <div class="badge" aria-hidden="true">2</div>
+            <div>
+              <b>Supplemental Claims</b>
+              <span>New and relevant evidence strategy—tight, targeted, and persuasive.</span>
+            </div>
+          </li>
+          <li class="item">
+            <div class="badge" aria-hidden="true">3</div>
+            <div>
+              <b>Higher-Level Review (HLR)</b>
+              <span>Identify legal/analysis errors and argue within the closed record (conference when useful).</span>
+            </div>
+          </li>
+          <li class="item">
+            <div class="badge" aria-hidden="true">4</div>
+            <div>
+              <b>Board of Veterans’ Appeals</b>
+              <span>Appeal lane selection, evidence timing, and submission strategy.</span>
+            </div>
+          </li>
+          <li class="item">
+            <div class="badge" aria-hidden="true">5</div>
+            <div>
+              <b>Discharge Upgrade Assistance</b>
+              <span>Record development and narrative framing for DRB/BCMR where applicable.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card how" id="process">
+        <h2>Process</h2>
+        <p>Simple, repeatable steps that keep things moving.</p>
+
+        <ol class="steps">
+          <li class="step">
+            <div class="num">1</div>
+            <div><b>Intake</b><div style="color:var(--muted);font-size:13px;">Identify issues, deadlines, and the fastest path forward.</div></div>
+          </li>
+          <li class="step">
+            <div class="num">2</div>
+            <div><b>Evidence plan</b><div style="color:var(--muted);font-size:13px;">What records matter, what opinions are needed, what to ignore.</div></div>
+          </li>
+          <li class="step">
+            <div class="num">3</div>
+            <div><b>Submission</b><div style="color:var(--muted);font-size:13px;">Clean, organized filing aligned with VA requirements.</div></div>
+          </li>
+          <li class="step">
+            <div class="num">4</div>
+            <div><b>Follow-through</b><div style="color:var(--muted);font-size:13px;">Track, respond, and push the claim through the pipeline.</div></div>
+          </li>
+        </ol>
+
+        <div class="fineprint">
+          Note: I am a VA-accredited claims agent. I am not your attorney unless separately retained as counsel and permitted by applicable rules.
+        </div>
+      </div>
+
+      <div class="card areas" id="areas">
+        <h2>Serving Missouri and nationwide</h2>
+        <p>
+          Based in the St. Louis, Missouri area. I work with veterans throughout Missouri and across the United States.
+          Remote representation is available.
+        </p>
+
+        <ul class="list" style="margin-top:12px;">
+          <li class="item">
+            <div class="badge" aria-hidden="true">STL</div>
+            <div>
+              <b>St. Louis Metro</b>
+              <span>St. Louis County • St. Charles • Jefferson • Franklin • Metro East</span>
+            </div>
+          </li>
+          <li class="item">
+            <div class="badge" aria-hidden="true">MO</div>
+            <div>
+              <b>Missouri statewide</b>
+              <span>Springfield • Columbia • Kansas City • rural Missouri</span>
+            </div>
+          </li>
+          <li class="item">
+            <div class="badge" aria-hidden="true">USA</div>
+            <div>
+              <b>Nationwide</b>
+              <span>Virtual intake and document exchange for out-of-state clients.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card contact" id="contact">
+        <h2>Contact</h2>
+        <p>Fastest way to start is email. Include your name, state, and what you’re trying to accomplish.</p>
+
+        <div class="contactbox">
+          <a href="mailto:jared@vdallc.com?subject=VA%20Claims%20Help%20Request">
+            <div><b>Email</b><div style="color:var(--muted);font-size:13px;">jared@vdallc.com</div></div>
+            <div class="right">Open</div>
+          </a>
+          <!-- Optional: add phone later -->
+          <!--
+          <a href="tel:+16368915181">
+            <div><b>Phone</b><div style="color:var(--muted);font-size:13px;">(636) 891-5181</div></div>
+            <div class="right">Call</div>
+          </a>
+          -->
+        </div>
+
+        <div class="fineprint">
+          No guarantees are ever made about VA outcomes. All representation is subject to VA rules, deadlines, and evidence availability.
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Veterans Disability Advocates</div>
+      <div style="opacity:.75;">vdallc.com</div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
