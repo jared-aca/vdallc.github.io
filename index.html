@@ -39,7 +39,6 @@
 
     .wrap{ max-width: var(--max); margin: 0 auto; padding: 22px 18px 80px; }
 
-    /* Top bar */
     .top{
       display: flex; align-items: center; justify-content: space-between;
       gap: 16px; padding: 10px 0 18px;
@@ -84,7 +83,6 @@
       color: #0b1220;
     }
 
-    /* Hero */
     .hero{
       margin-top: 10px;
       border-radius: var(--radius);
@@ -177,7 +175,6 @@
     .pill b{ display:block; font-size: 14px; }
     .pill span{ color: var(--muted); font-size: 13px; }
 
-    /* Sections */
     .grid{
       display:grid;
       grid-template-columns: repeat(12, 1fr);
@@ -279,7 +276,6 @@
       display:flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     }
 
-    /* Mobile */
     @media (max-width: 860px){
       .hero-inner{ grid-template-columns: 1fr; }
       .services, .how, .areas, .contact{ grid-column: 1 / -1; }
@@ -303,10 +299,10 @@
         <a href="#services">Services</a>
         <a href="#process">Process</a>
         <a href="#areas">Service areas</a>
-        <a href="#contact">Contact</a>
+        <a href="/contact.html">Contact</a>
       </div>
 
-      <a class="btn primary" href="#contact">Contact</a>
+      <a class="btn primary" href="/contact.html">Contact</a>
     </div>
 
     <section class="hero">
@@ -320,7 +316,7 @@
           </p>
 
           <div class="cta-row">
-            <a class="btn primary" href="mailto:jared@vdallc.com?subject=VA%20Claims%20Help%20Request">Email to get started</a>
+            <a class="btn primary" href="/contact.html">Request assistance</a>
             <a class="btn" href="#services">See services</a>
             <span class="mini">Based in the St. Louis, Missouri area • Serving veterans across the U.S.</span>
           </div>
@@ -462,20 +458,13 @@
 
       <div class="card contact" id="contact">
         <h2>Contact</h2>
-        <p>Fastest way to start is email. Include your name, state, and what you’re trying to accomplish.</p>
+        <p>Use the inquiry form so I can respond with the right next step.</p>
 
         <div class="contactbox">
-          <a href="mailto:jared@vdallc.com?subject=VA%20Claims%20Help%20Request">
-            <div><b>Email</b><div style="color:var(--muted);font-size:13px;">jared@vdallc.com</div></div>
+          <a href="/contact.html">
+            <div><b>Inquiry form</b><div style="color:var(--muted);font-size:13px;">Submit a short summary</div></div>
             <div class="right">Open</div>
           </a>
-          <!-- Optional: add phone later -->
-          <!--
-          <a href="tel:+16368915181">
-            <div><b>Phone</b><div style="color:var(--muted);font-size:13px;">(636) 891-5181</div></div>
-            <div class="right">Call</div>
-          </a>
-          -->
         </div>
 
         <div class="fineprint">
