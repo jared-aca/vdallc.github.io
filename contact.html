@@ -8,24 +8,32 @@
 
 <style>
   :root{
-    --bg:#0b1220;
-    --text:rgba(255,255,255,.92);
-    --muted:rgba(255,255,255,.70);
-    --border:rgba(255,255,255,.14);
+    --bg:#0a1f44;
+    --bg2:#071632;
+    --red:#b22234;
+    --coyote:#7a5c3a;
+    --tan:#b38b5d;
+
+    --text:rgba(245,245,245,.94);
+    --muted:rgba(245,245,245,.72);
+    --border:rgba(245,245,245,.14);
+    --border2:rgba(179,139,93,.22);
     --shadow:0 20px 60px rgba(0,0,0,.45);
     --radius:18px;
   }
+
   *{box-sizing:border-box;}
   body{
     margin:0;
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     color:var(--text);
     background:
-      radial-gradient(900px 500px at 20% 10%, rgba(76,195,255,.18), transparent 55%),
-      radial-gradient(900px 520px at 90% 0%, rgba(255,179,0,.10), transparent 52%),
-      var(--bg);
+      radial-gradient(900px 520px at 18% 8%, rgba(178,34,52,.22), transparent 56%),
+      radial-gradient(900px 520px at 90% 0%, rgba(122,92,58,.18), transparent 54%),
+      linear-gradient(180deg, var(--bg), var(--bg2));
     line-height:1.55;
   }
+
   a{color:inherit;text-decoration:none;}
   a:hover{text-decoration:underline;text-underline-offset:3px;}
 
@@ -37,23 +45,23 @@
   .brand{display:flex;align-items:center;gap:10px;font-weight:800;}
   .logo{
     width:38px;height:38px;border-radius:12px;
-    background: linear-gradient(135deg, rgba(76,195,255,.9), rgba(255,179,0,.75));
+    background: linear-gradient(135deg, rgba(178,34,52,.98), rgba(179,139,93,.90));
     box-shadow: 0 12px 30px rgba(0,0,0,.35);
   }
   .btn{
     display:inline-flex;align-items:center;justify-content:center;
     border:1px solid var(--border);
-    background: rgba(255,255,255,.06);
+    background: rgba(245,245,245,.06);
     border-radius:12px;
     padding:10px 14px;
     font-weight:800;
     text-decoration:none;
   }
-  .btn:hover{background:rgba(255,255,255,.10);text-decoration:none;}
+  .btn:hover{background:rgba(245,245,245,.10);text-decoration:none;}
 
   .card{
-    border:1px solid rgba(255,255,255,.10);
-    background: rgba(255,255,255,.05);
+    border:1px solid rgba(179,139,93,.18);
+    background: rgba(245,245,245,.05);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     padding: 20px;
@@ -62,13 +70,13 @@
   p{margin:0;color:var(--muted);}
 
   form{margin-top:16px;display:grid;gap:12px;}
-  label{font-size:13px;color:rgba(255,255,255,.78);font-weight:800;}
+  label{font-size:13px;color:rgba(245,245,245,.82);font-weight:800;}
 
   input, textarea, select{
     width:100%;
     padding:12px 12px;
     border-radius:12px;
-    border:1px solid rgba(255,255,255,.16);
+    border:1px solid rgba(179,139,93,.18);
     background: rgba(0,0,0,.18);
     color: var(--text);
     font-size:14px;
@@ -76,9 +84,9 @@
   }
   textarea{min-height:150px;resize:vertical;}
 
-  /* Fix: native select dropdowns often ignore color/background. */
+  /* Keep dropdown readable */
   select{
-    background: rgba(255,255,255,.92);
+    background: rgba(245,245,245,.92);
     color: #0b1220;
   }
   select option{
@@ -100,16 +108,16 @@
     font-weight:900;
     cursor:pointer;
     color:#0b1220;
-    background: linear-gradient(135deg, rgba(76,195,255,.95), rgba(255,179,0,.85));
+    background: linear-gradient(135deg, rgba(178,34,52,.98), rgba(179,139,93,.92));
   }
   .submit:hover{opacity:.92;}
 
   .fineprint{
     margin-top:14px;
-    border-top:1px solid rgba(255,255,255,.10);
+    border-top:1px solid rgba(179,139,93,.18);
     padding-top:12px;
     font-size:12px;
-    color:rgba(255,255,255,.58);
+    color:rgba(245,245,245,.60);
     line-height:1.55;
   }
 </style>
@@ -122,7 +130,7 @@
         <div class="logo" aria-hidden="true"></div>
         <div>
           <div style="font-size:14px;opacity:.92;">Veterans Disability Advocates</div>
-          <div style="font-size:12px;opacity:.68;font-weight:800;">Inquiry Form</div>
+          <div style="font-size:12px;opacity:.72;font-weight:800;">Inquiry Form</div>
         </div>
       </div>
       <a class="btn" href="/">Back to site</a>
@@ -130,7 +138,7 @@
 
     <div class="card">
       <h1>Request Assistance</h1>
-      <p>Provide your name, branch, and a brief summary. This sends directly to <b>jared@vdallc.com</b>.</p>
+      <p>Provide your name, phone, and a brief summary. This sends directly to <b>jared@vdallc.com</b>.</p>
 
       <form action="https://formsubmit.co/jared@vdallc.com" method="POST">
         <input type="hidden" name="_subject" value="New VA Claim Inquiry">
@@ -151,17 +159,16 @@
 
         <div class="row">
           <div>
-  <label for="phone">Phone</label>
- <input id="phone" type="tel" name="Phone" placeholder="(555) 555-5555" required>
-
-</div>
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" name="Phone" placeholder="(555) 555-5555" required>
+          </div>
 
           <div>
             <label for="type">Type of assistance</label>
             <select id="type" name="Claim Type" required>
               <option value="">Select…</option>
               <option>VA Disability</option>
-              <option>TDIU/Unemployability</option></option>
+              <option>TDIU/Unemployability</option>
               <option>DIC/Survivor's Benefits</option>
               <option>Discharge Upgrades</option>
               <option>Correcting Military Records</option>
