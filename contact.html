@@ -62,13 +62,37 @@ button:hover{
 <h1>Request Assistance</h1>
 <p>Provide your name, state, and a brief summary of your issue.</p>
 
-<form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-  <input type="text" name="name" placeholder="Full Name" required>
-  <input type="email" name="email" placeholder="Email Address" required>
-  <input type="text" name="state" placeholder="State">
-  <textarea name="message" placeholder="Describe your issue..." required></textarea>
+<form action="https://formsubmit.co/jared@vdallc.com" method="POST">
+
+  <!-- Required hidden fields -->
+  <input type="hidden" name="_subject" value="New VA Claim Inquiry">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://vdallc.com/thankyou.html">
+
+  <!-- Honeypot spam protection -->
+  <input type="text" name="_honey" style="display:none">
+
+  <input type="text" name="Full Name" placeholder="Full Name" required>
+
+  <input type="email" name="Email" placeholder="Email Address" required>
+
+  <input type="text" name="State" placeholder="State">
+
+  <select name="Claim Type" required style="padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:white;">
+    <option value="">Select Type of Assistance</option>
+    <option>Initial VA Disability Claim</option>
+    <option>Supplemental Claim</option>
+    <option>Higher-Level Review</option>
+    <option>Board of Veterans' Appeals</option>
+    <option>Discharge Upgrade</option>
+    <option>Other</option>
+  </select>
+
+  <textarea name="Message" placeholder="Briefly describe your issue..." required></textarea>
+
   <button type="submit">Submit Inquiry</button>
 </form>
+
 
 </div>
 </body>
