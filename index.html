@@ -98,15 +98,19 @@
       width: 320px; height: 320px;
       background: radial-gradient(circle at 30% 30%, rgba(76,195,255,.35), transparent 55%);
       filter: blur(2px);
+      pointer-events: none;
     }
+    
     .hero::after{
       content:"";
       position:absolute; inset: auto auto -120px -120px;
       width: 380px; height: 380px;
       background: radial-gradient(circle at 40% 40%, rgba(255,179,0,.20), transparent 60%);
+      pointer-events: none;
     }
+
     .hero-inner{
-      position: relative;
+      position: relative; z-index: 1;  }
       padding: 34px 28px;
       display: grid;
       grid-template-columns: 1.35fr .65fr;
