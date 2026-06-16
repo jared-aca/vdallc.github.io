@@ -1,29 +1,323 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Thank You</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<title>Inquiry Received | VDA LLC</title>
+
 <style>
-body{
-  background:#0b1220;
-  color:white;
-  font-family:system-ui, -apple-system, Segoe UI, Roboto;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  text-align:center;
-  padding:20px;
-}
-a{color:#4cc3ff;text-decoration:none;}
+  :root {
+    --bg:     #0a1f44;
+    --bg2:    #071632;
+    --red:    #b22234;
+    --tan:    #b38b5d;
+    --text:   rgba(245,245,245,.94);
+    --muted:  rgba(245,245,245,.68);
+    --faint:  rgba(245,245,245,.38);
+    --border: rgba(245,245,245,.12);
+    --btan:   rgba(179,139,93,.22);
+    --radius: 18px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+      radial-gradient(900px 520px at 18% 8%,  rgba(178,34,52,.20), transparent 56%),
+      radial-gradient(900px 520px at 88% 4%,  rgba(122,92,58,.16), transparent 54%),
+      linear-gradient(180deg, var(--bg), var(--bg2));
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---- Header ---- */
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 15px;
+  }
+
+  .shield {
+    width: 32px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    background: rgba(245,245,245,.06);
+    border-radius: 12px;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    transition: background .18s;
+  }
+  .back-btn:hover { background: rgba(245,245,245,.11); }
+
+  /* ---- Main ---- */
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 18px 80px;
+  }
+
+  .card {
+    border: 1px solid var(--btan);
+    background: rgba(245,245,245,.045);
+    border-radius: var(--radius);
+    box-shadow: 0 24px 72px rgba(0,0,0,.48);
+    padding: 48px 40px 40px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* ---- Checkmark animation ---- */
+  .check-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(178,34,52,.9), rgba(179,139,93,.82));
+    box-shadow: 0 12px 36px rgba(0,0,0,.35), 0 0 0 8px rgba(178,34,52,.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    animation: popIn .45s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .check-wrap svg {
+    animation: drawCheck .4s .25s cubic-bezier(0.16,1,0.3,1) both;
+    transform-origin: center;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.6); }
+    to   { opacity: 1; transform: scale(1);  }
+  }
+  @keyframes drawCheck {
+    from { opacity: 0; transform: scale(.5) rotate(-20deg); }
+    to   { opacity: 1; transform: scale(1)  rotate(0deg);   }
+  }
+
+  /* ---- Content ---- */
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--tan);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  h1 {
+    font-size: clamp(1.625rem, 4vw, 2.25rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    margin-bottom: 14px;
+  }
+
+  .lead {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---- What happens next ---- */
+  .steps {
+    background: rgba(0,0,0,.18);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 28px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .steps-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--tan);
+    margin-bottom: 2px;
+    display: block;
+  }
+
+  .step-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .step-num {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(178,34,52,.85), rgba(179,139,93,.75));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-text {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .step-text strong { color: var(--text); font-weight: 700; }
+
+  /* ---- CTA ---- */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: .03em;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(178,34,52,.95), rgba(179,139,93,.88));
+    box-shadow: 0 6px 20px rgba(178,34,52,.32);
+    cursor: pointer;
+    transition: opacity .18s, transform .18s;
+    text-decoration: none;
+    margin-bottom: 20px;
+  }
+  .cta:hover { opacity: .9; transform: translateY(-1px); }
+
+  /* ---- Fineprint ---- */
+  .fineprint {
+    font-size: 11.5px;
+    color: var(--faint);
+    line-height: 1.6;
+    border-top: 1px solid var(--btan);
+    padding-top: 16px;
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 36px 22px 28px; }
+    .top  { padding: 16px 18px; }
+  }
 </style>
 </head>
+
 <body>
-<div>
-<h1>Inquiry Received</h1>
-<p>Your message has been submitted. I will respond as soon as possible.</p>
-<p><a href="/">Return to homepage</a></p>
-</div>
+
+  <div class="top">
+    <div class="brand">
+      <!-- Shield logo inline so it works regardless of relative path -->
+      <svg class="shield" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 96" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="ty-body" x1="18" y1="4" x2="62" y2="92" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#7A9948"/><stop offset="1" stop-color="#2E4418"/>
+          </linearGradient>
+          <linearGradient id="ty-shine" x1="4" y1="4" x2="46" y2="64" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fff" stop-opacity=".26"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+          <clipPath id="ty-clip"><path d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z"/></clipPath>
+        </defs>
+        <path d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z" fill="url(#ty-body)"/>
+        <rect x="0" y="0" width="80" height="28" fill="#B22234" clip-path="url(#ty-clip)"/>
+        <rect x="0" y="27" width="80" height="1.5" fill="#fff" fill-opacity=".45" clip-path="url(#ty-clip)"/>
+        <path d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z" fill="url(#ty-shine)"/>
+        <path d="M40 5.5L5.5 18.8V46C5.5 71.2 21 87 40 91C59 87 74.5 71.2 74.5 46V18.8Z" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+        <polygon points="40,43 45,56.1 59,56.8 48.1,65.6 51.8,79.2 40,71.5 28.2,79.2 31.9,65.6 21,56.8 35,56.1" fill="#fff" opacity=".97"/>
+      </svg>
+      <div>
+        <div style="opacity:.92;">Veterans Disability Advocates</div>
+        <div style="font-size:11px;opacity:.6;font-weight:700;">VDA LLC</div>
+      </div>
+    </div>
+    <a class="back-btn" href="/">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to site
+    </a>
+  </div>
+
+  <main>
+    <div class="card">
+
+      <div class="check-wrap" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+
+      <span class="eyebrow">Inquiry Received</span>
+      <h1>We&rsquo;ve got your message.</h1>
+      <p class="lead">Your inquiry has been sent directly to <strong style="color:rgba(245,245,245,.88);">jared@vdallc.com</strong>. Here&rsquo;s what happens next.</p>
+
+      <div class="steps">
+        <span class="steps-label">What to expect</span>
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Review</strong> — We&rsquo;ll read your summary and assess your situation, typically within one business day.</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Reach out</strong> — We&rsquo;ll contact you by phone or email to discuss your case and confirm next steps.</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Intake</strong> — If we can help, we&rsquo;ll schedule a full intake to gather your records and build a plan.</div>
+        </div>
+      </div>
+
+      <a class="cta" href="/">
+        Return to VDA LLC
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+
+      <p class="fineprint">
+        Submitting this form does not create a representation agreement or attorney-client relationship. VDA LLC is not your attorney unless separately retained. No guarantees are ever made about VA outcomes.
+      </p>
+    </div>
+  </main>
+
 </body>
 </html>

@@ -1,506 +1,515 @@
-<!-- index.html (replace entire file) -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VA Accredited Claims Agent | Veterans Disability Advocates</title>
-  <meta name="description" content="VA Accredited Claims Agent assisting veterans nationwide with VA disability claims, appeals, and discharge upgrades. Based in St. Louis, Missouri." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VDA LLC represents veterans and survivors nationwide in VA disability claims, AMA appeals, discharge upgrades, military record corrections, and survivor benefits. Missouri-based. VA-accredited claims agent.">
+  <meta name="robots" content="index, follow">
+  <title>VDA LLC — VA Disability Claims, Appeals &amp; Discharge Upgrades</title>
 
-  <style>
-    :root{
-      /* USA + Coyote palette */
-      --bg: #0a1f44;                /* navy */
-      --bg2: #071632;               /* deeper navy */
-      --red: #b22234;               /* old glory red */
-      --blue: #0a1f44;              /* navy */
-      --offwhite: #f5f5f5;          /* off-white */
-      --coyote: #7a5c3a;            /* coyote brown */
-      --tan: #b38b5d;               /* muted tan accent */
-
-      --card: rgba(245,245,245,.06);
-      --card2: rgba(245,245,245,.10);
-      --text: rgba(245,245,245,.94);
-      --muted: rgba(245,245,245,.72);
-      --border: rgba(245,245,245,.14);
-      --border2: rgba(179,139,93,.22);
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
-      --radius: 18px;
-      --radius2: 14px;
-      --max: 1040px;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body{
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text);
-      background:
-        radial-gradient(900px 520px at 18% 8%, rgba(178,34,52,.22), transparent 56%),
-        radial-gradient(900px 520px at 90% 0%, rgba(122,92,58,.18), transparent 54%),
-        radial-gradient(900px 620px at 60% 112%, rgba(245,245,245,.08), transparent 62%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      line-height: 1.55;
-    }
-
-    a{ color: inherit; text-decoration: none; }
-    a:hover{ text-decoration: underline; text-underline-offset: 3px; }
-
-    .wrap{ max-width: var(--max); margin: 0 auto; padding: 22px 18px 80px; }
-
-    .top{
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; padding: 10px 0 18px;
-    }
-    .brand{
-      display:flex; align-items:center; gap: 10px;
-      font-weight: 700; letter-spacing: .2px;
-    }
-    .logo{
-      width: 38px; height: 38px; border-radius: 12px;
-      background: linear-gradient(135deg, rgba(178,34,52,.95), rgba(179,139,93,.85));
-      box-shadow: 0 12px 30px rgba(0,0,0,.35);
-    }
-    .nav{
-      display:flex; gap: 14px; align-items:center;
-      color: var(--muted); font-weight: 600; font-size: 14px;
-    }
-    .nav a{ padding: 8px 10px; border-radius: 10px; }
-    .nav a:hover{
-      background: rgba(245,245,245,.06);
-      text-decoration: none;
-      color: var(--text);
-    }
-
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      border: 1px solid var(--border);
-      background: rgba(245,245,245,.06);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-weight: 700; font-size: 14px;
-      text-decoration: none;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-      white-space: nowrap;
-    }
-    .btn:hover{
-      background: rgba(245,245,245,.10);
-      border-color: rgba(245,245,245,.22);
-      transform: translateY(-1px);
-      text-decoration: none;
-    }
-    .btn.primary{
-      border: none;
-      background: linear-gradient(135deg, rgba(178,34,52,.98), rgba(179,139,93,.92));
-      color: #0b1220;
-    }
-
-    .hero{
-      margin-top: 10px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(245,245,245,.10);
-      background: linear-gradient(180deg, rgba(245,245,245,.08), rgba(245,245,245,.04));
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: relative;
-    }
-    .hero::before{
-      content:"";
-      position:absolute; inset: -120px -120px auto auto;
-      width: 360px; height: 360px;
-      background: radial-gradient(circle at 30% 30%, rgba(178,34,52,.30), transparent 58%);
-      filter: blur(2px);
-      pointer-events: none;
-    }
-    .hero::after{
-      content:"";
-      position:absolute; inset: auto auto -140px -140px;
-      width: 420px; height: 420px;
-      background: radial-gradient(circle at 40% 40%, rgba(122,92,58,.22), transparent 62%);
-      pointer-events: none;
-    }
-
-    .hero-inner{
-      align-items: start;
-      position: relative;
-      z-index: 1;
-      padding: 34px 28px;
-      display: grid;
-      grid-template-columns: 1.35fr .65fr;
-      gap: 22px;
-    }
-
-    .kicker{
-      display:inline-flex; gap: 10px; align-items:center;
-      color: rgba(245,245,245,.80);
-      font-weight: 700;
-      letter-spacing: .25px;
-      font-size: 13px;
-      background: rgba(245,245,245,.06);
-      border: 1px solid rgba(179,139,93,.22);
-      padding: 8px 12px;
-      border-radius: 999px;
-      width: fit-content;
-    }
-    .dot{
-      width: 8px; height: 8px; border-radius: 999px;
-      background: rgba(179,139,93,.92);
-      box-shadow: 0 0 0 6px rgba(179,139,93,.14);
-    }
-    h1{
-      margin: 14px 0 10px;
-      font-size: clamp(28px, 3.6vw, 44px);
-      line-height: 1.08;
-      letter-spacing: -.6px;
-    }
-    .sub{
-      margin: 0;
-      font-size: 16px;
-      color: var(--muted);
-      max-width: 60ch;
-    }
-    .cta-row{
-      display:flex; flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-      align-items:center;
-    }
-    .mini{
-      color: rgba(245,245,245,.70);
-      font-size: 13px;
-    }
-    .panel{
-      border-radius: var(--radius2);
-      border: 1px solid rgba(179,139,93,.24);
-      background: rgba(245,245,245,.06);
-      padding: 14px;
-    }
-    .panel h3{
-      margin: 0 0 10px;
-      font-size: 14px;
-      letter-spacing: .2px;
-      color: rgba(245,245,245,.90);
-    }
-    .pill{
-      display:flex; gap: 10px; align-items:flex-start;
-      padding: 10px 10px;
-      border-radius: 12px;
-      background: rgba(0,0,0,.18);
-      border: 1px solid rgba(179,139,93,.18);
-      margin-bottom: 10px;
-    }
-    .pill:last-child{ margin-bottom: 0; }
-    .pill b{ display:block; font-size: 14px; }
-    .pill span{ color: var(--muted); font-size: 13px; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-      margin-top: 18px;
-    }
-    .card{
-      border-radius: var(--radius);
-      border: 1px solid rgba(179,139,93,.18);
-      background: rgba(245,245,245,.05);
-      box-shadow: 0 14px 40px rgba(0,0,0,.28);
-      padding: 18px;
-    }
-    .card h2{
-      margin: 0 0 12px;
-      font-size: 18px;
-      letter-spacing: -.2px;
-    }
-    .card p{ margin: 0; color: var(--muted); }
-
-    .services{ grid-column: span 7; }
-    .how{ grid-column: span 5; }
-    .areas{ grid-column: span 7; }
-    .contact{ grid-column: span 5; }
-
-    .list{
-      margin: 14px 0 0;
-      padding: 0;
-      list-style: none;
-      display:grid;
-      gap: 10px;
-    }
-    .item{
-      display:flex; gap: 12px; align-items:flex-start;
-      border: 1px solid rgba(179,139,93,.18);
-      background: rgba(0,0,0,.14);
-      border-radius: 14px;
-      padding: 12px;
-    }
-    .badge{
-      width: 34px; height: 34px; border-radius: 12px;
-      flex: 0 0 auto;
-      background: linear-gradient(135deg, rgba(178,34,52,.98), rgba(179,139,93,.90));
-      color: #0b1220;
-      display:flex; align-items:center; justify-content:center;
-      font-weight: 900;
-      box-shadow: 0 14px 30px rgba(0,0,0,.35);
-    }
-    .item b{ display:block; font-size: 14px; margin-bottom: 2px; }
-    .item span{ color: var(--muted); font-size: 13px; }
-
-    .steps{
-      margin: 12px 0 0; padding: 0; list-style: none;
-      display:grid; gap: 10px;
-    }
-    .step{
-      display:flex; gap: 10px; align-items:flex-start;
-      padding: 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(179,139,93,.18);
-      background: rgba(0,0,0,.14);
-    }
-    .num{
-      width: 28px; height: 28px; border-radius: 999px;
-      border: 1px solid rgba(245,245,245,.18);
-      display:flex; align-items:center; justify-content:center;
-      font-weight: 900;
-      color: rgba(245,245,245,.88);
-      flex: 0 0 auto;
-    }
-
-    .contactbox{
-      display:grid; gap: 10px; margin-top: 12px;
-    }
-    .contactbox a{
-      display:flex; justify-content: space-between; align-items:center;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(179,139,93,.18);
-      background: rgba(0,0,0,.14);
-      text-decoration: none;
-    }
-    .contactbox a:hover{ background: rgba(245,245,245,.08); }
-    .right{ color: rgba(245,245,245,.70); font-weight: 700; }
-
-    .fineprint{
-      margin-top: 16px;
-      color: rgba(245,245,245,.60);
-      font-size: 12px;
-      line-height: 1.55;
-      border-top: 1px solid rgba(179,139,93,.18);
-      padding-top: 14px;
-    }
-
-    footer{
-      margin-top: 18px;
-      color: rgba(245,245,245,.58);
-      font-size: 12px;
-      display:flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-    }
-
-    @media (max-width: 860px){
-      .hero-inner{ grid-template-columns: 1fr; }
-      .services, .how, .areas, .contact{ grid-column: 1 / -1; }
-      .nav{ display:none; }
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    (function(){var t=localStorage.getItem('vda-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();
+  </script>
 </head>
-
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <div style="font-size:14px;opacity:.92;">Veterans Disability Advocates</div>
-          <div style="font-size:12px;opacity:.72;font-weight:700;">VA Accredited Claims Agent</div>
-        </div>
-      </div>
 
-      <div class="nav" aria-label="primary navigation">
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="#areas">Service areas</a>
-        <a href="/contact.html">Contact</a>
-      </div>
+  <!-- =====================
+       HEADER
+  ===================== -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo" aria-label="VDA LLC — Return to homepage">
+        <img src="img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="eager" aria-hidden="true">
+        <img src="img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="eager" aria-hidden="true">
+        VDA LLC
+      </a>
 
-      <a class="btn primary" href="/contact.html">Contact</a>
+      <nav class="nav-primary" aria-label="Primary navigation">
+        <ul>
+          <li class="nav-has-mega" id="nav-services">
+            <a href="#services" aria-haspopup="true" aria-expanded="false">
+              Services
+              <svg class="mega-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
+            </a>
+          </li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+
+      <a href="#contact" class="btn btn-primary nav-cta">Request Assistance</a>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
     </div>
 
-    <section class="hero">
-      <div class="hero-inner">
-        <div>
-          <div class="kicker"><span class="dot" aria-hidden="true"></span>Nationwide representation • Missouri-based</div>
-          <h1>VA disability claims, appeals, and discharge upgrades; handled with structure and accountability.</h1>
-          <p class="sub">
-            I represent veterans and survivors nationwide in disability claims, AMA appeals, discharge upgrades, military record corrections, and survivor benefits, 
-            structured around disciplined evidence and sound entitlement theory.
-          </p>
-
-          <div class="cta-row">
-            <a class="btn primary" href="/contact.html">Request assistance</a>
-            <a class="btn" href="#services">See services</a>
-            <span class="mini">Based in St. Louis, Missouri • Serving veterans across the U.S.</span>
-          </div>
-        </div>
-
-        <aside class="panel" aria-label="quick facts">
-          <h3>Quick facts</h3>
-
-          <div class="pill">
-            <div class="badge" aria-hidden="true">VA</div>
-            <div>
-              <b>VA-accredited claims agent</b>
-              <span>Representation within VA rules and procedure.</span>
+    <!-- Megamenu: positioned relative to site-header -->
+    <div class="megamenu" id="megamenu" aria-hidden="true">
+      <div class="container">
+        <div class="megamenu-grid">
+          <a href="services/va-disability-claims.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
             </div>
-          </div>
-
-          <div class="pill">
-            <div class="badge" aria-hidden="true">⚖</div>
             <div>
-              <b>Evidence-first approach</b>
-              <span>Symptoms, records, and opinions organized for VA review.</span>
+              <strong>VA Disability Claims</strong>
+              <p>New claims, increased ratings, and service-connected conditions.</p>
             </div>
-          </div>
-
-          <div class="pill">
-            <div class="badge" aria-hidden="true">MO</div>
+          </a>
+          <a href="services/tdiu-unemployability.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </div>
             <div>
-              <b>Local presence, national reach</b>
-              <span>Missouri-Based • Nationwide VA Representation.</span>
+              <strong>TDIU / Unemployability</strong>
+              <p>100% pay rate when service-connected disabilities prevent gainful employment.</p>
             </div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="grid">
-      <div class="card services" id="services">
-        <h2>Services</h2>
-        <p>Focused representation for the most common claim and appeal paths.</p>
-
-        <ul class="list">
-          <li class="item">
-            <div class="badge" aria-hidden="true">1</div>
+          </a>
+          <a href="services/dic-survivor-benefits.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
             <div>
-              <b>VA Disability Claims</b>
-              <span>Initial claims through Board appeals and increased ratings; each structured around evidence and entitlement theory.</span>
+              <strong>DIC / Survivor Benefits</strong>
+              <p>Dependency and Indemnity Compensation for surviving spouses and dependents.</p>
             </div>
-          </li>
-          <li class="item">
-            <div class="badge" aria-hidden="true">2</div>
+          </a>
+          <a href="services/discharge-upgrades.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </div>
             <div>
-              <b>TDIU/Unemployability</b>
-              <span>Total disability based on inability to maintain substantially gainful employment due to service-connected conditions.</span>
+              <strong>Discharge Upgrades</strong>
+              <p>Character of discharge reviews, clemency requests, and upgrade petitions.</p>
             </div>
-          </li>
-          <li class="item">
-            <div class="badge" aria-hidden="true">3</div>
+          </a>
+          <a href="services/military-records.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+            </div>
             <div>
-              <b>DIC/Survivor's Benefits</b>
-              <span>Dependency and Indemnity Compensation and related survivor benefits based on service-connected death.</span>
+              <strong>Correcting Military Records</strong>
+              <p>DD214 corrections and administrative military record amendments.</p>
             </div>
-          </li>
-          <li class="item">
-            <div class="badge" aria-hidden="true">4</div>
-            <div>
-              <b>Discharge Upgrades</b>
-              <span>Representation before DRB/BCMR to seek characterization upgrades and correction of narrative reason.</span>
-            </div>
-          </li>
-          <li class="item">
-            <div class="badge" aria-hidden="true">5</div>
-            <div>
-              <b>Correcting Military Records</b>
-              <span>Petitions to Boards for Correction of Military Records to amend errors or injustices in service records.</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card how" id="process">
-        <h2>Process</h2>
-        <p>Simple, repeatable steps that keep things moving.</p>
-
-        <ol class="steps">
-          <li class="step">
-            <div class="num">1</div>
-            <div><b>Intake</b><div style="color:var(--muted);font-size:13px;">Identify issues, deadlines, and the fastest path forward.</div></div>
-          </li>
-          <li class="step">
-            <div class="num">2</div>
-            <div><b>Evidence plan</b><div style="color:var(--muted);font-size:13px;">What records matter, what opinions are needed, what to ignore.</div></div>
-          </li>
-          <li class="step">
-            <div class="num">3</div>
-            <div><b>Submission</b><div style="color:var(--muted);font-size:13px;">Clean, organized filing aligned with VA requirements.</div></div>
-          </li>
-          <li class="step">
-            <div class="num">4</div>
-            <div><b>Follow-through</b><div style="color:var(--muted);font-size:13px;">Track, respond, and push the claim through the pipeline.</div></div>
-          </li>
-        </ol>
-
-        <div class="fineprint">
-          Note: I am a VA-accredited claims agent. I am not your attorney unless separately retained as counsel and permitted by applicable rules.
-        </div>
-      </div>
-
-      <div class="card areas" id="areas">
-        <h2>Serving Missouri and nationwide</h2>
-        <p>
-          Based in the St. Louis, Missouri area. I work with veterans throughout Missouri and across the United States.
-          Remote representation is available.
-        </p>
-
-        <ul class="list" style="margin-top:12px;">
-          <li class="item">
-            <div class="badge" aria-hidden="true">STL</div>
-            <div>
-              <b>St. Louis Metro</b>
-              <span>St. Louis County • St. Charles • Jefferson • Franklin • Metro East</span>
-            </div>
-          </li>
-          <li class="item">
-            <div class="badge" aria-hidden="true">MO</div>
-            <div>
-              <b>Missouri statewide</b>
-              <span>Springfield • Columbia • Kansas City • rural Missouri</span>
-            </div>
-          </li>
-          <li class="item">
-            <div class="badge" aria-hidden="true">USA</div>
-            <div>
-              <b>Nationwide</b>
-              <span>Virtual intake and document exchange for out-of-state clients.</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card contact" id="contact">
-        <h2>Contact</h2>
-        <p>Use the inquiry form so I can respond with the right next step.</p>
-
-        <div class="contactbox">
-          <a href="/contact.html">
-            <div><b>Inquiry form</b><div style="color:var(--muted);font-size:13px;">Submit a short summary</div></div>
-            <div class="right">Open</div>
           </a>
         </div>
+      </div>
+    </div>
 
-        <div class="fineprint">
-          No guarantees are ever made about VA outcomes. All representation is subject to VA rules, deadlines, and evidence availability.
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
+      <ul>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="btn btn-primary">Request Assistance</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- =====================
+         HERO — full-bleed split
+    ===================== -->
+    <section class="hero" aria-labelledby="hero-headline">
+
+      <div class="hero-left">
+        <div class="hero-left-inner">
+          <p class="eyebrow">VA-Accredited Claims Agent</p>
+          <h1 class="hero-headline" id="hero-headline">
+            VA disability claims, appeals, and discharge upgrades&thinsp;&mdash;
+            <em class="text-gold">handled with structure and accountability.</em>
+          </h1>
+          <p class="hero-subtext">
+            We represent veterans and survivors nationwide in disability claims, AMA appeals, discharge upgrades, military record corrections, and survivor benefits&nbsp;&mdash; structured around disciplined evidence and sound entitlement theory.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary btn-lg">Request Assistance</a>
+            <a href="#services" class="btn btn-outline-dark btn-lg">See Services &rarr;</a>
+          </div>
+          <ul class="trust-badges" aria-label="Key credentials">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Nationwide Representation
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+              Missouri-Based
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              VA-Accredited Claims Agent
+            </li>
+          </ul>
         </div>
+      </div>
+
+      <!-- Full-bleed right panel — military photo, no rounded frame -->
+      <div class="hero-right" aria-hidden="true">
+        <img
+          src="https://images.unsplash.com/photo-1499200493734-6ba25a83f77c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt=""
+          width="1000"
+          height="1400"
+          loading="eager"
+          decoding="async"
+        >
+        <!-- Gradient blends left-panel cream into the photo -->
+        <div class="hero-gradient"></div>
+      </div>
+
+    </section>
+
+    <!-- =====================
+         TRUST ROW
+    ===================== -->
+    <section class="trust-row" aria-label="Key credentials">
+      <div class="container">
+        <ul class="trust-grid">
+          <li class="trust-card">
+            <div class="trust-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <div>
+              <h3>VA-Accredited Claims Agent</h3>
+              <p>Accredited by the U.S. Department of Veterans Affairs.</p>
+            </div>
+          </li>
+          <li class="trust-card">
+            <div class="trust-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </div>
+            <div>
+              <h3>Evidence-First Approach</h3>
+              <p>Every case is built around organized evidence and sound theory.</p>
+            </div>
+          </li>
+          <li class="trust-card">
+            <div class="trust-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <h3>Missouri-Based &bull; Nationwide</h3>
+              <p>Local roots in Missouri. Serving veterans across the U.S.</p>
+            </div>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <footer>
-      <div>© <span id="y"></span> Veterans Disability Advocates</div>
-      <div style="opacity:.78;">vdallc.com</div>
-    </footer>
-  </div>
+    <!-- =====================
+         SERVICES
+    ===================== -->
+    <section class="services" id="services" aria-labelledby="services-heading">
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow">What We Do</p>
+          <h2 id="services-heading">Our Services</h2>
+          <p class="section-lead">Focused representation across the full range of VA disability and benefits matters.</p>
+        </header>
 
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
+        <ul class="services-grid">
+          <li class="service-card reveal">
+            <div class="service-card-img">
+              <img src="https://images.pexels.com/photos/1202726/pexels-photo-1202726.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+              </div>
+              <h3>VA Disability Claims</h3>
+              <p>New claims, increased ratings, and service-connected conditions.</p>
+              <a href="services/va-disability-claims.html" class="service-card-link">Learn More &rarr;</a>
+            </div>
+          </li>
+          <li class="service-card reveal">
+            <div class="service-card-img">
+              <img src="https://images.pexels.com/photos/7467913/pexels-photo-7467913.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              </div>
+              <h3>TDIU / Unemployability</h3>
+              <p>Total Disability based on Individual Unemployability claims.</p>
+              <a href="services/tdiu-unemployability.html" class="service-card-link">Learn More &rarr;</a>
+            </div>
+          </li>
+          <li class="service-card reveal">
+            <div class="service-card-img">
+              <img src="https://images.pexels.com/photos/8157331/pexels-photo-8157331.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              </div>
+              <h3>DIC / Survivor Benefits</h3>
+              <p>Dependency and Indemnity Compensation and related survivor benefits.</p>
+              <a href="services/dic-survivor-benefits.html" class="service-card-link">Learn More &rarr;</a>
+            </div>
+          </li>
+          <li class="service-card reveal">
+            <div class="service-card-img">
+              <img src="https://images.pexels.com/photos/9845045/pexels-photo-9845045.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              </div>
+              <h3>Discharge Upgrades</h3>
+              <p>Character of discharge upgrades, clemency requests, and related petitions.</p>
+              <a href="services/discharge-upgrades.html" class="service-card-link">Learn More &rarr;</a>
+            </div>
+          </li>
+          <li class="service-card reveal">
+            <div class="service-card-img">
+              <img src="https://images.pexels.com/photos/7984347/pexels-photo-7984347.jpeg?auto=compress&cs=tinysrgb&w=700" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="service-card-body">
+              <div class="service-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              </div>
+              <h3>Correcting Military Records</h3>
+              <p>Administrative corrections for DD214s and military records.</p>
+              <a href="services/military-records.html" class="service-card-link">Learn More &rarr;</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- =====================
+         PROCESS
+    ===================== -->
+    <section class="process" id="process" aria-labelledby="process-heading">
+      <div class="container">
+        <header class="section-header">
+          <p class="eyebrow">How It Works</p>
+          <h2 id="process-heading">Our Process</h2>
+          <p class="section-lead">A structured, disciplined approach at every stage of your case.</p>
+        </header>
+
+        <ol class="process-steps" aria-label="Four-step process">
+          <li class="process-step reveal">
+            <div class="step-num" aria-hidden="true">01</div>
+            <div class="step-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <h3>Intake</h3>
+            <p>We listen, gather your story, and review your initial documents.</p>
+          </li>
+          <li class="process-step reveal">
+            <div class="step-num" aria-hidden="true">02</div>
+            <div class="step-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+            </div>
+            <h3>Evidence Plan</h3>
+            <p>We identify gaps, organize records, and build a focused evidence plan.</p>
+          </li>
+          <li class="process-step reveal">
+            <div class="step-num" aria-hidden="true">03</div>
+            <div class="step-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </div>
+            <h3>Submission</h3>
+            <p>We prepare and submit your claim or appeal with accuracy and support.</p>
+          </li>
+          <li class="process-step reveal">
+            <div class="step-num" aria-hidden="true">04</div>
+            <div class="step-icon-wrap">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <h3>Follow-Through</h3>
+            <p>We monitor progress, respond to VA requests, and keep you informed.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- =====================
+         BOTTOM SPLIT — Service area + Contact side by side
+    ===================== -->
+    <div class="bottom-split">
+
+      <!-- Left: dark navy service area with St. Louis arch bg -->
+      <section class="service-area" id="about" aria-labelledby="area-heading">
+        <div class="area-bg" aria-hidden="true">
+          <img
+            src="https://images.unsplash.com/photo-1675906798362-12318a371268?auto=format&fit=crop&w=900&q=80"
+            alt=""
+            width="900"
+            height="600"
+            loading="lazy"
+            decoding="async"
+          >
+        </div>
+
+        <div class="area-content">
+          <p class="eyebrow eyebrow--light">Where We Work</p>
+          <h2 id="area-heading">Serving Missouri and Nationwide</h2>
+          <p class="area-lead">Based in the St. Louis, Missouri area, VDA LLC serves veterans and survivors across Missouri and throughout the United States.</p>
+
+          <ul class="area-list">
+            <li>
+              <div class="area-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+              <div>
+                <strong>St. Louis Metro</strong>
+                <p>Local and in-person support for the St. Louis area.</p>
+              </div>
+            </li>
+            <li>
+              <div class="area-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
+              </div>
+              <div>
+                <strong>Missouri Statewide</strong>
+                <p>Serving veterans in every corner of Missouri.</p>
+              </div>
+            </li>
+            <li>
+              <div class="area-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+              <div>
+                <strong>Nationwide Virtual Intake</strong>
+                <p>Secure virtual intake and representation available nationwide.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Right: contact form -->
+      <section class="contact" id="contact" aria-labelledby="contact-heading">
+        <div class="contact-inner">
+          <header class="contact-header">
+            <p class="eyebrow">Get Started</p>
+            <h2 id="contact-heading">Let&rsquo;s Take the Next Step</h2>
+            <p>Submit a short summary of your situation and we&rsquo;ll respond with the right next step.</p>
+          </header>
+
+          <form class="contact-form" id="contact-form" action="https://formsubmit.co/jared@vdallc.com" method="POST">
+            <input type="hidden" name="_subject" value="New VA Claim Inquiry — VDA LLC">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://vdallc.com/thankyou.html">
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" id="full-name" name="Full Name" autocomplete="name" required placeholder="Your full name">
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="Email" autocomplete="email" required placeholder="you@example.com">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="Phone" autocomplete="tel" required placeholder="(555) 555-5555">
+              </div>
+              <div class="form-group">
+                <label for="claim-type">Type of Assistance</label>
+                <select id="claim-type" name="Claim Type" required>
+                  <option value="">Select&hellip;</option>
+                  <option>VA Disability</option>
+                  <option>TDIU/Unemployability</option>
+                  <option>DIC/Survivor&apos;s Benefits</option>
+                  <option>Discharge Upgrades</option>
+                  <option>Correcting Military Records</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="situation">Brief Summary</label>
+              <textarea id="situation" name="Message" rows="4" placeholder="What are you trying to accomplish? Any deadlines coming up?"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-full">Request Assistance</button>
+            <p class="form-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              Your information is secure and confidential.
+            </p>
+          </form>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- =====================
+       FOOTER
+  ===================== -->
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo" aria-label="VDA LLC — Return to homepage">
+            <img src="img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="lazy" aria-hidden="true">
+            <img src="img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="lazy" aria-hidden="true">
+            VDA LLC
+          </a>
+          <p>VA disability claims, appeals, and discharge upgrades&nbsp;&mdash; built on evidence and accountability.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav-col">
+            <strong>Services</strong>
+            <ul>
+              <li><a href="services/va-disability-claims.html">VA Disability Claims</a></li>
+              <li><a href="services/tdiu-unemployability.html">TDIU / Unemployability</a></li>
+              <li><a href="services/dic-survivor-benefits.html">DIC / Survivor Benefits</a></li>
+              <li><a href="services/discharge-upgrades.html">Discharge Upgrades</a></li>
+              <li><a href="services/military-records.html">Correcting Military Records</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <strong>Company</strong>
+            <ul>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#process">Our Process</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <strong>Get Started</strong>
+            <a href="#contact" class="btn btn-primary footer-cta-btn">Request Assistance</a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <p>No guarantees are ever made about VA outcomes. All representation is subject to VA rules, deadlines, and evidence availability.</p>
+          <p>VDA LLC provides services as a VA-accredited claims agent. VDA LLC is not your attorney unless separately retained as counsel where permitted by applicable rules.</p>
+          <p class="footer-copy">&copy; 2024 VDA LLC. All rights reserved.</p>
+        </div>
+        <div class="footer-meta">
+          <p class="footer-credit">Website by <a href="https://thecoolmoon.com" target="_blank" rel="noopener noreferrer">TheCoolMoon.com</a></p>
+          <div class="va-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            VA Accredited Agent
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
