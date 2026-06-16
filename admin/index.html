@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Admin — VDA LLC</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* ── Login ──────────────────────────────────────────────────────────── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--navy-dark);
+    }
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2.25rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: var(--shadow-lg);
+    }
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--navy);
+      margin-bottom: 1.75rem;
+    }
+    .login-logo svg { flex-shrink: 0; }
+    .login-title { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--navy); margin: 0 0 .25rem; }
+    .login-sub   { font-size: .875rem; color: var(--text-mid); margin: 0 0 1.5rem; }
+    .login-error {
+      background: rgba(178,34,52,.1);
+      border: 1px solid rgba(178,34,52,.3);
+      color: #b22234;
+      font-size: .8125rem;
+      padding: .5rem .875rem;
+      border-radius: var(--radius);
+      margin-bottom: .875rem;
+      display: none;
+    }
+    .login-error.show { display: block; }
+
+    /* ── Topbar ─────────────────────────────────────────────────────────── */
+    #admin-panel { display: none; min-height: 100vh; background: var(--off-white); }
+    #admin-panel.active { display: block; }
+
+    .admin-topbar {
+      background: var(--navy-dark);
+      color: rgba(255,255,255,.9);
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: .625rem;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: .9375rem;
+    }
+    .topbar-badge {
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: var(--navy-dark);
+      padding: .15rem .5rem;
+      border-radius: 2px;
+    }
+    .topbar-actions { display: flex; align-items: center; gap: .5rem; }
+    .topbar-btn {
+      font-size: .8rem;
+      font-weight: 600;
+      padding: .35rem .85rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.25);
+      background: transparent;
+      color: rgba(255,255,255,.85);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: background .2s;
+    }
+    .topbar-btn:hover { background: rgba(255,255,255,.1); }
+    .topbar-btn.accent { background: var(--gold); border-color: var(--gold); color: var(--navy-dark); }
+    .topbar-btn.accent:hover { opacity: .9; }
+
+    /* ── Views ──────────────────────────────────────────────────────────── */
+    .admin-view { display: none; padding: 2rem 1.5rem; max-width: 920px; margin: 0 auto; }
+    .admin-view.active { display: block; }
+
+    .view-heading { font-family: var(--font-serif); font-size: 1.625rem; color: var(--navy); margin: 0 0 .3rem; }
+    .view-sub     { font-size: .9rem; color: var(--text-mid); margin: 0 0 2rem; }
+
+    /* ── Dashboard cards ────────────────────────────────────────────────── */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+      gap: .875rem;
+      margin-bottom: 1.75rem;
+    }
+    .post-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.125rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .post-card-tag   { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+    .post-card-title { font-family: var(--font-serif); font-size: .9375rem; font-weight: 700; color: var(--navy); line-height: 1.3; }
+    .post-card-date  { font-size: .75rem; color: var(--text-faint); }
+    .post-card-status { font-size: .7rem; font-weight: 600; color: #2e7d32; margin-top: .2rem; }
+
+    /* ── Password helper ────────────────────────────────────────────────── */
+    .pass-helper {
+      margin-top: 3rem;
+      padding: 1.25rem 1.375rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .pass-helper h3 { font-size: .9375rem; color: var(--navy); margin: 0 0 .375rem; }
+    .pass-helper p  { font-size: .8125rem; color: var(--text-mid); margin: 0 0 .875rem; line-height: 1.6; }
+    .pass-row       { display: flex; gap: .5rem; margin-bottom: .75rem; }
+    .pass-row input {
+      flex: 1;
+      padding: .5rem .75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .875rem;
+      font-family: var(--font-sans);
+    }
+    .pass-row button {
+      padding: .5rem 1rem;
+      background: var(--navy-dark);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: .8125rem;
+      font-family: var(--font-sans);
+    }
+    .hash-output {
+      font-family: monospace;
+      font-size: .78rem;
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: .5rem .75rem;
+      word-break: break-all;
+      color: var(--text-dark);
+      display: none;
+    }
+
+    /* ── Editor ─────────────────────────────────────────────────────────── */
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .875rem;
+      margin-bottom: .875rem;
+    }
+    .col-full { grid-column: 1 / -1; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .field label {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      letter-spacing: .02em;
+    }
+    .field label .req { color: #b22234; }
+    .field input,
+    .field select,
+    .field textarea {
+      padding: .575rem .825rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .875rem;
+      font-family: var(--font-sans);
+      color: var(--text-dark);
+      background: var(--white);
+      transition: border-color .15s, box-shadow .15s;
+      width: 100%;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: #9b7c35;
+      box-shadow: 0 0 0 3px rgba(155,124,53,.12);
+    }
+    .field textarea { resize: vertical; }
+    .field-hint { font-size: .73rem; color: var(--text-faint); line-height: 1.4; }
+
+    /* ── Section builder ────────────────────────────────────────────────── */
+    .sections-label { font-size: .8rem; font-weight: 600; color: var(--text-dark); margin-bottom: .5rem; letter-spacing: .02em; }
+    .section-block {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: .875rem 1rem;
+      margin-bottom: .625rem;
+      background: var(--white);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .625rem;
+    }
+    .section-num { font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); }
+    .section-remove-btn {
+      font-size: .75rem;
+      font-weight: 600;
+      color: #b22234;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: .2rem .4rem;
+      font-family: var(--font-sans);
+    }
+    .section-remove-btn:hover { opacity: .7; }
+    .add-section-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .375rem;
+      width: 100%;
+      padding: .625rem;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: none;
+      color: var(--text-mid);
+      font-size: .8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: border-color .15s, color .15s;
+    }
+    .add-section-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── Callout builder ────────────────────────────────────────────────── */
+    .callout-toggle-btn {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--gold);
+      background: none;
+      border: 1px solid rgba(201,168,76,.4);
+      border-radius: var(--radius);
+      padding: .45rem .9rem;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: border-color .15s;
+      margin-top: 1rem;
+    }
+    .callout-toggle-btn:hover { border-color: var(--gold); }
+    .callout-block {
+      display: none;
+      margin-top: .625rem;
+      padding: 1rem 1.125rem;
+      background: var(--cream);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    /* ── Related articles ───────────────────────────────────────────────── */
+    .related-list { display: flex; flex-direction: column; gap: .375rem; }
+    .related-list label {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .875rem;
+      color: var(--text-mid);
+      cursor: pointer;
+    }
+
+    /* ── Editor actions ─────────────────────────────────────────────────── */
+    .editor-actions {
+      display: flex;
+      gap: .75rem;
+      align-items: center;
+      padding: 1.5rem 0 0;
+      border-top: 1px solid var(--border);
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-preview {
+      padding: .6rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--navy);
+      font-weight: 600;
+      font-size: .875rem;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: border-color .15s;
+    }
+    .btn-preview:hover { border-color: var(--navy); }
+    .btn-export {
+      padding: .6rem 1.375rem;
+      background: var(--navy-dark);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: .875rem;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: opacity .15s;
+    }
+    .btn-export:hover { opacity: .85; }
+    .export-note { font-size: .78rem; color: var(--text-faint); line-height: 1.4; }
+
+    /* ── Preview modal ──────────────────────────────────────────────────── */
+    .preview-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 500;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+    .preview-overlay.open { display: flex; }
+    .preview-modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 760px;
+      overflow: hidden;
+      margin: auto;
+    }
+    .preview-modal-head {
+      padding: .875rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .preview-modal-head strong { font-size: .9375rem; color: var(--navy); }
+    .preview-close {
+      background: none; border: none; font-size: 1.25rem; cursor: pointer;
+      color: var(--text-mid); padding: .2rem .5rem; line-height: 1;
+    }
+    .preview-body {
+      padding: 2rem;
+      max-height: 78vh;
+      overflow-y: auto;
+      font-size: .9375rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+    .preview-body h1 { font-family: var(--font-serif); font-size: 1.625rem; color: var(--navy); margin: 0 0 .5rem; line-height: 1.2; }
+    .preview-body .preview-meta { font-size: .78rem; color: var(--text-faint); margin: 0 0 1.25rem; }
+    .preview-body h2 { font-family: var(--font-serif); font-size: 1.15rem; color: var(--navy); margin: 1.5rem 0 .5rem; }
+    .preview-body p  { margin: 0 0 .75rem; }
+    .preview-callout {
+      background: var(--cream);
+      border-left: 3px solid var(--gold);
+      padding: .875rem 1.125rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 1.125rem 0;
+    }
+    .preview-callout p { margin: 0; }
+
+    @media (max-width: 600px) {
+      .editor-grid { grid-template-columns: 1fr; }
+      .admin-view  { padding: 1.25rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Login ─────────────────────────────────────────────────────────── -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M11 0L0 5v8c0 6.627 4.925 12.82 11 14 6.075-1.18 11-7.373 11-14V5L11 0z" fill="#1B2A4A"/>
+          <rect x="7" y="11.5" width="8" height="1.5" rx=".75" fill="#C9A84C"/>
+          <rect x="7" y="15"   width="5" height="1.5" rx=".75" fill="#C9A84C"/>
+        </svg>
+        VDA LLC
+      </div>
+      <h1 class="login-title">Content Admin</h1>
+      <p class="login-sub">Sign in to create and manage blog posts.</p>
+      <div class="login-error" id="login-error">Incorrect password — please try again.</div>
+      <div class="form-group">
+        <label for="login-pw">Password</label>
+        <input type="password" id="login-pw" autocomplete="current-password" placeholder="••••••••••••">
+      </div>
+      <button class="btn btn-primary" id="login-btn" style="margin-top:1rem;width:100%">Sign In</button>
+    </div>
+  </div>
+
+  <!-- ── Admin panel ────────────────────────────────────────────────────── -->
+  <div id="admin-panel">
+
+    <div class="admin-topbar">
+      <div class="topbar-brand">
+        VDA LLC <span class="topbar-badge">Admin</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn" onclick="showDash()">Dashboard</button>
+        <button class="topbar-btn accent" onclick="showEditor()">+ New Post</button>
+        <button class="topbar-btn" onclick="logout()">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="admin-view active" id="view-dash">
+      <h1 class="view-heading">Published Posts</h1>
+      <p class="view-sub">Create a new post or review what&rsquo;s live on the site.</p>
+      <div class="posts-grid" id="posts-grid"></div>
+      <button class="btn btn-primary" onclick="showEditor()">+ Create New Post</button>
+
+      <div class="pass-helper">
+        <h3>Change Admin Password</h3>
+        <p>Enter your new password below to generate its SHA-256 hash. Open <code>admin/index.html</code>, find the <code>PASS_HASH</code> constant near the top of the &lt;script&gt; tag, and replace it with the value shown.</p>
+        <div class="pass-row">
+          <input type="password" id="new-pw" placeholder="New password">
+          <button onclick="genHash()">Generate Hash</button>
+        </div>
+        <div class="hash-output" id="hash-out"></div>
+      </div>
+    </div>
+
+    <!-- Editor -->
+    <div class="admin-view" id="view-editor">
+      <h2 class="view-heading">New Post</h2>
+      <p class="view-sub">Fill in the fields, then click <strong>Download HTML</strong>. Place the file in the <code>/blog/</code> folder and commit it to GitHub Pages to publish.</p>
+
+      <div class="editor-grid">
+
+        <div class="field col-full">
+          <label for="f-title">Post Title <span class="req">*</span></label>
+          <input type="text" id="f-title" placeholder="e.g. How to File a Successful VA Claim" oninput="autoSlug()">
+        </div>
+
+        <div class="field">
+          <label for="f-slug">URL Slug <span class="req">*</span></label>
+          <input type="text" id="f-slug" placeholder="how-to-file-va-claim" oninput="updateSlugHint()">
+          <span class="field-hint">File saves as <code>/blog/<span id="slug-hint">your-slug</span>.html</code></span>
+        </div>
+
+        <div class="field">
+          <label for="f-tag">Category <span class="req">*</span></label>
+          <select id="f-tag" onchange="prefillSubject()">
+            <option value="VA Claims">VA Claims</option>
+            <option value="TDIU">TDIU / Unemployability</option>
+            <option value="VA Appeals">VA Appeals</option>
+            <option value="Discharge Upgrades">Discharge Upgrades</option>
+            <option value="Survivor Benefits">Survivor Benefits</option>
+            <option value="Military Records">Military Records</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-date">Publish Date <span class="req">*</span></label>
+          <input type="date" id="f-date">
+        </div>
+
+        <div class="field">
+          <label for="f-readtime">Read Time</label>
+          <input type="text" id="f-readtime" placeholder="Auto-calculated if blank">
+        </div>
+
+        <div class="field col-full">
+          <label for="f-excerpt">Excerpt <span class="req">*</span></label>
+          <textarea id="f-excerpt" rows="2" placeholder="1–2 sentences shown in card previews and below the hero title."></textarea>
+        </div>
+
+        <div class="field col-full">
+          <label for="f-hero">Hero Image URL <span class="req">*</span></label>
+          <input type="url" id="f-hero" placeholder="https://images.pexels.com/photos/XXXXXXX/pexels-photo-XXXXXXX.jpeg?auto=compress&cs=tinysrgb&w=1400">
+          <span class="field-hint">Full-bleed image behind the post title. Use <code>w=1400</code> for hero images.</span>
+        </div>
+
+        <div class="field col-full">
+          <label for="f-hero-alt">Hero Image Alt Text</label>
+          <input type="text" id="f-hero-alt" placeholder="Describe the image for screen readers (decorative images can be left blank)">
+        </div>
+
+        <div class="field col-full">
+          <label for="f-card-img">Card Thumbnail URL</label>
+          <input type="url" id="f-card-img" placeholder="Optional — defaults to hero URL with w=700">
+          <span class="field-hint">Smaller image shown in blog index cards. Leave blank to auto-derive from the hero URL.</span>
+        </div>
+
+        <div class="field col-full">
+          <label for="f-form-subject">Sidebar Form Subject Line</label>
+          <input type="text" id="f-form-subject" placeholder="e.g. Claim Question — VDA LLC">
+        </div>
+
+      </div><!-- /editor-grid -->
+
+      <!-- Sections -->
+      <div class="sections-label">Article Sections <span class="req">*</span></div>
+      <div id="sections-wrap"></div>
+      <button class="add-section-btn" onclick="addSection()">+ Add Section</button>
+
+      <!-- Optional callout -->
+      <button class="callout-toggle-btn" id="callout-btn" onclick="toggleCallout()">+ Add Callout Box</button>
+      <div class="callout-block" id="callout-block">
+        <div class="editor-grid" style="margin-bottom:0">
+          <div class="field">
+            <label for="f-callout-label">Callout Label</label>
+            <input type="text" id="f-callout-label" placeholder="e.g. Key Rule, Important, Did You Know">
+          </div>
+          <div class="field">
+            <label for="f-callout-after">Insert after section #</label>
+            <input type="number" id="f-callout-after" min="1" value="2" style="max-width:80px">
+          </div>
+          <div class="field col-full">
+            <label for="f-callout-text">Callout Text</label>
+            <textarea id="f-callout-text" rows="2" placeholder="The highlighted note shown inside the callout block."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related articles -->
+      <div style="margin-top:1.375rem">
+        <div class="sections-label">Related Articles (sidebar)</div>
+        <div class="related-list" id="related-list"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="editor-actions">
+        <button class="btn-preview" onclick="openPreview()">Preview</button>
+        <button class="btn-export" onclick="exportPost()">Download HTML File</button>
+        <span class="export-note">Place the downloaded file in <code>/blog/</code><br>and commit to GitHub to publish.</span>
+      </div>
+    </div><!-- /view-editor -->
+
+  </div><!-- /admin-panel -->
+
+  <!-- Preview modal -->
+  <div class="preview-overlay" id="preview-overlay">
+    <div class="preview-modal">
+      <div class="preview-modal-head">
+        <strong>Post Preview</strong>
+        <button class="preview-close" onclick="closePreview()" aria-label="Close preview">&times;</button>
+      </div>
+      <div class="preview-body" id="preview-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── CONFIG ──────────────────────────────────────────────────────────────
+    // Default password: VDAadmin2025
+    // To change: use the "Change Admin Password" tool on the dashboard,
+    // then replace the hash string below with the generated value.
+    const PASS_HASH = 'bfcca36bbf3c582484b86fcee3ae92d9e2c953adc1063dcae17cf2b0f000253c';
+
+    const BASE_POSTS = [
+      { title: 'How VA Combined Ratings Work — And Why the Math Usually Shortchanges Veterans', slug: 'va-disability-ratings',    tag: 'VA Claims',          date: '2025-06-01' },
+      { title: 'TDIU: How Veterans Can Receive 100% VA Pay Without a 100% Rating',             slug: 'tdiu-guide',               tag: 'TDIU',               date: '2025-06-05' },
+      { title: 'VA Claim Denied? Your Three Appeal Options Under the AMA',                      slug: 'va-claim-denied',          tag: 'VA Appeals',         date: '2025-06-10' },
+      { title: 'Discharge Upgrade Guide: Who Qualifies and What to Expect',                     slug: 'discharge-upgrade-guide',  tag: 'Discharge Upgrades', date: '2025-06-15' },
+    ];
+
+    // ── AUTH ────────────────────────────────────────────────────────────────
+    async function sha256(str) {
+      const buf  = new TextEncoder().encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', buf);
+      return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function isLoggedIn() { return sessionStorage.getItem('vda-auth') === '1'; }
+    function logout()     { sessionStorage.removeItem('vda-auth'); location.reload(); }
+
+    document.getElementById('login-btn').addEventListener('click', tryLogin);
+    document.getElementById('login-pw').addEventListener('keydown', e => e.key === 'Enter' && tryLogin());
+
+    async function tryLogin() {
+      const pw   = document.getElementById('login-pw').value;
+      const hash = await sha256(pw);
+      if (hash === PASS_HASH) {
+        sessionStorage.setItem('vda-auth', '1');
+        bootPanel();
+      } else {
+        document.getElementById('login-error').classList.add('show');
+        document.getElementById('login-pw').value = '';
+        document.getElementById('login-pw').focus();
+      }
+    }
+
+    function bootPanel() {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-panel').style.display  = 'block';
+      buildDash();
+      initEditor();
+    }
+
+    if (isLoggedIn()) bootPanel();
+
+    // ── DASHBOARD ───────────────────────────────────────────────────────────
+    function allPosts() {
+      const stored = JSON.parse(localStorage.getItem('vda-admin-posts') || '[]');
+      const merged = [...BASE_POSTS];
+      stored.forEach(p => { if (!merged.find(m => m.slug === p.slug)) merged.push(p); });
+      return merged;
+    }
+
+    function buildDash() {
+      const grid  = document.getElementById('posts-grid');
+      grid.innerHTML = allPosts().map(p => `
+        <div class="post-card">
+          <span class="post-card-tag">${p.tag}</span>
+          <div class="post-card-title">${p.title}</div>
+          <div class="post-card-date">${fmtDate(p.date)}</div>
+          <div class="post-card-status">&#10003; Published</div>
+        </div>
+      `).join('');
+    }
+
+    function showDash() {
+      document.getElementById('view-dash').classList.add('active');
+      document.getElementById('view-editor').classList.remove('active');
+    }
+
+    // ── HASH HELPER ─────────────────────────────────────────────────────────
+    async function genHash() {
+      const val = document.getElementById('new-pw').value;
+      if (!val) { alert('Enter a new password first.'); return; }
+      const h   = await sha256(val);
+      const out = document.getElementById('hash-out');
+      out.style.display = 'block';
+      out.textContent   = h;
+    }
+
+    // ── EDITOR ──────────────────────────────────────────────────────────────
+    let secCount      = 0;
+    let calloutOpen   = false;
+
+    function initEditor() {
+      document.getElementById('f-date').value = new Date().toISOString().slice(0,10);
+      addSection(); addSection(); addSection();
+      buildRelated();
+    }
+
+    function showEditor() {
+      document.getElementById('view-dash').classList.remove('active');
+      document.getElementById('view-editor').classList.add('active');
+    }
+
+    function autoSlug() {
+      const slug = document.getElementById('f-title').value
+        .toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').slice(0,60);
+      document.getElementById('f-slug').value = slug;
+      updateSlugHint();
+    }
+
+    function updateSlugHint() {
+      document.getElementById('slug-hint').textContent = document.getElementById('f-slug').value || 'your-slug';
+    }
+
+    function prefillSubject() {
+      const tag  = document.getElementById('f-tag').value;
+      const subj = document.getElementById('f-form-subject');
+      if (!subj.value) subj.value = `${tag} Question — VDA LLC`;
+    }
+
+    function addSection() {
+      secCount++;
+      const n  = secCount;
+      const el = document.createElement('div');
+      el.className = 'section-block';
+      el.id        = `sec-${n}`;
+      el.innerHTML = `
+        <div class="section-header">
+          <span class="section-num">Section ${n}</span>
+          <button class="section-remove-btn" onclick="removeSection(${n})">Remove</button>
+        </div>
+        <div class="field" style="margin-bottom:.5rem">
+          <label>Heading (H2)</label>
+          <input type="text" id="sh-${n}" placeholder="Section heading — leave blank for no heading">
+        </div>
+        <div class="field">
+          <label>Content <span class="req">*</span></label>
+          <textarea id="sb-${n}" rows="5" placeholder="Write the section body here. Separate paragraphs with a blank line."></textarea>
+        </div>
+      `;
+      document.getElementById('sections-wrap').appendChild(el);
+    }
+
+    function removeSection(n) {
+      document.getElementById(`sec-${n}`)?.remove();
+    }
+
+    function toggleCallout() {
+      calloutOpen = !calloutOpen;
+      document.getElementById('callout-block').style.display = calloutOpen ? 'block' : 'none';
+      document.getElementById('callout-btn').textContent = calloutOpen ? '− Remove Callout Box' : '+ Add Callout Box';
+    }
+
+    function buildRelated() {
+      const list  = document.getElementById('related-list');
+      list.innerHTML = allPosts().map(p => `
+        <label>
+          <input type="checkbox" name="rel" value="${p.slug}" data-title="${esc(p.title)}">
+          ${p.title} <span style="font-size:.75rem;color:var(--text-faint)">(${p.tag})</span>
+        </label>
+      `).join('');
+    }
+
+    // ── COLLECT FORM DATA ───────────────────────────────────────────────────
+    function collect() {
+      const sections = [];
+      document.querySelectorAll('.section-block').forEach(b => {
+        const id  = b.id.slice(4);
+        const h   = document.getElementById(`sh-${id}`)?.value.trim() || '';
+        const raw = document.getElementById(`sb-${id}`)?.value.trim() || '';
+        const ps  = raw.split(/\n\s*\n/).map(p => p.trim().replace(/\n/g,' ')).filter(Boolean);
+        if (h || ps.length) sections.push({ h, ps });
+      });
+
+      const related = [];
+      document.querySelectorAll('input[name="rel"]:checked').forEach(cb => {
+        related.push({ slug: cb.value, title: cb.dataset.title });
+      });
+
+      const heroUrl   = document.getElementById('f-hero').value.trim();
+      const cardImg   = document.getElementById('f-card-img').value.trim()
+                      || heroUrl.replace('w=1400','w=700');
+      const readtime  = document.getElementById('f-readtime').value.trim()
+                      || autoReadTime(sections);
+
+      return {
+        title:    document.getElementById('f-title').value.trim(),
+        slug:     document.getElementById('f-slug').value.trim(),
+        tag:      document.getElementById('f-tag').value,
+        date:     document.getElementById('f-date').value,
+        readtime,
+        excerpt:  document.getElementById('f-excerpt').value.trim(),
+        heroUrl,
+        heroAlt:  document.getElementById('f-hero-alt').value.trim(),
+        cardImg,
+        subject:  document.getElementById('f-form-subject').value.trim() || 'Inquiry — VDA LLC',
+        sections,
+        callout:  calloutOpen ? {
+          label: document.getElementById('f-callout-label').value.trim() || 'Note',
+          text:  document.getElementById('f-callout-text').value.trim(),
+          after: parseInt(document.getElementById('f-callout-after').value) || 2,
+        } : null,
+        related,
+      };
+    }
+
+    function autoReadTime(sections) {
+      const words = sections.reduce((n, s) => n + s.ps.join(' ').split(/\s+/).length, 0);
+      return `${Math.max(2, Math.ceil(words / 220))} min read`;
+    }
+
+    // ── PREVIEW ─────────────────────────────────────────────────────────────
+    function openPreview() {
+      const d = collect();
+      let html = `<h1>${esc(d.title) || 'Untitled'}</h1>
+<p class="preview-meta">${esc(d.tag)} &middot; ${fmtDate(d.date)} &middot; ${esc(d.readtime)}</p>
+<p><em>${esc(d.excerpt)}</em></p>`;
+      d.sections.forEach((s, i) => {
+        if (s.h)  html += `<h2>${esc(s.h)}</h2>`;
+        s.ps.forEach(p => { html += `<p>${esc(p)}</p>`; });
+        if (d.callout && d.callout.after === i + 1 && d.callout.text) {
+          html += `<div class="preview-callout"><p><strong>${esc(d.callout.label)}:</strong> ${esc(d.callout.text)}</p></div>`;
+        }
+      });
+      document.getElementById('preview-body').innerHTML = html;
+      document.getElementById('preview-overlay').classList.add('open');
+    }
+
+    function closePreview() {
+      document.getElementById('preview-overlay').classList.remove('open');
+    }
+
+    // ── HTML GENERATION ─────────────────────────────────────────────────────
+    function buildArticle(d) {
+      let out = '';
+      d.sections.forEach((s, i) => {
+        if (s.h)  out += `\n          <h2>${esc(s.h)}</h2>`;
+        s.ps.forEach(p => { out += `\n          <p>${esc(p)}</p>`; });
+        if (d.callout && d.callout.after === i + 1 && d.callout.text) {
+          out += `\n\n          <div class="blog-callout">\n            <p><strong>${esc(d.callout.label)}:</strong> ${esc(d.callout.text)}</p>\n          </div>`;
+        }
+      });
+      return out;
+    }
+
+    function buildRelatedLinks(related) {
+      if (!related.length) return '';
+      return `
+          <div class="sidebar-card">
+            <h3>Related Articles</h3>
+            <nav class="sidebar-related" aria-label="Related articles">
+${related.map(r => `              <a href="${r.slug}.html" class="sidebar-related-item">${esc(r.title)} &rarr;</a>`).join('\n')}
+            </nav>
+          </div>`;
+    }
+
+    function generateHTML(d) {
+      const year      = new Date(d.date + 'T12:00:00').getFullYear();
+      const canonical = `https://vdallc.com/blog/${d.slug}.html`;
+      const article   = buildArticle(d);
+      const related   = buildRelatedLinks(d.related);
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${esc(d.title)} | VDA LLC</title>
+  <meta name="description" content="${esc(d.excerpt)}">
+  <link rel="canonical" href="${canonical}">
+  <meta property="og:title"       content="${esc(d.title)} | VDA LLC">
+  <meta property="og:description" content="${esc(d.excerpt)}">
+  <meta property="og:type"        content="article">
+  <meta property="og:url"         content="${canonical}">
+  <meta property="og:image"       content="${esc(d.heroUrl)}">
+  <script>(function(){var t=localStorage.getItem('vda-theme');if(t)document.documentElement.setAttribute('data-theme',t)})();<\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="../" class="logo" aria-label="VDA LLC — Return to homepage">
+        <img src="../img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="eager" aria-hidden="true">
+        <img src="../img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="eager" aria-hidden="true">
+        <span class="logo-text">VDA LLC</span>
+      </a>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li class="nav-has-mega" id="nav-services">
+            <a href="../#services" aria-haspopup="true" aria-expanded="false">
+              Services
+              <svg class="chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <div class="megamenu" role="region" aria-label="Services submenu">
+              <div class="container megamenu-inner">
+                <a href="../services/va-disability-claims.html" class="megamenu-item">VA Disability Claims</a>
+                <a href="../services/tdiu-unemployability.html" class="megamenu-item">TDIU / Unemployability</a>
+                <a href="../services/dic-survivor-benefits.html" class="megamenu-item">DIC / Survivor Benefits</a>
+                <a href="../services/discharge-upgrades.html" class="megamenu-item">Discharge Upgrades</a>
+                <a href="../services/military-records.html" class="megamenu-item">Correcting Military Records</a>
+              </div>
+            </div>
+          </li>
+          <li><a href="../about.html">About Us</a></li>
+          <li><a href="../blog.html">Insights</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+        <a href="../contact.html" class="btn btn-primary">Request Assistance</a>
+      </nav>
+      <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="theme-toggle" aria-label="Toggle colour scheme">
+        <svg class="icon-sun"  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10A5 5 0 0012 7z"/></svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
+      <ul>
+        <li>
+          <button class="mobile-nav-toggle" aria-expanded="false">
+            Services
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="mobile-nav-sub">
+            <li><a href="../services/va-disability-claims.html">VA Disability Claims</a></li>
+            <li><a href="../services/tdiu-unemployability.html">TDIU / Unemployability</a></li>
+            <li><a href="../services/dic-survivor-benefits.html">DIC / Survivor Benefits</a></li>
+            <li><a href="../services/discharge-upgrades.html">Discharge Upgrades</a></li>
+            <li><a href="../services/military-records.html">Correcting Military Records</a></li>
+          </ul>
+        </li>
+        <li><a href="../about.html">About Us</a></li>
+        <li><a href="../blog.html">Insights</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="page-hero" aria-labelledby="page-hero-heading">
+      <div class="page-hero-bg" aria-hidden="true">
+        <img src="${esc(d.heroUrl)}" alt="" loading="eager" decoding="async">
+      </div>
+      <div class="container page-hero-inner">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="../">Home</a>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <a href="../blog.html">Insights</a>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span aria-current="page">${esc(d.title)}</span>
+        </nav>
+        <p class="eyebrow">${esc(d.tag)} &middot; ${esc(d.readtime)}</p>
+        <h1 id="page-hero-heading">${esc(d.title)}</h1>
+        <p class="page-hero-lead">${esc(d.excerpt)}</p>
+      </div>
+    </section>
+
+    <section class="service-page-section">
+      <div class="container service-page-inner">
+
+        <article class="service-content">
+${article}
+
+        </article>
+
+        <aside class="service-sidebar">
+
+          <div class="sidebar-card">
+            <h3>Have a Question?</h3>
+            <p>Tell us about your situation and we&rsquo;ll respond with the right next step.</p>
+            <form class="sidebar-form" action="https://formsubmit.co/jared@vdallc.com" method="POST">
+              <input type="hidden" name="_subject" value="${esc(d.subject)}">
+              <input type="hidden" name="_captcha" value="false">
+              <input type="hidden" name="_next" value="https://vdallc.com/thankyou.html">
+              <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+              <div class="form-group">
+                <label for="s-name">Full Name</label>
+                <input type="text" id="s-name" name="Full Name" required placeholder="Full Name">
+              </div>
+              <div class="form-group">
+                <label for="s-email">Email</label>
+                <input type="email" id="s-email" name="Email" required placeholder="Email Address">
+              </div>
+              <div class="form-group">
+                <label for="s-phone">Phone</label>
+                <input type="tel" id="s-phone" name="Phone" required placeholder="(555) 555-5555">
+              </div>
+              <div class="form-group">
+                <label for="s-msg">Brief Summary</label>
+                <textarea id="s-msg" name="Message" rows="3" placeholder="Briefly describe your situation."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-full">Submit Inquiry</button>
+            </form>
+          </div>
+${related}
+          <div class="sidebar-card">
+            <div class="sidebar-trust">
+              <div class="sidebar-trust-item">
+                <div class="sidebar-trust-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+                VA-Accredited Claims Agent
+              </div>
+              <div class="sidebar-trust-item">
+                <div class="sidebar-trust-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                Missouri-Based &bull; Nationwide
+              </div>
+              <div class="sidebar-trust-item">
+                <div class="sidebar-trust-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div>
+                Evidence-First Approach
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="../" class="footer-logo" aria-label="VDA LLC — Return to homepage">
+            <img src="../img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="lazy" aria-hidden="true">
+            <img src="../img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="lazy" aria-hidden="true">
+            VDA LLC
+          </a>
+          <p>VA disability claims, appeals, and discharge upgrades&nbsp;&mdash; built on evidence and accountability.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav-col">
+            <strong>Services</strong>
+            <ul>
+              <li><a href="../services/va-disability-claims.html">VA Disability Claims</a></li>
+              <li><a href="../services/tdiu-unemployability.html">TDIU / Unemployability</a></li>
+              <li><a href="../services/dic-survivor-benefits.html">DIC / Survivor Benefits</a></li>
+              <li><a href="../services/discharge-upgrades.html">Discharge Upgrades</a></li>
+              <li><a href="../services/military-records.html">Correcting Military Records</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <strong>Company</strong>
+            <ul>
+              <li><a href="../about.html">About Us</a></li>
+              <li><a href="../process.html">Our Process</a></li>
+              <li><a href="../blog.html">Insights</a></li>
+              <li><a href="../contact.html">Contact</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; ${year} VDA LLC. All rights reserved. VA-Accredited Claims Agent.</p>
+        <p style="margin-top:.25rem;font-size:.75rem">Website by TheCoolMoon.com</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js" defer><\/script>
+</body>
+</html>`;
+    }
+
+    // ── EXPORT ──────────────────────────────────────────────────────────────
+    function exportPost() {
+      const d = collect();
+      if (!d.title)   { alert('Please enter a post title.');              return; }
+      if (!d.slug)    { alert('Please enter a URL slug.');                return; }
+      if (!d.heroUrl) { alert('Please enter a hero image URL.');          return; }
+      if (!d.excerpt) { alert('Please enter an excerpt.');                return; }
+      const hasSections = d.sections.some(s => s.ps.length);
+      if (!hasSections) { alert('Please add content to at least one section.'); return; }
+
+      const html = generateHTML(d);
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const a    = document.createElement('a');
+      a.href     = URL.createObjectURL(blob);
+      a.download = `${d.slug}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+
+      // Save post to local registry
+      const stored = JSON.parse(localStorage.getItem('vda-admin-posts') || '[]');
+      if (!stored.find(p => p.slug === d.slug)) {
+        stored.push({ title: d.title, slug: d.slug, tag: d.tag, date: d.date });
+        localStorage.setItem('vda-admin-posts', JSON.stringify(stored));
+      }
+      buildDash();
+    }
+
+    // ── HELPERS ─────────────────────────────────────────────────────────────
+    function esc(s) {
+      return String(s || '')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return '';
+      const [y,m,d] = iso.split('-').map(Number);
+      return new Date(y, m-1, d).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+    }
+  </script>
+
+</body>
+</html>

@@ -1576,3 +1576,7 @@ input, select, textarea, button { font: inherit; }
 [data-theme="dark"] .blog-callout { background: #1C1C24; border-left-color: var(--gold); }
 [data-theme="dark"] .blog-callout p { color: var(--text-mid) !important; }
 [data-theme="dark"] .sidebar-related-item { color: var(--text-mid); }
+
+/* ============================ ARTICLE FIGURES ============================ */
+.article-figure { margin: 2.25rem 0; border-radius: var(--radius-lg); overflow: hidden; }
+.article-figure img { width: 100%; height: 280px; object-fit: cover; object-position: center top; display: block; }
