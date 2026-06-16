@@ -171,6 +171,9 @@ input, select, textarea, button { font: inherit; }
   background: var(--white);
   border-bottom: 1px solid var(--border-light);
   transition: box-shadow var(--t) var(--ease);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 .site-header.scrolled { box-shadow: var(--shadow-md); }
 
@@ -785,8 +788,7 @@ input, select, textarea, button { font: inherit; }
   background: var(--navy-dark);
   color: rgba(255,255,255,.65);
   padding-top: 4rem;
-  border-top: 3px solid transparent;
-  border-image: linear-gradient(to right, #B22234 0%, #607B3A 100%) 1;
+  border-top: 3px solid #B22234;
 }
 
 .footer-top {
@@ -1238,6 +1240,7 @@ input, select, textarea, button { font: inherit; }
   color: var(--white);
   padding: 5.5rem 0 4.5rem;
   overflow: hidden;
+  border-top: 3px solid #B22234;
 }
 .page-hero-bg {
   position: absolute;
@@ -1411,7 +1414,9 @@ input, select, textarea, button { font: inherit; }
 /* ---- Service pages dark mode ---- */
 [data-theme="dark"] .page-hero {
   background: linear-gradient(150deg, #091232 0%, #1C2E0E 55%, #091232 100%);
+  border-top-color: #607B3A;
 }
+[data-theme="dark"] .site-footer { border-top-color: #607B3A; }
 [data-theme="dark"] .page-hero-bg::after {
   background: linear-gradient(to top, rgba(0,0,0,.97) 0%, rgba(0,0,0,.68) 42%, rgba(0,0,0,.22) 100%);
 }
