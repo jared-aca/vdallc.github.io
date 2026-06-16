@@ -767,6 +767,8 @@ input, select, textarea, button { font: inherit; }
   background: var(--navy-dark);
   color: rgba(255,255,255,.65);
   padding-top: 4rem;
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(to right, #B22234 0%, #607B3A 100%) 1;
 }
 
 .footer-top {

@@ -1,323 +1,383 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,follow">
-<title>Inquiry Received | VDA LLC</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,follow">
+  <title>Inquiry Received | VDA LLC</title>
 
-<style>
-  :root {
-    --bg:     #0a1f44;
-    --bg2:    #071632;
-    --red:    #b22234;
-    --tan:    #b38b5d;
-    --text:   rgba(245,245,245,.94);
-    --muted:  rgba(245,245,245,.68);
-    --faint:  rgba(245,245,245,.38);
-    --border: rgba(245,245,245,.12);
-    --btan:   rgba(179,139,93,.22);
-    --radius: 18px;
-  }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    (function(){var t=localStorage.getItem('vda-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();
+  </script>
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
+    .ty-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 1.125rem 6rem;
+      background: var(--bg-subtle);
+      flex: 1;
+    }
+    [data-theme="dark"] .ty-main { background: #141418; }
 
-  body {
-    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background:
-      radial-gradient(900px 520px at 18% 8%,  rgba(178,34,52,.20), transparent 56%),
-      radial-gradient(900px 520px at 88% 4%,  rgba(122,92,58,.16), transparent 54%),
-      linear-gradient(180deg, var(--bg), var(--bg2));
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-  }
+    .ty-card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 24px 72px rgba(14,20,34,.10);
+      padding: 3rem 2.5rem 2.5rem;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    [data-theme="dark"] .ty-card {
+      background: #1C1C24;
+      border-color: #2E2E3A;
+      box-shadow: 0 24px 72px rgba(0,0,0,.45);
+    }
 
-  a { color: inherit; text-decoration: none; }
+    .ty-check-wrap {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--navy) 100%);
+      box-shadow: 0 12px 36px rgba(0,0,0,.20), 0 0 0 8px rgba(178,34,52,.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.75rem;
+      animation: tyPopIn .45s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    [data-theme="dark"] .ty-check-wrap {
+      box-shadow: 0 12px 36px rgba(0,0,0,.4), 0 0 0 8px rgba(96,123,58,.18);
+    }
+    .ty-check-wrap svg {
+      animation: tyDrawCheck .4s .25s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes tyPopIn {
+      from { opacity: 0; transform: scale(.6); }
+      to   { opacity: 1; transform: scale(1);  }
+    }
+    @keyframes tyDrawCheck {
+      from { opacity: 0; transform: scale(.5) rotate(-20deg); }
+      to   { opacity: 1; transform: scale(1)  rotate(0deg);   }
+    }
 
-  /* ---- Header ---- */
-  .top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-    max-width: 900px;
-    margin: 0 auto;
-    width: 100%;
-  }
+    .ty-eyebrow {
+      display: block;
+      font-size: .6875rem;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .625rem;
+    }
 
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 800;
-    font-size: 15px;
-  }
+    .ty-card h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.625rem, 4vw, 2.125rem);
+      font-weight: 700;
+      color: var(--navy-dark);
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: .875rem;
+    }
+    [data-theme="dark"] .ty-card h1 { color: var(--text-dark); }
 
-  .shield {
-    width: 32px;
-    height: 38px;
-    flex-shrink: 0;
-  }
+    .ty-lead {
+      font-size: .9375rem;
+      color: var(--text-mid);
+      line-height: 1.72;
+      margin-bottom: 2rem;
+    }
 
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    border: 1px solid var(--border);
-    background: rgba(245,245,245,.06);
-    border-radius: 12px;
-    padding: 9px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-    transition: background .18s;
-  }
-  .back-btn:hover { background: rgba(245,245,245,.11); }
+    .ty-steps {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.375rem;
+      margin-bottom: 1.75rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: .875rem;
+    }
+    [data-theme="dark"] .ty-steps {
+      background: rgba(0,0,0,.22);
+      border-color: #2E2E3A;
+    }
 
-  /* ---- Main ---- */
-  main {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 18px 80px;
-  }
+    .ty-steps-label {
+      display: block;
+      font-size: .625rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .125rem;
+    }
 
-  .card {
-    border: 1px solid var(--btan);
-    background: rgba(245,245,245,.045);
-    border-radius: var(--radius);
-    box-shadow: 0 24px 72px rgba(0,0,0,.48);
-    padding: 48px 40px 40px;
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-  }
+    .ty-step-row {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+    }
 
-  /* ---- Checkmark animation ---- */
-  .check-wrap {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(178,34,52,.9), rgba(179,139,93,.82));
-    box-shadow: 0 12px 36px rgba(0,0,0,.35), 0 0 0 8px rgba(178,34,52,.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 28px;
-    animation: popIn .45s cubic-bezier(0.16,1,0.3,1) both;
-  }
+    .ty-step-num {
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border-radius: 50%;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .6875rem;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    [data-theme="dark"] .ty-step-num { background: var(--gold); }
 
-  .check-wrap svg {
-    animation: drawCheck .4s .25s cubic-bezier(0.16,1,0.3,1) both;
-    transform-origin: center;
-  }
+    .ty-step-text {
+      font-size: .84375rem;
+      color: var(--text-mid);
+      line-height: 1.55;
+    }
+    .ty-step-text strong { color: var(--navy-dark); font-weight: 700; }
+    [data-theme="dark"] .ty-step-text strong { color: var(--text-dark); }
 
-  @keyframes popIn {
-    from { opacity: 0; transform: scale(.6); }
-    to   { opacity: 1; transform: scale(1);  }
-  }
-  @keyframes drawCheck {
-    from { opacity: 0; transform: scale(.5) rotate(-20deg); }
-    to   { opacity: 1; transform: scale(1)  rotate(0deg);   }
-  }
+    .ty-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .375rem;
+      width: 100%;
+      padding: .875rem 1rem;
+      border: none;
+      border-radius: var(--radius);
+      font-size: .875rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+      color: #fff;
+      background: var(--navy);
+      box-shadow: 0 6px 20px rgba(14,20,34,.22);
+      cursor: pointer;
+      transition: opacity .18s, transform .18s;
+      text-decoration: none;
+      margin-bottom: 1.25rem;
+    }
+    .ty-cta:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
+    [data-theme="dark"] .ty-cta { background: var(--gold); box-shadow: 0 6px 20px rgba(96,123,58,.28); }
 
-  /* ---- Content ---- */
-  .eyebrow {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--tan);
-    margin-bottom: 10px;
-    display: block;
-  }
+    .ty-fineprint {
+      font-size: .71875rem;
+      color: var(--text-faint);
+      line-height: 1.6;
+      border-top: 1px solid var(--border-light);
+      padding-top: 1rem;
+    }
+    [data-theme="dark"] .ty-fineprint { border-color: #2E2E3A; }
 
-  h1 {
-    font-size: clamp(1.625rem, 4vw, 2.25rem);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -.02em;
-    margin-bottom: 14px;
-  }
-
-  .lead {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 32px;
-    max-width: 380px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* ---- What happens next ---- */
-  .steps {
-    background: rgba(0,0,0,.18);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 22px;
-    margin-bottom: 28px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .steps-label {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: .13em;
-    text-transform: uppercase;
-    color: var(--tan);
-    margin-bottom: 2px;
-    display: block;
-  }
-
-  .step-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .step-num {
-    width: 22px;
-    height: 22px;
-    min-width: 22px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(178,34,52,.85), rgba(179,139,93,.75));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 800;
-    color: #fff;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .step-text {
-    font-size: 13.5px;
-    color: var(--muted);
-    line-height: 1.55;
-  }
-  .step-text strong { color: var(--text); font-weight: 700; }
-
-  /* ---- CTA ---- */
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 900;
-    letter-spacing: .03em;
-    color: #fff;
-    background: linear-gradient(135deg, rgba(178,34,52,.95), rgba(179,139,93,.88));
-    box-shadow: 0 6px 20px rgba(178,34,52,.32);
-    cursor: pointer;
-    transition: opacity .18s, transform .18s;
-    text-decoration: none;
-    margin-bottom: 20px;
-  }
-  .cta:hover { opacity: .9; transform: translateY(-1px); }
-
-  /* ---- Fineprint ---- */
-  .fineprint {
-    font-size: 11.5px;
-    color: var(--faint);
-    line-height: 1.6;
-    border-top: 1px solid var(--btan);
-    padding-top: 16px;
-  }
-
-  @media (max-width: 480px) {
-    .card { padding: 36px 22px 28px; }
-    .top  { padding: 16px 18px; }
-  }
-</style>
+    @media (max-width: 480px) {
+      .ty-card { padding: 2.25rem 1.375rem 1.75rem; }
+    }
+  </style>
 </head>
-
 <body>
 
-  <div class="top">
-    <div class="brand">
-      <!-- Shield logo inline so it works regardless of relative path -->
-      <svg class="shield" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 96" fill="none" aria-hidden="true">
-        <defs>
-          <linearGradient id="ty-body" x1="18" y1="4" x2="62" y2="92" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#7A9948"/><stop offset="1" stop-color="#2E4418"/>
-          </linearGradient>
-          <linearGradient id="ty-shine" x1="4" y1="4" x2="46" y2="64" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#fff" stop-opacity=".26"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/>
-          </linearGradient>
-          <clipPath id="ty-clip"><path d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z"/></clipPath>
-        </defs>
-        <path d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z" fill="url(#ty-body)"/>
-        <rect x="0" y="0" width="80" height="28" fill="#B22234" clip-path="url(#ty-clip)"/>
-        <rect x="0" y="27" width="80" height="1.5" fill="#fff" fill-opacity=".45" clip-path="url(#ty-clip)"/>
-        <path d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z" fill="url(#ty-shine)"/>
-        <path d="M40 5.5L5.5 18.8V46C5.5 71.2 21 87 40 91C59 87 74.5 71.2 74.5 46V18.8Z" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
-        <polygon points="40,43 45,56.1 59,56.8 48.1,65.6 51.8,79.2 40,71.5 28.2,79.2 31.9,65.6 21,56.8 35,56.1" fill="#fff" opacity=".97"/>
-      </svg>
-      <div>
-        <div style="opacity:.92;">Veterans Disability Advocates</div>
-        <div style="font-size:11px;opacity:.6;font-weight:700;">VDA LLC</div>
+  <!-- HEADER -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo" aria-label="VDA LLC — Return to homepage">
+        <img src="img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="eager" aria-hidden="true">
+        <img src="img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="eager" aria-hidden="true">
+        VDA LLC
+      </a>
+
+      <nav class="nav-primary" aria-label="Primary navigation">
+        <ul>
+          <li class="nav-has-mega" id="nav-services">
+            <a href="/#services" aria-haspopup="true" aria-expanded="false">
+              Services
+              <svg class="mega-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
+            </a>
+          </li>
+          <li><a href="process.html">Process</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+
+      <a href="contact.html" class="btn btn-primary nav-cta">Request Assistance</a>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Megamenu -->
+    <div class="megamenu" id="megamenu" aria-hidden="true">
+      <div class="container">
+        <div class="megamenu-grid">
+          <a href="services/va-disability-claims.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </div>
+            <div>
+              <strong>VA Disability Claims</strong>
+              <p>New claims, increased ratings, and service-connected conditions.</p>
+            </div>
+          </a>
+          <a href="services/tdiu-unemployability.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            </div>
+            <div>
+              <strong>TDIU / Unemployability</strong>
+              <p>100% pay rate when service-connected disabilities prevent gainful employment.</p>
+            </div>
+          </a>
+          <a href="services/dic-survivor-benefits.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
+            <div>
+              <strong>DIC / Survivor Benefits</strong>
+              <p>Dependency and Indemnity Compensation for surviving spouses and dependents.</p>
+            </div>
+          </a>
+          <a href="services/discharge-upgrades.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            </div>
+            <div>
+              <strong>Discharge Upgrades</strong>
+              <p>Character of discharge reviews, clemency requests, and upgrade petitions.</p>
+            </div>
+          </a>
+          <a href="services/military-records.html" class="megamenu-item">
+            <div class="megamenu-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+            </div>
+            <div>
+              <strong>Correcting Military Records</strong>
+              <p>DD214 corrections, personnel file amendments, and record upgrades.</p>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
-    <a class="back-btn" href="/">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      Back to site
-    </a>
-  </div>
+  </header>
 
-  <main>
-    <div class="card">
+  <!-- MAIN -->
+  <main class="ty-main">
+    <div class="ty-card">
 
-      <div class="check-wrap" aria-hidden="true">
+      <div class="ty-check-wrap" aria-hidden="true">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 13l4 4L19 7"/>
         </svg>
       </div>
 
-      <span class="eyebrow">Inquiry Received</span>
+      <span class="ty-eyebrow">Inquiry Received</span>
       <h1>We&rsquo;ve got your message.</h1>
-      <p class="lead">Your inquiry has been sent directly to <strong style="color:rgba(245,245,245,.88);">jared@vdallc.com</strong>. Here&rsquo;s what happens next.</p>
+      <p class="ty-lead">Your inquiry has been sent directly to <strong>jared@vdallc.com</strong>. Here&rsquo;s what happens next.</p>
 
-      <div class="steps">
-        <span class="steps-label">What to expect</span>
-        <div class="step-row">
-          <div class="step-num">1</div>
-          <div class="step-text"><strong>Review</strong> — We&rsquo;ll read your summary and assess your situation, typically within one business day.</div>
+      <div class="ty-steps">
+        <span class="ty-steps-label">What to expect</span>
+        <div class="ty-step-row">
+          <div class="ty-step-num">1</div>
+          <div class="ty-step-text"><strong>Review</strong> — We&rsquo;ll read your summary and assess your situation, typically within one business day.</div>
         </div>
-        <div class="step-row">
-          <div class="step-num">2</div>
-          <div class="step-text"><strong>Reach out</strong> — We&rsquo;ll contact you by phone or email to discuss your case and confirm next steps.</div>
+        <div class="ty-step-row">
+          <div class="ty-step-num">2</div>
+          <div class="ty-step-text"><strong>Reach out</strong> — We&rsquo;ll contact you by phone or email to discuss your case and confirm next steps.</div>
         </div>
-        <div class="step-row">
-          <div class="step-num">3</div>
-          <div class="step-text"><strong>Intake</strong> — If we can help, we&rsquo;ll schedule a full intake to gather your records and build a plan.</div>
+        <div class="ty-step-row">
+          <div class="ty-step-num">3</div>
+          <div class="ty-step-text"><strong>Intake</strong> — If we can help, we&rsquo;ll schedule a full intake to gather your records and build a plan.</div>
         </div>
       </div>
 
-      <a class="cta" href="/">
+      <a class="ty-cta" href="/">
         Return to VDA LLC
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
 
-      <p class="fineprint">
+      <p class="ty-fineprint">
         Submitting this form does not create a representation agreement or attorney-client relationship. VDA LLC is not your attorney unless separately retained. No guarantees are ever made about VA outcomes.
       </p>
     </div>
   </main>
 
+  <!-- FOOTER -->
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo" aria-label="VDA LLC — Return to homepage">
+            <img src="img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="lazy" aria-hidden="true">
+            <img src="img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="lazy" aria-hidden="true">
+            VDA LLC
+          </a>
+          <p>VA disability claims, appeals, and discharge upgrades&nbsp;&mdash; built on evidence and accountability.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav-col">
+            <strong>Services</strong>
+            <ul>
+              <li><a href="services/va-disability-claims.html">VA Disability Claims</a></li>
+              <li><a href="services/tdiu-unemployability.html">TDIU / Unemployability</a></li>
+              <li><a href="services/dic-survivor-benefits.html">DIC / Survivor Benefits</a></li>
+              <li><a href="services/discharge-upgrades.html">Discharge Upgrades</a></li>
+              <li><a href="services/military-records.html">Correcting Military Records</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <strong>Company</strong>
+            <ul>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="process.html">Our Process</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <strong>Get Started</strong>
+            <a href="contact.html" class="btn btn-primary footer-cta-btn">Request Assistance</a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <p>No guarantees are ever made about VA outcomes. All representation is subject to VA rules, deadlines, and evidence availability.</p>
+          <p>VDA LLC provides services as a VA-accredited claims agent. VDA LLC is not your attorney unless separately retained as counsel where permitted by applicable rules.</p>
+          <p class="footer-copy">&copy; 2024 VDA LLC. All rights reserved.</p>
+        </div>
+        <div class="footer-meta">
+          <p class="footer-credit">Website by <a href="https://thecoolmoon.com" target="_blank" rel="noopener noreferrer">TheCoolMoon.com</a></p>
+          <div class="va-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            VA Accredited Agent
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
