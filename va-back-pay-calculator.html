@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estimate VA disability retroactive compensation using official annual rates for veterans without dependents.">
+  <meta name="robots" content="index, follow">
+  <title>VA Disability Back Pay Calculator | VDA LLC</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>(function(){var t=localStorage.getItem('vda-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+
+<style>
+.calc-wrap{max-width:960px;margin:0 auto;min-width:0}.calc-wrap *{min-width:0}.calc-panel{overflow-wrap:break-word}.calc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.calc-field input,.calc-field select{box-sizing:border-box;max-width:100%;min-width:0;height:48px;font-size:1rem!important;line-height:1.25}.calc-field input[type=date]{color-scheme:light}[data-theme=dark] .calc-field input[type=date]{color-scheme:dark}@media(max-width:640px){.calc-grid{grid-template-columns:minmax(0,1fr)!important}.calc-wrap{padding-inline:1rem}.calc-panel{padding:1.25rem}}.calc-panel{padding:2rem;background:var(--white);border:1px solid var(--border-light);border-radius:12px;margin:1.5rem 0}.calc-panel h2{margin-top:0}.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem}.calc-field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem}.calc-field label{font-weight:600;font-size:.9rem}.calc-field select,.calc-field input{padding:.7rem;border:1px solid var(--border-light);border-radius:6px;background:var(--white);color:var(--text-mid);width:100%;font:inherit}.calc-btn{background:var(--navy);color:white;border:0;border-radius:6px;padding:.7rem 1.1rem;font-weight:700;cursor:pointer}.calc-btn.alt{background:transparent;color:var(--navy);border:1px solid var(--border-light)}.calc-result{background:var(--bg-subtle);padding:1.5rem;border-radius:9px;margin-top:1.2rem}.calc-number{font-size:clamp(2rem,5vw,3rem);font-weight:800;color:var(--navy-dark)}.calc-row{display:grid;grid-template-columns:1fr 140px 145px 90px;gap:.5rem;align-items:center;margin-bottom:.65rem}.calc-row select{padding:.55rem;min-width:0}.calc-note{font-size:.9rem;line-height:1.65;color:var(--text-mid)}.calc-table{width:100%;border-collapse:collapse}.calc-table td,.calc-table th{padding:.65rem;text-align:left;border-bottom:1px solid var(--border-light)}[data-theme=dark] .calc-panel{background:#1c1c24}[data-theme=dark] .calc-number{color:var(--text-dark)}[data-theme=dark] .calc-btn.alt{color:var(--text-dark)}@media(max-width:600px){.calc-panel{padding:1rem}.calc-row{grid-template-columns:1fr 95px 90px 40px;gap:.2rem}.calc-row select{font-size:.75rem}}
+</style>
+  <link rel="canonical" href="https://vdallc.com/va-back-pay-calculator.html">
+</head>
+<body>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="VDA LLC , Return to homepage">
+        <img src="img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="eager" aria-hidden="true">
+        <img src="img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="eager" aria-hidden="true">
+        VDA LLC
+      </a>
+      <nav class="nav-primary" aria-label="Primary navigation">
+        <ul>
+          <li class="nav-has-mega" id="nav-services">
+            <a href="#services" aria-haspopup="true" aria-expanded="false">
+              Services
+              <svg class="mega-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg>
+            </a>
+          </li>
+          <li class="nav-has-tools" id="nav-tools"><a href="calculators.html" aria-haspopup="true" aria-expanded="false">Tools <svg class="mega-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 9l-7 7-7-7"/></svg></a><div class="tools-dropdown" aria-label="Free VA calculators"><div class="tools-dropdown-heading">FREE VA CALCULATORS</div><a href="va-disability-calculator.html"><strong>Disability Rating Calculator</strong><span>Estimate your combined rating and bilateral factor.</span></a><a href="va-back-pay-calculator.html"><strong>Back Pay Calculator</strong><span>Estimate retroactive VA compensation.</span></a><a class="tools-all" href="calculators.html">Explore All Tools &rarr;</a></div></li>
+          <li><a href="process.html">Process</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="blog.html">Insights</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <a href="contact.html" class="btn btn-primary nav-cta">Request Assistance</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="megamenu" id="megamenu" aria-hidden="true">
+      <div class="container">
+        <div class="megamenu-grid">
+          <a href="services/va-disability-claims.html" class="megamenu-item">
+            <div class="megamenu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div>
+            <div><strong>VA Disability Claims</strong><p>New claims, increased ratings, and service-connected conditions.</p></div>
+          </a>
+          <a href="services/tdiu-unemployability.html" class="megamenu-item">
+            <div class="megamenu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+            <div><strong>TDIU / Unemployability</strong><p>100% pay rate when disabilities prevent gainful employment.</p></div>
+          </a>
+          <a href="services/dic-survivor-benefits.html" class="megamenu-item">
+            <div class="megamenu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+            <div><strong>DIC / Survivor Benefits</strong><p>Compensation for surviving spouses and dependents.</p></div>
+          </a>
+          <a href="services/discharge-upgrades.html" class="megamenu-item">
+            <div class="megamenu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div>
+            <div><strong>Discharge Upgrades</strong><p>Character of discharge reviews and upgrade petitions.</p></div>
+          </a>
+          <a href="services/military-records.html" class="megamenu-item">
+            <div class="megamenu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg></div>
+            <div><strong>Correcting Military Records</strong><p>DD214 corrections and military record amendments.</p></div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" aria-hidden="true">
+      <ul>
+        <li class="mobile-nav-group">
+          <span class="mobile-nav-label">Services</span>
+          <ul class="mobile-nav-sub">
+            <li><a href="services/va-disability-claims.html">VA Disability Claims</a></li>
+            <li><a href="services/tdiu-unemployability.html">TDIU / Unemployability</a></li>
+            <li><a href="services/dic-survivor-benefits.html">DIC / Survivor Benefits</a></li>
+            <li><a href="services/discharge-upgrades.html">Discharge Upgrades</a></li>
+            <li><a href="services/military-records.html">Correcting Military Records</a></li>
+          </ul>
+        </li>
+        <li class="mobile-nav-group"><span class="mobile-nav-label">Free Calculators</span><ul class="mobile-nav-sub"><li><a href="calculators.html">All Calculators</a></li><li><a href="va-disability-calculator.html">Disability Rating Calculator</a></li><li><a href="va-back-pay-calculator.html">Back Pay Calculator</a></li></ul></li>
+        <li><a href="process.html">Process</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="blog.html">Insights</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <a href="contact.html" class="btn btn-primary">Request Assistance</a>
+    </nav>
+  </header>
+
+  <main><section class="page-hero"><div class="container"><p class="hero-eyebrow">Free VA Benefits Tools</p><h1>VA Disability Back Pay Calculator</h1><p>Estimate VA disability retroactive compensation using official annual rates for veterans without dependents.</p></div></section><section class="service-page-section"><div class="container calc-wrap"><div class="calc-panel"><h2>Estimate disability compensation owed</h2><p>This initial estimator uses the official <strong>veteran-alone, no-dependent</strong> compensation rates from 2023 through 2026. Enter the effective date, the last month of unpaid benefits, the rating VA actually paid, and the rating VA should have paid. For the last unpaid benefit month, select any day in that month; the day does not affect the estimate.</p><div class="calc-grid"><div class="calc-field"><label for="effective">Effective date</label><input type="date" id="effective" min="2023-01-01" max="2026-10-31" value="2025-09-24"></div><div class="calc-field"><label for="through">Last unpaid benefit month</label><input type="date" id="through" min="2023-02-01" max="2026-10-31" value="2026-09-01"></div><div class="calc-field"><label for="paid">Rating VA paid</label><select id="paid"></select></div><div class="calc-field"><label for="owed">Correct rating</label><select id="owed"></select></div></div><button class="calc-btn" type="button" id="calculate">Calculate estimated back pay</button><div class="calc-result" aria-live="polite"><div class="calc-note">Estimated retroactive compensation</div><div class="calc-number" id="retro-result">$0.00</div><p id="retro-description"></p><div id="retro-breakdown"></div></div></div><div class="calc-panel"><h2>Important limitations</h2><p>VA generally begins monetary payment on the first day of the month following the effective date under <a href="https://www.ecfr.gov/current/title-38/section-3.31">38 CFR § 3.31</a>. This calculator excludes the effective-date month and uses the annual VA rate in effect for each benefit month. December benefit months use the rate schedule effective that December.</p><p>It assumes unchanged ratings, no dependents, and no interruptions. It does not calculate SMC, dependent additions, staged ratings, military retired pay offsets, severance recoupment, withholding, attorney or agent fees, or actual payment dates. It cannot determine the legally correct effective date. For those issues, request an individual review of your award.</p><p>Source tables: <a href="https://www.va.gov/disability/compensation-rates/veteran-rates/">2026</a>, <a href="https://www.va.gov/disability/compensation-rates/veteran-rates/past-rates-2025/">2025</a>, <a href="https://www.va.gov/disability/compensation-rates/veteran-rates/past-rates-2024/">2024</a>, and <a href="https://www.va.gov/disability/compensation-rates/veteran-rates/past-rates-2023/">2023</a>.</p><p><a href="va-disability-calculator.html">Calculate your combined rating</a> or <a href="blog/va-disability-ratings.html">learn how VA disability ratings work</a>.</p></div><p class="calc-note">These calculators provide estimates for educational purposes, not VA decisions. For assistance reviewing your rating or effective date, <a href="contact.html">contact an experienced VA-accredited claims agent at VDA LLC</a>.</p></div></section></main>
+
+  <footer class="site-footer" aria-label="Site footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo" aria-label="VDA LLC , Return to homepage">
+            <img src="img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="lazy" aria-hidden="true">
+            <img src="img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="lazy" aria-hidden="true">
+            VDA LLC
+          </a>
+          <p>VA disability claims, appeals, and discharge upgrades&nbsp;, built on evidence and accountability.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <div class="footer-nav-col">
+            <strong>Services</strong>
+            <ul>
+              <li><a href="services/va-disability-claims.html">VA Disability Claims</a></li>
+              <li><a href="services/tdiu-unemployability.html">TDIU / Unemployability</a></li>
+              <li><a href="services/dic-survivor-benefits.html">DIC / Survivor Benefits</a></li>
+              <li><a href="services/discharge-upgrades.html">Discharge Upgrades</a></li>
+              <li><a href="services/military-records.html">Correcting Military Records</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <strong>Company</strong>
+            <ul>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="process.html">Our Process</a></li>
+              <li><a href="blog.html">Insights</a></li>
+              <li><a href="calculators.html">Free VA Calculators</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-nav-col">
+            <strong>Get Started</strong>
+            <a href="contact.html" class="btn btn-primary footer-cta-btn">Request Assistance</a>
+          </div>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-legal">
+          <p>No guarantees are ever made about VA outcomes. All representation is subject to VA rules, deadlines, and evidence availability.</p>
+          <p>VDA LLC provides services as a VA-accredited claims agent. VDA LLC is not your attorney unless separately retained as counsel where permitted by applicable rules.</p>
+          <p class="footer-copy">&copy; 2025 VDA LLC. All rights reserved.</p>
+        </div>
+        <div class="footer-meta">
+          <div class="va-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            VA Accredited Agent
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+<script>(()=>{const rates={2023: [0, 165.92, 327.99, 508.05, 731.86, 1041.82, 1319.65, 1663.06, 1933.15, 2172.39, 3621.95], 2024: [0, 171.23, 338.49, 524.31, 755.28, 1075.16, 1361.88, 1716.28, 1995.01, 2241.91, 3737.85], 2025: [0, 175.51, 346.95, 537.42, 774.16, 1102.04, 1395.93, 1759.19, 2044.89, 2297.96, 3831.3], 2026: [0, 180.42, 356.66, 552.47, 795.84, 1132.9, 1435.02, 1808.45, 2102.15, 2362.3, 3938.58]};for(let id of ['paid','owed']){let s=document.getElementById(id);for(let i=0;i<=100;i+=10){let o=document.createElement('option');o.value=i;o.textContent=i+'%';s.appendChild(o)}}document.getElementById('paid').value=40;document.getElementById('owed').value=70;const money=n=>n.toLocaleString('en-US',{style:'currency',currency:'USD'});function calculate(){let eff=document.getElementById('effective').value,through=document.getElementById('through').value,paid=+document.getElementById('paid').value,owed=+document.getElementById('owed').value,output=document.getElementById('retro-result'),description=document.getElementById('retro-description'),breakdown=document.getElementById('retro-breakdown');if(!eff||!through){description.textContent='Enter valid dates.';return}let [ey,em]=eff.split('-').map(Number),[ty,tm]=through.split('-').map(Number);let y=ey,m=em+1;if(m===13){m=1;y++}if(y<2023||y>2026||(ty*12+tm)<(y*12+m)||(ty*12+tm)>2026*12+10){output.textContent='$0.00';description.textContent='Choose a valid period from February 2023 through October 2026, with at least one payable month after the effective date.';breakdown.innerHTML='';return}let total=0,group={};for(;y*12+m<=ty*12+tm;){let schedule=rates[m===12?y+1:y];if(!schedule)break;let delta=Math.max(0,schedule[owed/10]-schedule[paid/10]);total+=delta;group[y]??={months:0,total:0};group[y].months++;group[y].total+=delta;m++;if(m===13){m=1;y++}}output.textContent=money(total);description.textContent='Estimated difference between '+paid+'% and '+owed+'% for '+Object.values(group).reduce((a,b)=>a+b.months,0)+' benefit months. Veteran alone, no dependents.';breakdown.innerHTML='<table class="calc-table"><thead><tr><th>Year</th><th>Months</th><th>Subtotal</th></tr></thead><tbody>'+Object.entries(group).map(([year,g])=>'<tr><td>'+year+'</td><td>'+g.months+'</td><td>'+money(g.total)+'</td></tr>').join('')+'</tbody></table>'}document.getElementById('calculate').onclick=calculate;calculate()})();</script>
+</body>
+</html>

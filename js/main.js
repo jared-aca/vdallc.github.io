@@ -1,4 +1,4 @@
-/* VDA LLC — Site Scripts */
+/* VDA LLC , Site Scripts */
 
 (function () {
   'use strict';
@@ -145,7 +145,7 @@
     });
   }
 
-  // ---- Contact forms — real POST via FormSubmit ----
+  // ---- Contact forms , real POST via FormSubmit ----
   // No JS interception needed; forms use action="https://formsubmit.co/..."
 
 })();

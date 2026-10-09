@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content Admin — VDA LLC</title>
+  <title>Content Admin , VDA LLC</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -411,7 +411,7 @@
       </div>
       <h1 class="login-title">Content Admin</h1>
       <p class="login-sub">Sign in to create and manage blog posts.</p>
-      <div class="login-error" id="login-error">Incorrect password — please try again.</div>
+      <div class="login-error" id="login-error">Incorrect password , please try again.</div>
       <div class="form-group">
         <label for="login-pw">Password</label>
         <input type="password" id="login-pw" autocomplete="current-password" placeholder="••••••••••••">
@@ -510,13 +510,13 @@
 
         <div class="field col-full">
           <label for="f-card-img">Card Thumbnail URL</label>
-          <input type="url" id="f-card-img" placeholder="Optional — defaults to hero URL with w=700">
+          <input type="url" id="f-card-img" placeholder="Optional , defaults to hero URL with w=700">
           <span class="field-hint">Smaller image shown in blog index cards. Leave blank to auto-derive from the hero URL.</span>
         </div>
 
         <div class="field col-full">
           <label for="f-form-subject">Sidebar Form Subject Line</label>
-          <input type="text" id="f-form-subject" placeholder="e.g. Claim Question — VDA LLC">
+          <input type="text" id="f-form-subject" placeholder="e.g. Claim Question , VDA LLC">
         </div>
 
       </div><!-- /editor-grid -->
@@ -580,7 +580,7 @@
     const PASS_HASH = 'bfcca36bbf3c582484b86fcee3ae92d9e2c953adc1063dcae17cf2b0f000253c';
 
     const BASE_POSTS = [
-      { title: 'How VA Combined Ratings Work — And Why the Math Usually Shortchanges Veterans', slug: 'va-disability-ratings',    tag: 'VA Claims',          date: '2025-06-01' },
+      { title: 'How VA Combined Ratings Work , And Why the Math Usually Shortchanges Veterans', slug: 'va-disability-ratings',    tag: 'VA Claims',          date: '2025-06-01' },
       { title: 'TDIU: How Veterans Can Receive 100% VA Pay Without a 100% Rating',             slug: 'tdiu-guide',               tag: 'TDIU',               date: '2025-06-05' },
       { title: 'VA Claim Denied? Your Three Appeal Options Under the AMA',                      slug: 'va-claim-denied',          tag: 'VA Appeals',         date: '2025-06-10' },
       { title: 'Discharge Upgrade Guide: Who Qualifies and What to Expect',                     slug: 'discharge-upgrade-guide',  tag: 'Discharge Upgrades', date: '2025-06-15' },
@@ -685,7 +685,7 @@
     function prefillSubject() {
       const tag  = document.getElementById('f-tag').value;
       const subj = document.getElementById('f-form-subject');
-      if (!subj.value) subj.value = `${tag} Question — VDA LLC`;
+      if (!subj.value) subj.value = `${tag} Question , VDA LLC`;
     }
 
     function addSection() {
@@ -701,7 +701,7 @@
         </div>
         <div class="field" style="margin-bottom:.5rem">
           <label>Heading (H2)</label>
-          <input type="text" id="sh-${n}" placeholder="Section heading — leave blank for no heading">
+          <input type="text" id="sh-${n}" placeholder="Section heading , leave blank for no heading">
         </div>
         <div class="field">
           <label>Content <span class="req">*</span></label>
@@ -763,7 +763,7 @@
         heroUrl,
         heroAlt:  document.getElementById('f-hero-alt').value.trim(),
         cardImg,
-        subject:  document.getElementById('f-form-subject').value.trim() || 'Inquiry — VDA LLC',
+        subject:  document.getElementById('f-form-subject').value.trim() || 'Inquiry , VDA LLC',
         sections,
         callout:  calloutOpen ? {
           label: document.getElementById('f-callout-label').value.trim() || 'Note',
@@ -853,7 +853,7 @@ ${related.map(r => `              <a href="${r.slug}.html" class="sidebar-relate
 
   <header class="site-header" role="banner">
     <div class="container header-inner">
-      <a href="../" class="logo" aria-label="VDA LLC — Return to homepage">
+      <a href="../" class="logo" aria-label="VDA LLC , Return to homepage">
         <img src="../img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="eager" aria-hidden="true">
         <img src="../img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="eager" aria-hidden="true">
         <span class="logo-text">VDA LLC</span>
@@ -997,12 +997,12 @@ ${related}
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
-          <a href="../" class="footer-logo" aria-label="VDA LLC — Return to homepage">
+          <a href="../" class="footer-logo" aria-label="VDA LLC , Return to homepage">
             <img src="../img/logo-mark.svg"      alt="" class="logo-mark logo-mark-light" width="26" height="32" loading="lazy" aria-hidden="true">
             <img src="../img/logo-mark-dark.svg" alt="" class="logo-mark logo-mark-dark"  width="26" height="32" loading="lazy" aria-hidden="true">
             VDA LLC
           </a>
-          <p>VA disability claims, appeals, and discharge upgrades&nbsp;&mdash; built on evidence and accountability.</p>
+          <p>VA disability claims, appeals, and discharge upgrades&nbsp;, built on evidence and accountability.</p>
         </div>
         <nav class="footer-nav" aria-label="Footer navigation">
           <div class="footer-nav-col">
@@ -1028,7 +1028,6 @@ ${related}
       </div>
       <div class="footer-bottom">
         <p>&copy; ${year} VDA LLC. All rights reserved. VA-Accredited Claims Agent.</p>
-        <p style="margin-top:.25rem;font-size:.75rem">Website by TheCoolMoon.com</p>
       </div>
     </div>
   </footer>
