@@ -246,8 +246,11 @@ function calculate(){
  desc.textContent=months+' payable benefit month'+(months===1?'':'s')+' at '+owed+'% instead of '+paid+'%. Historical amounts before December 2022 are approximate COLA-based estimates, not verified historical VA table amounts. Review actual VA award records before relying on this figure.';
  breakdown.innerHTML='<table class="calc-table"><thead><tr><th>Benefit year</th><th>Months</th><th>Estimated difference</th></tr></thead><tbody>'+Object.entries(groups).map(([y,g])=>'<tr><td>'+y+'</td><td>'+g.months+'</td><td>'+money(g.cents/100)+'</td></tr>').join('')+'</tbody></table>';
 }
-for(const el of document.querySelectorAll('input[name="married"]'))el.addEventListener('change',()=>{$('spouse-aa-row').classList.toggle('calc-hidden',!isMarried());calculate()});
-for(const el of document.querySelectorAll('input,select'))el.addEventListener('change',calculate);
+// Update conditional fields only. Estimates are calculated exclusively on button click.
+for(const el of document.querySelectorAll('input[name="married"]'))el.addEventListener('change',()=>{
+ $('spouse-aa-row').classList.toggle('calc-hidden',!isMarried());
+ if(!isMarried())document.querySelector('input[name="aa"]').checked=false;
+});
 $('calculate').addEventListener('click',calculate);
 $('reset').addEventListener('click',()=>{$('effective').value='';$('end-date').value='';for(const id of ['owed','paid'])$(id).value='';for(const id of ['parents','children','school'])$(id).value='0';document.querySelectorAll('input[name="married"],input[name="aa"]').forEach(el=>el.checked=false);$('spouse-aa-row').classList.add('calc-hidden');$('retro-result').textContent='$0.00';$('retro-description').textContent='';$('retro-breakdown').replaceChildren()});
 $('retro-result').textContent='$0.00';
