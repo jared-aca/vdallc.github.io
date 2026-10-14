@@ -11,6 +11,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Homepage contact section: equal-width panels and roomier form. */
+    @media (min-width: 769px) {
+      .bottom-split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .bottom-split .service-area,
+      .bottom-split .contact { padding: 4.5rem clamp(2rem, 4vw, 5rem); }
+      .bottom-split .area-content,
+      .bottom-split .contact-inner { width: 100%; max-width: 640px; margin-inline: auto; }
+      .bottom-split .form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .bottom-split .form-group { min-width: 0; }
+      .bottom-split .form-group input,
+      .bottom-split .form-group select,
+      .bottom-split .form-group textarea { width: 100%; min-width: 0; box-sizing: border-box; }
+    }
+  </style>
   <script>
     (function(){var t=localStorage.getItem('vda-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();
   </script>
