@@ -121,10 +121,10 @@
 </div></div>
 <div class="vda-card"><span class="vda-step">STEP 3 / WORK AND RESULTS</span><h2>Your combined VA disability rating</h2><p>Are your service-connected disabilities preventing substantially gainful employment?</p><div class="vda-choose" id="work-choices"><button type="button" class="vda-choice" data-work="yes" aria-pressed="false">Yes</button><button type="button" class="vda-choice" data-work="no" aria-pressed="true">No</button></div>
 <div class="vda-results"><div class="vda-result-box" style="text-align:center"><div id="rating-gauge" class="vda-gauge" style="--pct:0%"><div class="vda-gauge-inner" id="gauge-number">0%</div></div><small>Estimated combined disability rating</small><div id="raw-result" class="vda-muted">Combined value before final rounding: 0%</div></div>
-<div class="vda-result-box"><span class="vda-badge">2026 MONTHLY BASE COMPENSATION</span><strong id="monthly-result">$0.00</strong><small>Veteran-alone base rate, before dependent additions or SMC</small><p id="dependent-warning" class="vda-warning vda-section-note">Enter your ratings to see an estimate.</p></div></div>
+<div class="vda-result-box"><span class="vda-badge">2026 ESTIMATED MONTHLY COMPENSATION</span><strong id="monthly-result">$0.00</strong><small>Includes eligible dependents at ratings of 30% or higher; excludes SMC</small><p id="dependent-warning" class="vda-warning vda-section-note">Enter your ratings to see an estimate.</p></div></div>
 <p id="bilateral-result" class="vda-breakdown"></p><p id="work-result" class="vda-warning vda-hidden"></p><a class="vda-cta" href="contact.html">Request a VA Claims Review →</a>
-<p class="vda-muted vda-section-note">Estimates are informational and do not constitute a VA determination. VA applies the combined ratings table and bilateral factor under 38 CFR §§ 4.25 and 4.26. Special monthly compensation, dependents, and other adjustments may change payment.</p></div>
-<div class="vda-card"><h2>How VA math works</h2><p>VA does not simply add disability percentages. Under <a href="https://www.ecfr.gov/current/title-38/section-4.25">38 CFR § 4.25</a>, multiple ratings are combined using the remaining-efficiency method and rounded to the nearest 10% for the final evaluation. The <a href="https://www.ecfr.gov/current/title-38/section-4.26">bilateral factor</a> can apply when qualifying compensable disabilities affect both arms, both legs, or paired skeletal muscles. The factor is calculated before the bilateral group is combined with other ratings.</p><p>The dollar estimate uses the veteran-alone 2026 rate schedule. Check <a href="https://www.va.gov/disability/compensation-rates/veteran-rates/">VA's official compensation tables</a> for your exact dependent category, and use our <a href="va-back-pay-calculator.html">back-pay calculator</a> for retroactive estimates.</p></div>
+<p class="vda-muted vda-section-note">Estimates are informational and do not constitute a VA determination. VA applies the combined ratings table and bilateral factor under 38 CFR §§ 4.25 and 4.26. Special monthly compensation and other adjustments may change payment.</p></div>
+<div class="vda-card"><h2>How VA math works</h2><p>VA does not simply add disability percentages. Under <a href="https://www.ecfr.gov/current/title-38/section-4.25">38 CFR § 4.25</a>, multiple ratings are combined using the remaining-efficiency method and rounded to the nearest 10% for the final evaluation. The <a href="https://www.ecfr.gov/current/title-38/section-4.26">bilateral factor</a> can apply when qualifying compensable disabilities affect both arms, both legs, or paired skeletal muscles. The factor is calculated before the bilateral group is combined with other ratings.</p><p>The dollar estimate uses the 2026 VA compensation tables and includes qualifying dependent additions. Check <a href="https://www.va.gov/disability/compensation-rates/veteran-rates/">VA's official compensation tables</a> for your exact dependent category, and use our <a href="va-back-pay-calculator.html">back-pay calculator</a> for retroactive estimates.</p></div>
 </div></section></main>
   <footer class="site-footer" aria-label="Site footer">
     <div class="container">
@@ -184,6 +184,43 @@
 <script>(()=>{
 'use strict';
 const rates=[0,180.42,356.66,552.47,795.84,1132.90,1435.02,1808.45,2102.15,2362.30,3938.58];
+// Official 2026 VA rates (effective December 1, 2025), indexed 30,40,...,100.
+const table={
+ alone:[552.47,795.84,1132.90,1435.02,1808.45,2102.15,2362.30,3938.58],
+ spouse:[617.47,882.84,1241.90,1566.02,1961.45,2277.15,2559.30,4158.17],
+ parent1:[604.47,865.84,1220.90,1540.02,1931.45,2242.15,2520.30,4114.82],
+ parent2:[656.47,935.84,1308.90,1645.02,2054.45,2382.15,2678.30,4291.06],
+ spouseparent1:[669.47,952.84,1329.90,1671.02,2084.45,2417.15,2717.30,4334.41],
+ spouseparent2:[721.47,1022.84,1417.90,1776.02,2207.45,2557.15,2875.30,4510.65],
+ child:[596.47,853.84,1205.90,1523.02,1910.45,2219.15,2494.30,4085.43],
+ childspouse:[666.47,947.84,1322.90,1663.02,2074.45,2406.15,2704.30,4318.99],
+ childparent1:[648.47,923.84,1293.90,1628.02,2033.45,2359.15,2652.30,4261.67],
+ childparent2:[700.47,993.84,1381.90,1733.02,2156.45,2499.15,2810.30,4437.91],
+ childspouseparent1:[718.47,1017.84,1410.90,1768.02,2197.45,2546.15,2862.30,4495.23],
+ childspouseparent2:[770.47,1087.84,1498.90,1873.02,2320.45,2686.15,3020.30,4671.47],
+ extraMinor:[32,43,54,65,76,87,98,109.11],
+ school:[105,140,176,211,246,281,317,352.45],
+ spouseAA:[61,81,101,121,141,161,181,201.41]
+};
+function payment(rating){
+ if(rating<30)return rates[rating/10];
+ const idx=rating/10-3,sp=$('spouse').value==='yes',parents=Number($('parents').value),minors=Number($('children').value),students=Number($('students').value),aid=sp&&$('aid').value==='yes';
+ const hasChild=minors+students>0;
+ const key=(hasChild?'child':'')+(sp?'spouse':'')+(parents?'parent'+parents:'')||'alone';
+ let amount=table[key][idx];
+ // One child is included in the basic child rate; if no minors, the first schoolchild
+ // replaces that included child with the schoolchild addition.
+ if(hasChild){
+  amount+=Math.max(0,minors-1)*table.extraMinor[idx];
+  if(minors===0){
+   const baseKey=(sp?'spouse':'')+(parents?'parent'+parents:'')||'alone';
+   amount=table[baseKey][idx]+table.school[idx];
+  }
+  amount+=Math.max(0,students-(minors===0?1:0))*table.school[idx];
+ }
+ if(aid)amount+=table.spouseAA[idx];
+ return Math.round(amount*100)/100;
+}
 const names={general:'General condition','left-arm':'Left arm','right-arm':'Right arm','left-leg':'Left leg','right-leg':'Right leg'};
 const $=id=>document.getElementById(id);let selected='general',items=[],next=0,work='no';
 const money=n=>n.toLocaleString('en-US',{style:'currency',currency:'USD'});
@@ -203,10 +240,10 @@ const paired=bilateral?items.filter(x=>x.side!=='general'&&x.r>0):[];const rest=
 let bonus=0,base=0;const values=rest.map(x=>x.r);
 if(paired.length>=2){base=combineSorted(paired.map(x=>x.r));bonus=Math.round(base*.1);values.push(Math.min(100,base+bonus))}
 const raw=combineSorted(values);const final=Math.min(100,Math.round(raw/10)*10);
-$('gauge-number').textContent=final+'%';$('rating-gauge').style.setProperty('--pct',final+'%');$('raw-result').textContent='Combined value before final rounding: '+raw+'%';$('monthly-result').textContent=money(rates[final/10]);
+$('gauge-number').textContent=final+'%';$('rating-gauge').style.setProperty('--pct',final+'%');$('raw-result').textContent='Combined value before final rounding: '+raw+'%';$('monthly-result').textContent=money(payment(final));
 $('bilateral-result').textContent=bonus?'Bilateral factor: '+bonus+' points (10% of the bilateral group combined value of '+base+'%), applied before combining other conditions.':'No bilateral factor applied to the current selections.';
 const deps=$('spouse').value==='yes'||Number($('children').value)>0||Number($('students').value)>0||Number($('parents').value)>0||($('spouse').value==='yes'&&$('aid').value==='yes');
-$('dependent-warning').textContent=deps&&final>=30?'You entered dependents. This figure does not include additional dependent compensation and is not your complete monthly entitlement.':'This is the veteran-alone base amount. SMC and other adjustments are not included.';
+$('dependent-warning').textContent=final<30?'Dependent additions are not payable for ratings below 30%.':deps?'Eligible dependent additions are included. SMC and other adjustments are not included.':'Veteran-alone rate shown. SMC and other adjustments are not included.';
 $('work-result').classList.toggle('vda-hidden',work!=='yes');$('work-result').textContent='If service-connected conditions prevent substantially gainful employment, you may wish to review TDIU eligibility. TDIU is not automatic and is not included in this calculation.';
 }render();
 })();</script>
