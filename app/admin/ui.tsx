@@ -1,15 +1,5 @@
 "use client";
-import {
-  cloneElement,
-  isValidElement,
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  type ReactElement,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   Content,
   ContentSummary,
@@ -17,26 +7,44 @@ import type {
   RecordEntry,
   Seo,
 } from "@/lib/model";
+import Field from "./field";
 import { cleanBody } from "@/lib/validation";
 import {
   getSession,
   signInWithGitHub,
   signOutGitHub,
-  listContent,
-  getContent,
+  loadWorkspace,
+  getEditor,
+  commitSeoPlan,
   commitContent,
   publishingStatusUrl,
 } from "@/lib/github-cms";
+import SeoWorkspace, { SeoTargetFields } from "./seo-tools";
+import {
+  emptySeoPlan,
+  emptyTarget,
+  targetFor,
+  type SeoPlan,
+  type SeoTarget,
+  type KeywordCluster,
+} from "@/lib/seo-plan";
 import { previewContent } from "@/lib/client-preview";
 
-type Section = "overview" | "page" | "blog" | "service";
+type Section = "overview" | "page" | "blog" | "service" | "strategy";
 const labels = {
   overview: "Overview",
   page: "SEO & pages",
   blog: "Blog posts",
   service: "Services",
+  strategy: "Keywords & clusters",
 };
-const icons = { overview: "◈", page: "◎", blog: "▤", service: "◇" };
+const icons = {
+  overview: "◈",
+  page: "◎",
+  blog: "▤",
+  service: "◇",
+  strategy: "⌘",
+};
 const blankSeo: Seo = {
   title: "",
   description: "",
@@ -69,30 +77,6 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 120);
-function Field({
-  label,
-  hint,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  children: ReactNode;
-}) {
-  const id = useId();
-  const input = isValidElement(children)
-    ? cloneElement(
-        children as ReactElement<{ id: string; "aria-describedby"?: string }>,
-        { id, "aria-describedby": hint ? `${id}-hint` : undefined },
-      )
-    : children;
-  return (
-    <div className="field">
-      <label htmlFor={id}>{label}</label>
-      {input}
-      {hint && <small id={`${id}-hint`}>{hint}</small>}
-    </div>
-  );
-}
 function RichText({
   value,
   onChange,
@@ -207,6 +191,11 @@ export default function Admin() {
   const [account, setAccount] = useState("GitHub editor");
   const [section, setSection] = useState<Section>("overview");
   const [pages, setPages] = useState<ContentSummary[]>([]);
+  const [plan, setPlan] = useState<SeoPlan>(emptySeoPlan());
+  const [documents, setDocuments] = useState<Content[]>([]);
+  const [target, setTarget] = useState<SeoTarget>(emptyTarget());
+  const [savedTarget, setSavedTarget] = useState(JSON.stringify(emptyTarget()));
+  const [strategyDirty, setStrategyDirty] = useState(false);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [error, setError] = useState("");
@@ -219,11 +208,19 @@ export default function Admin() {
   const [tab, setTab] = useState<"content" | "seo" | "history">("content");
   const [preview, setPreview] = useState("");
   const [saved, setSaved] = useState("");
-  const dirty = Boolean(content && JSON.stringify(content) !== saved);
+  const dirty =
+    Boolean(
+      content &&
+        (JSON.stringify(content) !== saved ||
+          JSON.stringify(target) !== savedTarget),
+    ) || strategyDirty;
   const reload = useCallback(async () => {
     setLoading(true);
     try {
-      setPages(await listContent());
+      const workspace = await loadWorkspace();
+      setPages(workspace.pages);
+      setDocuments(workspace.documents);
+      setPlan(workspace.plan);
     } finally {
       setLoading(false);
     }
@@ -266,6 +263,7 @@ export default function Admin() {
     if (busy || (dirty && !window.confirm("Discard unsaved changes?")))
       return false;
     setContent(null);
+    setStrategyDirty(false);
     setRecord(null);
     setCreating(false);
     setPreview("");
@@ -287,7 +285,13 @@ export default function Admin() {
     setNotice("");
     setPreview("");
     try {
-      const next = await getContent(path);
+      const editor = await getEditor(path);
+      const next = editor.record;
+      setPlan(editor.plan);
+      const targeting = targetFor(editor.plan, path);
+      setTarget(targeting);
+      setSavedTarget(JSON.stringify(targeting));
+      setStrategyDirty(false);
       setRecord(next);
       setContent(next.draft);
       setSaved(JSON.stringify(next.draft));
@@ -303,6 +307,8 @@ export default function Admin() {
     if (!leaveEditor()) return;
     const draft = newContent(type);
     setRecord(null);
+    setTarget(emptyTarget());
+    setSavedTarget(JSON.stringify(emptyTarget()));
     setContent(draft);
     setSaved(JSON.stringify(draft));
     setCreating(true);
@@ -321,12 +327,18 @@ export default function Admin() {
     setError("");
     setNotice("");
     try {
-      const next = await commitContent({
+      const result = await commitContent({
         content,
         action,
         revision: record?.revision ?? 0,
         create: creating,
+        target,
+        planRevision: plan.revision,
       });
+      const next = result.record;
+      setPlan(result.plan);
+      setTarget(targetFor(result.plan, next.draft.path));
+      setSavedTarget(JSON.stringify(targetFor(result.plan, next.draft.path)));
       setRecord(next);
       setContent(next.draft);
       setSaved(JSON.stringify(next.draft));
@@ -343,6 +355,50 @@ export default function Admin() {
       setError((cause as Error).message);
     } finally {
       setBusy(false);
+    }
+  }
+  async function savePlan(proposed: SeoPlan) {
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      const next = await commitSeoPlan(proposed, plan.revision);
+      setPlan(next);
+      setNotice("SEO plan saved to GitHub. Public pages have not changed.");
+    } catch (cause) {
+      setError((cause as Error).message);
+      throw cause;
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function createTargetCluster() {
+    if (!content || !target.primaryKeyword.trim()) return;
+    const at = new Date().toISOString();
+    const cluster: KeywordCluster = {
+      id: crypto.randomUUID(),
+      name: target.primaryKeyword.trim(),
+      primaryKeyword: target.primaryKeyword.trim(),
+      secondaryKeywords: target.secondaryKeywords,
+      intent:
+        target.searchIntent ||
+        (content.type === "blog" ? "informational" : "commercial"),
+      supportingQuestions: [],
+      includedTopics: [],
+      excludedTerms: [],
+      notes: "",
+      status: "active",
+      createdAt: at,
+      updatedAt: at,
+    };
+    try {
+      await savePlan({ ...plan, clusters: [...plan.clusters, cluster] });
+      setTarget({ ...target, clusterId: cluster.id, clusterRole: "primary" });
+      setNotice(
+        "Cluster created. Save this page to keep its keyword targeting and assignment.",
+      );
+    } catch {
+      /* savePlan shows the error and preserves the editor. */
     }
   }
   async function openPreview() {
@@ -465,7 +521,15 @@ export default function Admin() {
             >
               <span className="nav-icon">{icons[item]}</span>
               {labels[item]}
-              {item !== "overview" && <small>{count(item)}</small>}
+              {item !== "overview" && (
+                <small>
+                  {item === "strategy"
+                    ? plan.clusters.filter(
+                        (cluster) => cluster.status === "active",
+                      ).length
+                    : count(item)}
+                </small>
+              )}
             </button>
           ))}
         </nav>
@@ -691,6 +755,13 @@ export default function Admin() {
                 )}
                 {tab === "seo" && (
                   <>
+                    <SeoTargetFields
+                      content={content}
+                      target={target}
+                      plan={plan}
+                      onChange={setTarget}
+                      onCreateCluster={createTargetCluster}
+                    />
                     <div className="panel">
                       <div className="panel-heading">
                         <h2>Search appearance</h2>
@@ -904,6 +975,23 @@ export default function Admin() {
               </aside>
             </fieldset>
           </>
+        ) : section === "strategy" ? (
+          <SeoWorkspace
+            plan={plan}
+            documents={documents}
+            busy={busy}
+            onSave={savePlan}
+            onOpen={open}
+            onDirtyChange={setStrategyDirty}
+            onRefresh={async () => {
+              try {
+                await reload();
+                setError("");
+              } catch (cause) {
+                setError((cause as Error).message);
+              }
+            }}
+          />
         ) : (
           <>
             <header className="page-heading">

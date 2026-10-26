@@ -1,6 +1,13 @@
 import config from "@/cms.config.json";
 import { allRecords, recordFor, applyEdit, type Records } from "./records";
 import type { Content, ContentSummary, RecordEntry } from "./model";
+import {
+  emptySeoPlan,
+  validateSeoPlan,
+  updateTarget,
+  type SeoPlan,
+  type SeoTarget,
+} from "./seo-plan";
 const API = "https://api.github.com";
 const REPO = `/repos/${config.repository}`;
 const STORAGE_KEY = `vda-github:${config.repository}`;
@@ -64,11 +71,16 @@ async function snapshot() {
     `${REPO}/git/ref/heads/${encodeURIComponent(config.branch)}`,
   );
   const sha = ref.object.sha as string;
-  const [records, published] = await Promise.all([
+  const [records, published, planData] = await Promise.all([
     file<Records>("data/cms.json", sha, {}),
     file<Content[]>("data/published.json", sha),
+    file<SeoPlan>("data/seo-plan.json", sha, emptySeoPlan()),
   ]);
-  return { sha, records, published };
+  const plan = validateSeoPlan(
+    planData,
+    allRecords(records, published).map((record) => record.draft.path),
+  );
+  return { sha, records, published, plan };
 }
 async function identity() {
   const [user, repository] = await Promise.all([github("/user"), github(REPO)]);
@@ -154,15 +166,16 @@ export async function getSession(): Promise<{
 export function signOutGitHub() {
   sessionStorage.removeItem(STORAGE_KEY);
 }
-export async function getContent(path: string): Promise<RecordEntry> {
+export async function getEditor(path: string) {
   const current = await snapshot();
   const record = recordFor(path, current.records, current.published);
   if (!record) throw new Error("Content not found.");
-  return record;
+  return { record, plan: current.plan };
 }
-export async function listContent(): Promise<ContentSummary[]> {
+export async function loadWorkspace() {
   const current = await snapshot();
-  return allRecords(current.records, current.published).map((record) => ({
+  const records = allRecords(current.records, current.published);
+  const pages: ContentSummary[] = records.map((record) => ({
     path: record.draft.path,
     title: record.draft.title,
     type: record.draft.type,
@@ -178,17 +191,46 @@ export async function listContent(): Promise<ContentSummary[]> {
       record.draft.seo.title && record.draft.seo.description,
     ),
   }));
+  return {
+    pages,
+    documents: records.map((record) => record.draft),
+    plan: current.plan,
+  };
+}
+type TreeEntry = { path: string; mode: string; type: string; content: string };
+async function commitFiles(sha: string, entries: TreeEntry[], message: string) {
+  const commit = await github(`${REPO}/git/commits/${sha}`);
+  const tree = await github(`${REPO}/git/trees`, {
+    method: "POST",
+    body: JSON.stringify({ base_tree: commit.tree.sha, tree: entries }),
+  });
+  const saved = await github(`${REPO}/git/commits`, {
+    method: "POST",
+    body: JSON.stringify({ message, tree: tree.sha, parents: [sha] }),
+  });
+  await github(`${REPO}/git/refs/heads/${encodeURIComponent(config.branch)}`, {
+    method: "PATCH",
+    body: JSON.stringify({ sha: saved.sha, force: false }),
+  });
 }
 export async function commitContent(data: {
   content: Content;
   action: "draft" | "publish" | "unpublish";
   revision: number;
   create: boolean;
-}): Promise<RecordEntry> {
+  target: SeoTarget;
+  planRevision: number;
+}) {
   const current = await snapshot();
   const next = applyEdit(current.records, current.published, data);
-  const commit = await github(`${REPO}/git/commits/${current.sha}`);
-  const treeEntries = [
+  const plan = updateTarget(
+    current.plan,
+    data.content.path,
+    data.target,
+    data.planRevision,
+    allRecords(next.records, next.published).map((record) => record.draft.path),
+  );
+  const entries: TreeEntry[] = [
     {
       path: "data/cms.json",
       mode: "100644",
@@ -197,27 +239,52 @@ export async function commitContent(data: {
     },
   ];
   if (data.action !== "draft")
-    treeEntries.push({
+    entries.push({
       path: "data/published.json",
       mode: "100644",
       type: "blob",
       content: JSON.stringify(next.published),
     });
-  const tree = await github(`${REPO}/git/trees`, {
-    method: "POST",
-    body: JSON.stringify({ base_tree: commit.tree.sha, tree: treeEntries }),
-  });
-  const saved = await github(`${REPO}/git/commits`, {
-    method: "POST",
-    body: JSON.stringify({
-      message: `${data.action === "draft" ? "Save draft" : data.action === "publish" ? "Publish" : "Unpublish"}: ${next.record.draft.title}`,
-      tree: tree.sha,
-      parents: [current.sha],
-    }),
-  });
-  await github(`${REPO}/git/refs/heads/${encodeURIComponent(config.branch)}`, {
-    method: "PATCH",
-    body: JSON.stringify({ sha: saved.sha, force: false }),
-  });
-  return next.record;
+  if (plan !== current.plan)
+    entries.push({
+      path: "data/seo-plan.json",
+      mode: "100644",
+      type: "blob",
+      content: JSON.stringify(plan),
+    });
+  await commitFiles(
+    current.sha,
+    entries,
+    `${data.action === "draft" ? "Save draft" : data.action === "publish" ? "Publish" : "Unpublish"}: ${next.record.draft.title}`,
+  );
+  return { record: next.record, plan };
+}
+export async function commitSeoPlan(
+  proposed: SeoPlan,
+  expectedRevision: number,
+): Promise<SeoPlan> {
+  const current = await snapshot();
+  if (current.plan.revision !== expectedRevision)
+    throw new Error(
+      "The SEO plan changed in another session. Refresh the workspace before saving.",
+    );
+  const plan = validateSeoPlan(
+    { ...proposed, revision: expectedRevision + 1 },
+    allRecords(current.records, current.published).map(
+      (record) => record.draft.path,
+    ),
+  );
+  await commitFiles(
+    current.sha,
+    [
+      {
+        path: "data/seo-plan.json",
+        mode: "100644",
+        type: "blob",
+        content: JSON.stringify(plan),
+      },
+    ],
+    "Update SEO keywords and clusters",
+  );
+  return plan;
 }

@@ -23,6 +23,8 @@ The GitHub login button reports a setup message until the OAuth service is confi
 - **SEO & pages:** SEO titles, meta descriptions, canonical URLs, Open Graph / Twitter sharing, social image alt text, noindex, nofollow and sitemap exclusions for all 51 existing pages.
 - **Blog posts:** create posts and edit all 27 imported articles, including title, introduction, visual/HTML body, category, publish date, image URL and alt text.
 - **Services:** create services and edit all five existing service pages with the same content and SEO controls.
+- **Keyword targeting:** primary, secondary and target phrases, search intent, cluster assignment and a primary/supporting page role, saved alongside the page’s draft or publish commit.
+- **Keywords & clusters:** create, edit, archive and restore topic clusters; define primary and supporting keywords, questions, included/excluded topics and notes; assign one primary page and supporting pages; review missing assignments, draft body links and explicitly shared primary phrases. No search-volume/rank provider or AI generation is connected.
 - **Publishing:** save drafts, preview unsaved changes, publish, unpublish, and load up to ten recent saved versions. Existing URLs stay fixed after creation. Publish dates are display dates; publishing is immediate in the repository and goes live after the Pages workflow finishes.
 - Posts update the Insights listing and homepage. Services update homepage cards and desktop, mobile and footer navigation. The sitemap includes only published, indexable pages with a self-referencing canonical URL.
 
@@ -44,6 +46,8 @@ GitHub Pages cannot hold an OAuth client secret. `oauth-worker/` contains a smal
 4. Set `oauthUrl` in `cms.config.json` to the Worker origin, without `/auth` or `/callback`. Keep the configured repository, branch and site URL correct. `CMS_ORIGIN` and `GITHUB_REPO` in `oauth-worker/wrangler.jsonc` must match. No secret goes in `cms.config.json`.
 5. Add Josh's GitHub account as a repository collaborator with write access, if needed. The callback service and admin both check write permission before allowing editing. The OAuth app requests `public_repo` scope for this public repository. GitHub organization authorization policies must also allow the app.
 
+The OAuth `public_repo` permission is broader than a single repository; the editor targets only VDA, but the granted token is not restricted to this repository. A repository-scoped GitHub App would provide tighter token permissions.
+
 The callback uses state, PKCE and a short-lived HttpOnly state cookie. It posts the token only to the configured CMS origin. The editor validates the popup origin and source, keeps the GitHub token in this tab's session storage, and clears it on sign-out. Token revocation is available in the user's GitHub authorized applications settings. Never commit a GitHub token or OAuth client secret.
 
 For local OAuth development, copy `oauth-worker/.dev.vars.example` to `oauth-worker/.dev.vars`, fill the two credentials, and run `npm run oauth:dev -- --var CMS_ORIGIN:http://localhost:3101`. Use a separate development OAuth app with its localhost callback. Do not change the production app's callback to test locally.
@@ -55,12 +59,13 @@ For local OAuth development, copy `oauth-worker/.dev.vars.example` to `oauth-wor
 3. Run **Publish GitHub Pages** in the Actions tab, or push a source/published-content change. `.github/workflows/pages.yml` installs dependencies, checks types, runs tests, builds `out/`, and deploys that artifact to Pages.
 4. Verify the public site and `/admin/`, then complete one GitHub sign-in and publishing cycle with the configured OAuth app.
 
-A draft commit changes only `data/cms.json`, so the Pages workflow ignores it. Publish and unpublish atomically commit both `data/cms.json` and `data/published.json`; this triggers a Pages build. Publication takes effect after that workflow succeeds. If it fails, the last successful deployment stays live; check the Actions tab and rerun it after fixing the cause. The account must be allowed to commit directly to `main`; branch protection can prevent publishing.
+A draft commit changes `data/cms.json` and, when targeting changes, `data/seo-plan.json`. The Pages workflow ignores commits containing only these files. Cluster-only planning changes also skip deployment. Publish and unpublish atomically commit both `data/cms.json` and `data/published.json`; this triggers a Pages build. Publication takes effect after that workflow succeeds. If it fails, the last successful deployment stays live; check the Actions tab and rerun it after fixing the cause. The account must be allowed to commit directly to `main`; branch protection can prevent publishing.
 
 ## Data and implementation
 
 - `data/seed.json`: original page templates and imported content, used to preserve the site design.
 - `data/published.json`: current public content; the static build reads **only this file** for publication.
+- `data/seo-plan.json`: revisioned keyword targets and cluster relationships. It is never copied to the generated website; it remains readable in this public repository. Keyword planning is independent of body/metadata publication, and its history is in Git commits. Restoring a page content version does not restore its keyword plan.
 - `data/cms.json`: draft records, latest published versions, revisions and saved history; loaded through the authenticated GitHub API by the editor, never copied to `out/`.
 - `cms.config.json`: public repository, branch, canonical origin and OAuth service URL.
 - `public/`: runtime CSS, JavaScript and images. Public preview templates are generated from the original HTML sources.
@@ -83,6 +88,8 @@ npm audit --omit=dev
 ```
 
 Browser QA uses a **mocked GitHub API**, never real repository writes or credentials. It checks the actual static admin and GitHub transport: draft-only commits, previews, publication commits, branch conflicts, posts/services, SEO edits, lists, sitemap, mobile layout, all 51 original URLs, both calculators and logout. It restores the local output afterward. The OAuth callback has separate tests for state/PKCE, code exchange and repository authorization. A real GitHub sign-in still requires the owner's OAuth app setup above. Screenshots are in ignored `test-results/`.
+
+Keyword fields support editorial planning and content coverage. They are not emitted as a `meta keywords` tag: [Google ignores that tag for indexing and ranking](https://developers.google.com/search/docs/crawling-indexing/special-tags). Planning checks are prompts based on saved drafts, not measured search performance.
 
 Blog images include AI-generated editorial illustrations, not documentary photographs of actual veterans, historical events or VA personnel.
 

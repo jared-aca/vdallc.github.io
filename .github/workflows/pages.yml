@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths-ignore:
       - data/cms.json
+      - data/seo-plan.json
       - README.md
       - "oauth-worker/**"
   workflow_dispatch:

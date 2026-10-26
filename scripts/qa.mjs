@@ -12,6 +12,11 @@ const baseline = JSON.parse(await readFile("data/published.json", "utf8"));
 const repo = `/repos/${config.repository}`;
 let files = {
   "data/cms.json": "{}",
+  "data/seo-plan.json": JSON.stringify({
+    revision: 0,
+    clusters: [],
+    targets: {},
+  }),
   "data/published.json": JSON.stringify(baseline),
 };
 let head = "commit-0";
@@ -263,6 +268,27 @@ try {
     .getByLabel("SEO title", { exact: true })
     .fill("QA About Search Title");
   await page
+    .getByLabel("Primary keyword", { exact: true })
+    .fill("veterans advocates");
+  await page
+    .getByLabel("Secondary keywords", { exact: true })
+    .fill("VA claims help\nVeterans benefits\nva claims help");
+  await page
+    .getByLabel("Target keywords", { exact: true })
+    .fill("find a VA advocate, accredited veterans advocate");
+  await page
+    .getByLabel("Search intent", { exact: true })
+    .selectOption("commercial");
+  await page
+    .getByRole("button", { name: "Create a cluster from this primary keyword" })
+    .click();
+  await page
+    .getByRole("status")
+    .filter({ hasText: "Cluster created" })
+    .waitFor();
+  assert.deepEqual(changes.at(-1), ["data/seo-plan.json"]);
+
+  await page
     .getByRole("button", { name: "Publish changes", exact: true })
     .click();
   await page
@@ -273,6 +299,129 @@ try {
     await (await request.get(base + "/about.html")).text(),
     /<title>QA About Search Title<\/title>/,
   );
+  let planning = JSON.parse(files["data/seo-plan.json"]);
+  assert.equal(
+    planning.targets["/about.html"].primaryKeyword,
+    "veterans advocates",
+  );
+  assert.equal(planning.targets["/about.html"].secondaryKeywords.length, 2);
+  assert.equal(planning.targets["/about.html"].clusterRole, "primary");
+  assert.ok(changes.at(-1).includes("data/seo-plan.json"));
+  assert.ok(
+    !JSON.parse(files["data/published.json"]).find(
+      (page) => page.path === "/about.html",
+    ).seo.primaryKeyword,
+  );
+  await page.getByRole("button", { name: "Back to content" }).click();
+  await page
+    .getByRole("navigation", { name: "Content sections" })
+    .getByRole("button", { name: "Keywords & clusters" })
+    .click();
+  await page
+    .getByRole("heading", { name: "Keywords & clusters", exact: true })
+    .waitFor();
+  await page.getByRole("button", { name: "New cluster", exact: false }).click();
+  await page.getByLabel("Cluster name", { exact: true }).fill("QA VA Appeals");
+  await page
+    .getByLabel("Cluster primary keyword", { exact: true })
+    .fill("VA appeal denied");
+  await page
+    .getByLabel("Cluster supporting keywords", { exact: true })
+    .fill("VA appeal process\nsupplemental VA claim");
+  await page
+    .getByLabel("Primary topic page", { exact: true })
+    .selectOption("/services/va-disability-claims.html");
+  await page
+    .getByLabel("Supporting pages", { exact: true })
+    .selectOption(["/blog/va-claim-denied.html"]);
+  await page
+    .getByLabel("Supporting questions", { exact: true })
+    .fill("What happens after a VA claim denial?");
+  await page
+    .getByLabel("Included topics", { exact: true })
+    .fill("appeal lanes\nevidence");
+  await page
+    .getByLabel("Excluded terms", { exact: true })
+    .fill("social security");
+  await page
+    .getByLabel("Cluster notes", { exact: true })
+    .fill("Review evidence and add links before publishing changes.");
+  await page.getByRole("button", { name: "Save cluster", exact: true }).click();
+  await page
+    .locator(".cluster-card")
+    .filter({ hasText: "QA VA Appeals" })
+    .waitFor();
+  assert.deepEqual(changes.at(-1), ["data/seo-plan.json"]);
+  planning = JSON.parse(files["data/seo-plan.json"]);
+  const appeals = planning.clusters.find(
+    (cluster) => cluster.name === "QA VA Appeals",
+  );
+  assert.equal(
+    planning.targets["/services/va-disability-claims.html"].clusterRole,
+    "primary",
+  );
+  assert.equal(
+    planning.targets["/blog/va-claim-denied.html"].clusterId,
+    appeals.id,
+  );
+  assert.equal(
+    planning.targets["/blog/va-claim-denied.html"].clusterRole,
+    "supporting",
+  );
+  await page.screenshot({
+    path: "test-results/seo-clusters-desktop.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.ok(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  );
+  await page.screenshot({
+    path: "test-results/seo-clusters-mobile.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page
+    .locator(".cluster-card")
+    .filter({ hasText: "QA VA Appeals" })
+    .getByRole("button", { name: "Archive", exact: true })
+    .click();
+  await page
+    .getByLabel("Cluster status", { exact: true })
+    .selectOption("archived");
+  await page
+    .locator(".cluster-card")
+    .filter({ hasText: "QA VA Appeals" })
+    .getByRole("button", { name: "Restore", exact: true })
+    .click();
+  await page
+    .getByLabel("Cluster status", { exact: true })
+    .selectOption("active");
+  await page.getByRole("button", { name: "Refresh plan", exact: true }).click();
+  await page
+    .locator(".cluster-card")
+    .filter({ hasText: "veterans advocates" })
+    .getByRole("button", { name: "About VDA LLC", exact: true })
+    .click();
+  assert.equal(
+    await page.getByLabel("Primary keyword", { exact: true }).inputValue(),
+    "veterans advocates",
+  );
+  assert.equal(
+    await page.getByLabel("Role in cluster", { exact: true }).inputValue(),
+    "primary",
+  );
+  assert.equal(
+    await page.getByLabel("Secondary keywords", { exact: true }).inputValue(),
+    "VA claims help\nVeterans benefits",
+  );
+  assert.ok(
+    !(await (await request.get(base + "/about.html")).text()).includes(
+      'name="keywords"',
+    ),
+  );
   for (const { content } of seedMap.values())
     assert.equal(
       (await request.get(base + content.path)).status(),
@@ -281,6 +430,7 @@ try {
     );
   for (const path of [
     "/data/cms.json",
+    "/data/seo-plan.json",
     "/data/published.json",
     "/oauth-worker/index.ts",
     "/.env.local",
@@ -322,7 +472,7 @@ try {
   );
   assert.deepEqual(errors, [], "No browser runtime errors");
   console.log(
-    "PASS: static-site browser QA using a mocked GitHub API: drafts, previews, atomic commits, branch conflicts, posts, services, SEO, listings, sitemap, mobile layout, all 51 routes, both calculators, and logout.",
+    "PASS: static-site browser QA using a mocked GitHub API: keyword targeting, cluster creation/assignment/archive/restore, planning-only commits, drafts, previews, atomic commits, branch conflicts, posts, services, SEO, listings, sitemap, mobile layout, all 51 routes, both calculators, and logout.",
   );
 } finally {
   await browser.close();
