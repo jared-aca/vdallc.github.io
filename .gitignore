@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.next-dev/
+.wrangler/
+.env*
+.dev.vars*
+*.tsbuildinfo
+.DS_Store
+data/*.local.json*
+test-results/
+
+out/
+!oauth-worker/.dev.vars.example
+public/cms/

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 96" fill="none">
+  <defs>
+    <!-- Shield body: lighter flag blue → deep navy -->
+    <linearGradient id="vda-body" x1="18" y1="4" x2="62" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2F52B0"/>
+      <stop offset="1" stop-color="#0D1A4A"/>
+    </linearGradient>
+    <!-- Left-to-right shine highlight -->
+    <linearGradient id="vda-shine" x1="4" y1="4" x2="46" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity=".2"/>
+      <stop offset=".7" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Drop shadow filter -->
+    <filter id="vda-shadow" x="-25%" y="-18%" width="150%" height="155%">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="3.5" flood-color="#000" flood-opacity=".32"/>
+    </filter>
+    <!-- Clip path: same shield outline -->
+    <clipPath id="vda-clip">
+      <path d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Shield body -->
+  <path
+    d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z"
+    fill="url(#vda-body)"
+    filter="url(#vda-shadow)"
+  />
+
+  <!-- Red chief (top quarter of shield — classic heraldic division) -->
+  <rect x="0" y="0" width="80" height="28" fill="#B22234" clip-path="url(#vda-clip)"/>
+
+  <!-- Thin separation rule between red and blue -->
+  <rect x="0" y="27" width="80" height="1.5" fill="#fff" fill-opacity=".4" clip-path="url(#vda-clip)"/>
+
+  <!-- Shine overlay for depth -->
+  <path
+    d="M40 4L4 18V46C4 72 20 88 40 92C60 88 76 72 76 46V18Z"
+    fill="url(#vda-shine)"
+  />
+
+  <!-- Shield border -->
+  <path
+    d="M40 5.5L5.5 18.8V46C5.5 71.2 21 87 40 91C59 87 74.5 71.2 74.5 46V18.8Z"
+    stroke="#fff"
+    stroke-opacity=".22"
+    stroke-width="1.5"
+  />
+
+  <!-- 5-pointed star (center 40,63; r_outer=20; r_inner=8.5) -->
+  <polygon
+    points="40,43 45,56.1 59,56.8 48.1,65.6 51.8,79.2 40,71.5 28.2,79.2 31.9,65.6 21,56.8 35,56.1"
+    fill="#fff"
+    opacity=".96"
+  />
+</svg>

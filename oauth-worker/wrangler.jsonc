@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "vda-cms-oauth",
+  "main": "index.ts",
+  "compatibility_date": "2026-10-01",
+  "vars": {
+    "CMS_ORIGIN": "https://vdallc.com",
+    "GITHUB_REPO": "jared-aca/vdallc.github.io",
+  },
+}

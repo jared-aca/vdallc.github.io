@@ -1,0 +1,41 @@
+{
+  "name": "vda-website",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx scripts/prepare-templates.ts && next dev",
+    "build": "tsx scripts/prepare-templates.ts && next build && tsx scripts/export-site.ts",
+    "start": "node scripts/serve.mjs",
+    "check": "next typegen && tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "content:import": "node scripts/import-content.mjs",
+    "qa": "node --import tsx scripts/qa.mjs",
+    "oauth:dev": "wrangler dev --config oauth-worker/wrangler.jsonc",
+    "oauth:deploy": "wrangler deploy --config oauth-worker/wrangler.jsonc",
+    "export": "tsx scripts/export-site.ts"
+  },
+  "dependencies": {
+    "cheerio": "1.2.0",
+    "next": "15.5.28",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "sanitize-html": "2.18.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2",
+    "playwright": "^1.63.0",
+    "tsx": "^4",
+    "typescript": "^5.9",
+    "wrangler": "^4.152.0"
+  },
+  "overrides": {
+    "postcss": "^8.5.31",
+    "undici": "^7.30.1"
+  }
+}
