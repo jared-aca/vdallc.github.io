@@ -442,8 +442,8 @@
       <button class="btn btn-primary" onclick="showEditor()">+ Create New Post</button>
 
       <div class="pass-helper">
-        <h3>Change Admin Password</h3>
-        <p>Enter your new password below to generate its SHA-256 hash. Open <code>admin/index.html</code>, find the <code>PASS_HASH</code> constant near the top of the &lt;script&gt; tag, and replace it with the value shown.</p>
+        <h3>Manage Admin Passwords</h3>
+        <p>Enter a password below to generate its SHA-256 hash. Open <code>admin/index.html</code>, find the <code>PASS_HASHES</code> array near the top of the &lt;script&gt; tag, and add the generated hash to allow another password, or replace an existing hash to change that password.</p>
         <div class="pass-row">
           <input type="password" id="new-pw" placeholder="New password">
           <button onclick="genHash()">Generate Hash</button>
@@ -574,10 +574,12 @@
 
   <script>
     // ── CONFIG ──────────────────────────────────────────────────────────────
-    // Default password: VDAadmin2025
-    // To change: use the "Change Admin Password" tool on the dashboard,
-    // then replace the hash string below with the generated value.
-    const PASS_HASH = 'bfcca36bbf3c582484b86fcee3ae92d9e2c953adc1063dcae17cf2b0f000253c';
+    // To add or change a password, use "Manage Admin Passwords" on the
+    // dashboard, then add or replace its SHA-256 hash in this array.
+    const PASS_HASHES = [
+      'bfcca36bbf3c582484b86fcee3ae92d9e2c953adc1063dcae17cf2b0f000253c',
+      'caa622298c795a15973e5fb37e4d460f242c26cee4d36369e7419960a061d40a',
+    ];
 
     const BASE_POSTS = [
       { title: 'How VA Combined Ratings Work , And Why the Math Usually Shortchanges Veterans', slug: 'va-disability-ratings',    tag: 'VA Claims',          date: '2025-06-01' },
@@ -602,7 +604,7 @@
     async function tryLogin() {
       const pw   = document.getElementById('login-pw').value;
       const hash = await sha256(pw);
-      if (hash === PASS_HASH) {
+      if (PASS_HASHES.includes(hash)) {
         sessionStorage.setItem('vda-auth', '1');
         bootPanel();
       } else {
