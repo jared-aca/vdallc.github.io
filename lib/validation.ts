@@ -1,5 +1,11 @@
 import sanitizeHtml from "sanitize-html";
 import { CmsError, type Content, type ContentType, type Seo } from "./model";
+import {
+  articlePath,
+  articleSlug,
+  canonicalUrl,
+  legacyArticleRoutes,
+} from "./content-urls";
 export function safeUrl(value: string, absoluteOnly = false) {
   if (!value) return true;
   if (value.trim() !== value || /[\x00-\x20\\]/.test(value)) return false;
@@ -91,6 +97,10 @@ export function validateContent(input: unknown): Content {
   const obj = input as Record<string, unknown>;
   const path = text(obj, "path", 200, true);
   const type = obj.type as ContentType;
+  if (legacyArticleRoutes[path])
+    throw new CmsError(
+      `This legacy article URL is reserved. Edit ${legacyArticleRoutes[path]} instead.`,
+    );
   if (!["page", "blog", "service"].includes(type))
     throw new CmsError("Invalid content type.");
   if (
@@ -139,6 +149,26 @@ export function validateContent(input: unknown): Content {
       new Date(date).toISOString().slice(0, 10) !== date)
   )
     throw new CmsError("Use a valid publish date.");
+  if (type === "blog") {
+    articlePath(articleSlug(path));
+    const self = canonicalUrl({ path, type } as Content);
+    if (seo.canonical && new URL(seo.canonical, self).href !== self)
+      throw new CmsError(
+        "Articles must use their self-referencing /blog/ canonical URL.",
+      );
+    seo.canonical = self;
+  }
+  const structuredData = obj.structuredData;
+  if (
+    structuredData !== undefined &&
+    (!Array.isArray(structuredData) ||
+      structuredData.length > 20 ||
+      structuredData.some(
+        (value) => !value || typeof value !== "object" || Array.isArray(value),
+      ) ||
+      JSON.stringify(structuredData).length > 64000)
+  )
+    throw new CmsError("Invalid article structured data.");
   return {
     path,
     type,
@@ -150,5 +180,8 @@ export function validateContent(input: unknown): Content {
     category: text(obj, "category", 150),
     date,
     seo,
+    ...(structuredData !== undefined
+      ? { structuredData: structuredData as Record<string, unknown>[] }
+      : {}),
   };
 }

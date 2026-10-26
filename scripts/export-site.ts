@@ -1,12 +1,29 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, rm } from "node:fs/promises";
 import { dirname } from "node:path";
 import config from "../cms.config.json";
+import cms from "../data/cms.json";
+import seoPlan from "../data/seo-plan.json";
+import { reconcileContentData } from "../lib/content-reconciliation";
+import { legacyArticleRoutes } from "../lib/content-urls";
+import type { Content } from "../lib/model";
+import type { Records } from "../lib/records";
+import type { SeoPlan } from "../lib/seo-plan";
 import published from "../data/published.json";
 import { seedMap, seedPages } from "../lib/seed";
 import { renderPage, renderSitemap } from "../lib/render";
 import { validateContent } from "../lib/validation";
 async function main() {
-  const pages = published.map((content) => validateContent(content));
+  const reconciled = reconcileContentData(
+    seedPages,
+    published as Content[],
+    cms as Records,
+    seoPlan as SeoPlan,
+  );
+  const pages = reconciled.published.map((content) => validateContent(content));
+  for (const path of Object.keys(legacyArticleRoutes)) {
+    await rm(`out${path}`, { force: true });
+    await rm(`out/cms/templates/pages${path}`, { force: true });
+  }
   if (new Set(pages.map((page) => page.path)).size !== pages.length)
     throw new Error("Published content contains duplicate URLs.");
   for (const content of pages) {

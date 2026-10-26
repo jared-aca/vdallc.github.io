@@ -1,6 +1,14 @@
 import { load } from "cheerio";
 import type { Content } from "./model";
 import { seedMap } from "./seed";
+import {
+  canonicalUrl,
+  contentIdentity,
+  legacyArticleRoutes,
+  rewriteLegacyLink,
+} from "./content-urls";
+import { articleSchemas } from "./structured-data";
+export { canonicalUrl } from "./content-urls";
 import { cleanBody } from "./validation";
 export function escapeHtml(value: string) {
   return value.replace(
@@ -10,9 +18,6 @@ export function escapeHtml(value: string) {
         char
       ]!,
   );
-}
-export function canonicalUrl(content: Content, origin: string) {
-  return new URL(content.seo.canonical || content.path, origin).href;
 }
 function imageUrl(value: string, origin: string) {
   return value ? new URL(value, origin).href : "";
@@ -29,13 +34,17 @@ function postCard(post: Content) {
         timeZone: "UTC",
       })
     : "";
-  return `<a class="insight-card" href="${escapeHtml(post.path)}">${post.image ? `<div class="insight-card-img"><img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.imageAlt)}" loading="lazy" decoding="async"></div>` : ""}<div class="insight-card-body"><div class="insight-meta"><span class="insight-tag">${escapeHtml(post.category)}</span><span class="insight-date">${escapeHtml(date)}${date ? " · " : ""}${readTime(post.body)} min read</span></div><h3>${escapeHtml(post.title)}</h3><p>${escapeHtml(post.excerpt)}</p><span class="insight-card-link">Read Article →</span></div></a>`;
+  return `<a class="insight-card" href="${escapeHtml(contentIdentity(post).path)}">${post.image ? `<div class="insight-card-img"><img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.imageAlt)}" loading="lazy" decoding="async"></div>` : ""}<div class="insight-card-body"><div class="insight-meta"><span class="insight-tag">${escapeHtml(post.category)}</span><span class="insight-date">${escapeHtml(date)}${date ? " · " : ""}${readTime(post.body)} min read</span></div><h3>${escapeHtml(post.title)}</h3><p>${escapeHtml(post.excerpt)}</p><span class="insight-card-link">Read Article →</span></div></a>`;
 }
 export function renderPage(
   content: Content,
   publicPages: Content[],
   origin: string,
 ) {
+  if (legacyArticleRoutes[content.path])
+    throw new Error(
+      `Legacy article routes are redirects, not renderable pages: ${content.path}`,
+    );
   const source =
     seedMap.get(content.path) ??
     seedMap.get(
@@ -44,6 +53,13 @@ export function renderPage(
         : "/services/va-disability-claims.html",
     )!;
   const $ = load(source.html);
+  const originalSchemas: Record<string, unknown>[] = [];
+  if (seedMap.has(content.path))
+    $('script[type="application/ld+json"]').each((_, node) => {
+      try {
+        originalSchemas.push(JSON.parse($(node).text()));
+      } catch {}
+    });
   const canonical = canonicalUrl(content, origin);
   const title = content.seo.title || `${content.title} | VDA LLC`;
   const description = content.seo.description || content.excerpt;
@@ -117,7 +133,7 @@ export function renderPage(
         related
           .map(
             (page) =>
-              `<a class="sidebar-related-item" href="${escapeHtml(page.path)}">${escapeHtml(page.title)} →</a>`,
+              `<a class="sidebar-related-item" href="${escapeHtml(contentIdentity(page).path)}">${escapeHtml(page.title)} →</a>`,
           )
           .join(""),
       );
@@ -202,15 +218,31 @@ export function renderPage(
       ? { provider: { "@type": "Organization", name: "VDA LLC", url: origin } }
       : {}),
   };
-  const json = JSON.stringify(schema)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e")
-    .replace(/&/g, "\\u0026");
-  $("head").append(`<script type="application/ld+json">${json}</script>`);
+  const schemas =
+    content.type === "blog"
+      ? articleSchemas(content, originalSchemas, schema, origin)
+      : [schema];
+  for (const value of schemas) {
+    const json = JSON.stringify(value)
+      .replace(/</g, "\\u003c")
+      .replace(/>/g, "\\u003e")
+      .replace(/&/g, "\\u0026");
+    $("head").append(`<script type="application/ld+json">${json}</script>`);
+  }
+  $("a[href]").each((_, node) => {
+    const value = $(node).attr("href")!;
+    $(node).attr("href", rewriteLegacyLink(value, content.path, origin));
+  });
   return $.html();
 }
 export function renderSitemap(pages: Content[], origin: string) {
-  const entries = pages.filter(
+  const entries = [
+    ...new Map(
+      pages
+        .filter((page) => !legacyArticleRoutes[page.path])
+        .map((page) => [contentIdentity(page).path, page]),
+    ).values(),
+  ].filter(
     (content) =>
       !content.seo.noindex &&
       !content.seo.excludeFromSitemap &&

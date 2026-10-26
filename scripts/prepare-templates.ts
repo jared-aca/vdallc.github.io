@@ -1,6 +1,7 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, rm } from "node:fs/promises";
 import { seedMap, seedPages } from "../lib/seed";
 async function main() {
+  await rm("public/cms/templates/pages", { recursive: true, force: true });
   await mkdir("public/cms/templates/pages", { recursive: true });
   await writeFile(
     "public/cms/templates/blog.html",

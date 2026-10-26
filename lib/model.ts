@@ -22,6 +22,7 @@ export type Content = {
   category: string;
   date: string;
   seo: Seo;
+  structuredData?: Record<string, unknown>[];
 };
 export type SeedPage = { content: Content; html: string };
 export type Revision = {

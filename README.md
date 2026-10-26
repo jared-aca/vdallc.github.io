@@ -4,6 +4,8 @@ The public website and `/admin/` stay on **GitHub Pages**. Next.js and React bui
 
 Content is stored in the GitHub repository. Editors sign in with GitHub and need write access to `jared-aca/vdallc.github.io`. There is no shared admin password or content database.
 
+For the audited article URL cleanup and the required 301 hosting rollout, see [Article URL migration](docs/article-url-migration.md). The migration is local only; production deployment is explicitly gated on active server-side redirects.
+
 ## Run locally
 
 Requires Node.js 22 or newer.
@@ -20,7 +22,7 @@ The GitHub login button reports a setup message until the OAuth service is confi
 
 ## What the admin manages
 
-- **SEO & pages:** SEO titles, meta descriptions, canonical URLs, Open Graph / Twitter sharing, social image alt text, noindex, nofollow and sitemap exclusions for all 51 existing pages.
+- **SEO & pages:** SEO titles, meta descriptions, canonical URLs, Open Graph / Twitter sharing, social image alt text, noindex, nofollow and sitemap exclusions for all 41 canonical pages.
 - **Blog posts:** create posts and edit all 27 imported articles, including title, introduction, visual/HTML body, category, publish date, image URL and alt text.
 - **Services:** create services and edit all five existing service pages with the same content and SEO controls.
 - **Keyword targeting:** primary, secondary and target phrases, search intent, cluster assignment and a primary/supporting page role, saved alongside the page’s draft or publish commit.
@@ -87,7 +89,7 @@ npm run qa
 npm audit --omit=dev
 ```
 
-Browser QA uses a **mocked GitHub API**, never real repository writes or credentials. It checks the actual static admin and GitHub transport: draft-only commits, previews, publication commits, branch conflicts, posts/services, SEO edits, lists, sitemap, mobile layout, all 51 original URLs, both calculators and logout. It restores the local output afterward. The OAuth callback has separate tests for state/PKCE, code exchange and repository authorization. A real GitHub sign-in still requires the owner's OAuth app setup above. Screenshots are in ignored `test-results/`.
+Browser QA uses a **mocked GitHub API**, never real repository writes or credentials. It checks the actual static admin and GitHub transport: draft-only commits, previews, publication commits, branch conflicts, posts/services, SEO edits, lists, sitemap, mobile layout, all 41 canonical URLs and ten legacy redirects, both calculators and logout. It restores the local output afterward. The OAuth callback has separate tests for state/PKCE, code exchange and repository authorization. A real GitHub sign-in still requires the owner's OAuth app setup above. Screenshots are in ignored `test-results/`.
 
 Keyword fields support editorial planning and content coverage. They are not emitted as a `meta keywords` tag: [Google ignores that tag for indexing and ranking](https://developers.google.com/search/docs/crawling-indexing/special-tags). Planning checks are prompts based on saved drafts, not measured search performance.
 

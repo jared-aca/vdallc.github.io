@@ -1,3 +1,4 @@
+import { articleRedirect } from "../lib/content-urls.ts";
 import http from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname } from "node:path";
@@ -19,6 +20,17 @@ const types = {
 http
   .createServer(async (req, res) => {
     try {
+      const redirect = articleRedirect(
+        new URL(req.url, `http://${req.headers.host || "localhost"}`).href,
+      );
+      if (redirect && ["GET", "HEAD"].includes(req.method)) {
+        res.writeHead(301, {
+          Location: redirect,
+          "Cache-Control": "public, max-age=3600",
+        });
+        res.end();
+        return;
+      }
       const path = decodeURIComponent(
         new URL(req.url, "http://localhost").pathname,
       );

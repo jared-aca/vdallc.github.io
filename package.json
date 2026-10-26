@@ -8,14 +8,19 @@
   "scripts": {
     "dev": "tsx scripts/prepare-templates.ts && next dev",
     "build": "tsx scripts/prepare-templates.ts && next build && tsx scripts/export-site.ts",
-    "start": "node scripts/serve.mjs",
+    "start": "node --import tsx scripts/serve.mjs",
     "check": "next typegen && tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts",
-    "content:import": "node scripts/import-content.mjs",
+    "content:import": "node --import tsx scripts/import-content.mjs",
     "qa": "node --import tsx scripts/qa.mjs",
     "oauth:dev": "wrangler dev --config oauth-worker/wrangler.jsonc",
     "oauth:deploy": "wrangler deploy --config oauth-worker/wrangler.jsonc",
-    "export": "tsx scripts/export-site.ts"
+    "export": "tsx scripts/export-site.ts",
+    "audit:articles": "tsx scripts/migrate-article-urls.ts",
+    "migrate:articles": "tsx scripts/migrate-article-urls.ts --write",
+    "check:redirects": "node scripts/check-article-redirects.mjs",
+    "redirects:check": "wrangler deploy --config redirect-worker/wrangler.jsonc --dry-run --outdir .wrangler/redirect-build",
+    "check:links": "tsx scripts/check-export-links.ts"
   },
   "dependencies": {
     "cheerio": "1.2.0",

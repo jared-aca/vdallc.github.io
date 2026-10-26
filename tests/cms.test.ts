@@ -10,7 +10,7 @@ const example = () =>
   structuredClone(seedMap.get("/blog/va-ptsd-rating-criteria.html")!.content);
 
 test("imports all existing routes with editable post/service bodies", () => {
-  assert.equal(seedPages.length, 51);
+  assert.equal(seedPages.length, 41);
   assert.equal(seedPages.filter((p) => p.content.type === "blog").length, 27);
   assert.equal(seedPages.filter((p) => p.content.type === "service").length, 5);
   for (const page of seedPages)
@@ -175,7 +175,9 @@ test("server-generated SEO, social sharing, schema and canonical exclusions rema
   );
   assert.match(html, /"@type":"BlogPosting"/);
   content.seo.canonical = "https://vdallc.com/another-page.html";
-  assert.ok(!renderSitemap([content], "https://vdallc.com").includes("<url>"));
+  assert.ok(
+    renderSitemap([content], "https://vdallc.com").includes(content.path),
+  );
 });
 const env: OAuthEnv = {
   GITHUB_CLIENT_ID: "test-client",

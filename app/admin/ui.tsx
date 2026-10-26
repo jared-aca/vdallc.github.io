@@ -7,6 +7,7 @@ import type {
   RecordEntry,
   Seo,
 } from "@/lib/model";
+import { articlePath, canonicalUrl } from "@/lib/content-urls";
 import Field from "./field";
 import { cleanBody } from "@/lib/validation";
 import {
@@ -77,6 +78,14 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 120);
+function displayedCanonical(content: Content) {
+  if (content.type !== "blog") return content.seo.canonical;
+  try {
+    return canonicalUrl(content);
+  } catch {
+    return "";
+  }
+}
 function RichText({
   value,
   onChange,
@@ -288,7 +297,7 @@ export default function Admin() {
       const editor = await getEditor(path);
       const next = editor.record;
       setPlan(editor.plan);
-      const targeting = targetFor(editor.plan, path);
+      const targeting = targetFor(editor.plan, next.draft.path);
       setTarget(targeting);
       setSavedTarget(JSON.stringify(targeting));
       setStrategyDirty(false);
@@ -662,9 +671,18 @@ export default function Admin() {
                               ...(creating &&
                               (!content.path ||
                                 content.path ===
-                                  `/${content.type === "blog" ? "blog" : "services"}/${slugify(content.title)}.html`)
+                                  (content.type === "blog"
+                                    ? articlePath(
+                                        slugify(content.title) || "new-article",
+                                      )
+                                    : `/services/${slugify(content.title)}.html`))
                                 ? {
-                                    path: `/${content.type === "blog" ? "blog" : "services"}/${slugify(title)}.html`,
+                                    path:
+                                      content.type === "blog"
+                                        ? slugify(title)
+                                          ? articlePath(slugify(title))
+                                          : ""
+                                        : `/services/${slugify(title)}.html`,
                                   }
                                 : {}),
                               seo: {
@@ -790,10 +808,15 @@ export default function Admin() {
                       </Field>
                       <Field
                         label="Canonical URL"
-                        hint="Leave blank to use this page’s address. Use another URL only for duplicate content."
+                        hint={
+                          content.type === "blog"
+                            ? "Articles use one fixed, self-referencing /blog/ URL."
+                            : "Leave blank to use this page’s address. Use another URL only for duplicate content."
+                        }
                       >
                         <input
-                          value={content.seo.canonical}
+                          value={displayedCanonical(content)}
+                          readOnly={content.type === "blog"}
                           onChange={(e) =>
                             seoChange("canonical", e.target.value)
                           }

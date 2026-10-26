@@ -1,4 +1,5 @@
 import { CmsError, type Content, type RecordEntry } from "./model";
+import { contentIdentity, legacyArticleRoutes } from "./content-urls";
 import { validateContent } from "./validation";
 export type Records = Record<string, RecordEntry>;
 export function recordFor(
@@ -6,6 +7,7 @@ export function recordFor(
   records: Records,
   published: Content[],
 ): RecordEntry | null {
+  path = legacyArticleRoutes[path] || path;
   if (records[path]) return records[path];
   const content = published.find((page) => page.path === path);
   return content
@@ -20,13 +22,12 @@ export function recordFor(
 }
 export function allRecords(records: Records, published: Content[]) {
   const merged = new Map(
-    published.map((page) => [
-      page.path,
-      recordFor(page.path, records, published)!,
-    ]),
+    published
+      .filter((page) => !legacyArticleRoutes[page.path])
+      .map((page) => [page.path, recordFor(page.path, records, published)!]),
   );
   for (const [path, record] of Object.entries(records))
-    merged.set(path, record);
+    if (!legacyArticleRoutes[path]) merged.set(path, record);
   return [...merged.values()];
 }
 export function applyEdit(

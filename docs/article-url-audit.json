@@ -1,0 +1,118 @@
+{
+  "migration": "article-urls-v1",
+  "mode": "applied locally; not deployed",
+  "source": {
+    "seed": 51,
+    "published": 51,
+    "cmsRecords": 4,
+    "draftArticles": 0
+  },
+  "result": {
+    "seed": 41,
+    "published": 41,
+    "articles": 27,
+    "pages": 9,
+    "cmsRecords": 4
+  },
+  "affectedCount": 10,
+  "affected": [
+    {
+      "from": "/hlr-vs-supplemental-claim.html",
+      "to": "/blog/hlr-vs-supplemental-claim.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "1220e22b4b87654fc7c9b6c1e590c3415a0e0673b42b838b4a51b6faee0a3457"
+    },
+    {
+      "from": "/va-back-pain-rating-radiculopathy.html",
+      "to": "/blog/va-back-pain-rating-radiculopathy.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "911437757d3e2dc77cc0046664dee8a7ee35c84affc65f862c05bc35f526e74d"
+    },
+    {
+      "from": "/va-clear-and-unmistakable-error-cue.html",
+      "to": "/blog/va-clear-and-unmistakable-error-cue.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "00169005b7513f24fe85b489bda86d3e07080ffcfc889783dce63db1b19ec8ec"
+    },
+    {
+      "from": "/va-denied-no-medical-nexus.html",
+      "to": "/blog/va-denied-no-medical-nexus.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "f97d0ee02dc3dce95762c2882e7970ec7465507a496640d1d6f0a080f10b56cd"
+    },
+    {
+      "from": "/va-duty-to-assist-errors.html",
+      "to": "/blog/va-duty-to-assist-errors.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "ed5651e33045267f8cdc83a840b8a0effa372bd358d66bdfa906c82c49326466"
+    },
+    {
+      "from": "/va-gerd-rating-criteria.html",
+      "to": "/blog/va-gerd-rating-criteria.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "e80d1a0ccf7ea893e1e3ad6e241d7bfbe6347a52ad38255b27bf845aed1138b3"
+    },
+    {
+      "from": "/va-hearing-loss-rating.html",
+      "to": "/blog/va-hearing-loss-rating.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "15e7e4160bdb7d37fd7d5292e58d8dec0f82aef69176f0a735e5829d0f600326"
+    },
+    {
+      "from": "/va-migraine-rating-50-percent.html",
+      "to": "/blog/va-migraine-rating-50-percent.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "82a096b2f08ba3b41411d34ceb1b56dba453dbe4f252496bf5b8a2a6abbedc26"
+    },
+    {
+      "from": "/va-ptsd-rating-criteria.html",
+      "to": "/blog/va-ptsd-rating-criteria.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "3590fe0c7f064e2b43860e6ebcc809105479da7c6af3a6cbea2bb18b91ca0292"
+    },
+    {
+      "from": "/va-secondary-service-connection.html",
+      "to": "/blog/va-secondary-service-connection.html",
+      "evidence": "Explicit BlogPosting schema, canonical /blog/ link, matching article text",
+      "rootEdited": false,
+      "canonicalEdited": false,
+      "bodyTextMatches": true,
+      "rootTemplateSha256": "2eaff40275c530a7e028c9b46665836fcd5726b5de08cf2a8b4b8fffdd1fb395"
+    }
+  ],
+  "inputHashes": {
+    "seed": "7c93c68b7053d3561d8b1981254485443292748d585d64e978c70672eb4be0ee",
+    "published": "369bf8cc9b7cdee8983ba914a2eb92f056e4944006b04a1c1318bfce288250f4",
+    "cms": "7c03f7667b79899aab5a1473152dd17979ff3dc1b700225c5a0633be4ed86060",
+    "seo-plan": "ec84bd9dfc35de58370e022b837a56df1ae83422b1d36fa7f7a90b46f020d750"
+  },
+  "conflicts": [],
+  "productionChanges": false
+}

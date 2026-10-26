@@ -1,3 +1,4 @@
+import { rewriteLegacyLink } from "./content-urls";
 import { CmsError, type Content } from "./model";
 export const searchIntents = [
   "informational",
@@ -253,7 +254,11 @@ export function internalLinks(content: Content, origin: string): string[] {
   )) {
     try {
       const url = new URL(
-        match[1].replace(/&amp;/g, "&"),
+        rewriteLegacyLink(
+          match[1].replace(/&amp;/g, "&"),
+          content.path,
+          origin,
+        ),
         new URL(content.path, origin),
       );
       if (url.origin === new URL(origin).origin && !match[1].startsWith("#"))

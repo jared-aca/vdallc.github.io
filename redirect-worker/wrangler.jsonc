@@ -1,0 +1,89 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "vda-article-redirects",
+  "main": "index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "vdallc.com/hlr-vs-supplemental-claim.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/hlr-vs-supplemental-claim.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-back-pain-rating-radiculopathy.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-back-pain-rating-radiculopathy.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-clear-and-unmistakable-error-cue.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-clear-and-unmistakable-error-cue.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-denied-no-medical-nexus.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-denied-no-medical-nexus.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-duty-to-assist-errors.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-duty-to-assist-errors.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-gerd-rating-criteria.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-gerd-rating-criteria.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-hearing-loss-rating.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-hearing-loss-rating.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-migraine-rating-50-percent.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-migraine-rating-50-percent.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-ptsd-rating-criteria.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-ptsd-rating-criteria.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "vdallc.com/va-secondary-service-connection.html*",
+      "zone_name": "vdallc.com"
+    },
+    {
+      "pattern": "www.vdallc.com/va-secondary-service-connection.html*",
+      "zone_name": "vdallc.com"
+    }
+  ]
+}

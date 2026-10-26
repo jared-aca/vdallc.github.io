@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile, writeFile, rm, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { renderPage, renderSitemap } from "../lib/render.ts";
+import { legacyArticleRoutes } from "../lib/content-urls.ts";
 import { seedMap } from "../lib/seed.ts";
 const base = process.env.QA_BASE_URL || "http://localhost:3101";
 if (!["localhost", "127.0.0.1", "[::1]"].includes(new URL(base).hostname))
@@ -135,10 +136,49 @@ try {
   );
   await page.screenshot({ path: "test-results/admin-mobile.png" });
   await page.setViewportSize({ width: 1440, height: 1000 });
+  // Imported articles belong only to Blog, while genuine Pages remain separate.
+  await page
+    .getByRole("navigation", { name: "Content sections" })
+    .getByRole("button", { name: "SEO & pages" })
+    .click();
+  assert.equal(
+    await page
+      .getByRole("button", {
+        name: "VA Hearing Loss Ratings: Why a Severe Problem Can Still Be 0%",
+        exact: true,
+      })
+      .count(),
+    0,
+  );
+  assert.equal(await page.locator("tbody tr").count(), 9);
+  await page
+    .getByRole("navigation", { name: "Content sections" })
+    .getByRole("button", { name: "Blog posts" })
+    .click();
+  assert.equal(
+    await page
+      .getByRole("button", {
+        name: "VA Hearing Loss Ratings: Why a Severe Problem Can Still Be 0%",
+        exact: true,
+      })
+      .count(),
+    1,
+  );
   await page.getByRole("button", { name: "New blog post" }).click();
   await page
     .getByLabel("Page title", { exact: true })
     .fill("QA Veterans Guide");
+  await page.getByLabel("URL path", { exact: true }).fill("/blog/invalid");
+  await page.getByRole("tab", { name: "SEO & sharing", exact: true }).click();
+  await page.getByRole("button", { name: "Save draft", exact: true }).click();
+  await page
+    .getByRole("alert")
+    .filter({ hasText: "lowercase URL slug" })
+    .waitFor();
+  await page.getByRole("tab", { name: "Content", exact: true }).click();
+  await page
+    .getByLabel("URL path", { exact: true })
+    .fill("/blog/qa-veterans-guide.html");
   await page
     .getByLabel("Introduction / excerpt", { exact: true })
     .fill("A useful introduction for the publishing check.");
@@ -165,6 +205,13 @@ try {
     .frameLocator("iframe")
     .getByRole("heading", { name: "QA Veterans Guide", exact: true })
     .waitFor();
+  const previewDocument = await page
+    .frameLocator("iframe")
+    .locator("head")
+    .innerHTML();
+  assert.ok(
+    previewDocument.includes("https://vdallc.com/blog/qa-veterans-guide.html"),
+  );
   await page.getByRole("button", { name: "Close preview" }).click();
   await page
     .getByRole("button", { name: "Publish changes", exact: true })
@@ -428,6 +475,14 @@ try {
       200,
       content.path,
     );
+  for (const [from, to] of Object.entries(legacyArticleRoutes)) {
+    const response = await request.get(base + from + "?source=regression", {
+      maxRedirects: 0,
+    });
+    assert.equal(response.status(), 301);
+    assert.equal(response.headers().location, base + to + "?source=regression");
+    assert.equal((await request.get(base + to)).status(), 200);
+  }
   for (const path of [
     "/data/cms.json",
     "/data/seo-plan.json",
@@ -472,7 +527,7 @@ try {
   );
   assert.deepEqual(errors, [], "No browser runtime errors");
   console.log(
-    "PASS: static-site browser QA using a mocked GitHub API: keyword targeting, cluster creation/assignment/archive/restore, planning-only commits, drafts, previews, atomic commits, branch conflicts, posts, services, SEO, listings, sitemap, mobile layout, all 51 routes, both calculators, and logout.",
+    "PASS: static-site browser QA using a mocked GitHub API: keyword targeting, cluster creation/assignment/archive/restore, planning-only commits, drafts, previews, atomic commits, branch conflicts, posts, services, SEO, listings, sitemap, mobile layout, 41 canonical routes and 10 legacy HTTP 301 redirects, both calculators, and logout.",
   );
 } finally {
   await browser.close();

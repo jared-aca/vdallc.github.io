@@ -8,6 +8,7 @@ import {
   type SeoPlan,
   type SeoTarget,
 } from "./seo-plan";
+import { reconcileContentData } from "./content-reconciliation";
 const API = "https://api.github.com";
 const REPO = `/repos/${config.repository}`;
 const STORAGE_KEY = `vda-github:${config.repository}`;
@@ -71,16 +72,31 @@ async function snapshot() {
     `${REPO}/git/ref/heads/${encodeURIComponent(config.branch)}`,
   );
   const sha = ref.object.sha as string;
-  const [records, published, planData] = await Promise.all([
+  const [rawRecords, rawPublished, planData] = await Promise.all([
     file<Records>("data/cms.json", sha, {}),
     file<Content[]>("data/published.json", sha),
     file<SeoPlan>("data/seo-plan.json", sha, emptySeoPlan()),
   ]);
-  const plan = validateSeoPlan(
+  const reconciled = reconcileContentData(
+    [],
+    rawPublished,
+    rawRecords,
     planData,
+  );
+  const { records, published } = reconciled;
+  const plan = validateSeoPlan(
+    reconciled.plan,
     allRecords(records, published).map((record) => record.draft.path),
   );
-  return { sha, records, published, plan };
+  return {
+    sha,
+    records,
+    published,
+    plan,
+    planNeedsMigration: JSON.stringify(plan) !== JSON.stringify(planData),
+    publishedNeedsMigration:
+      JSON.stringify(published) !== JSON.stringify(rawPublished),
+  };
 }
 async function identity() {
   const [user, repository] = await Promise.all([github("/user"), github(REPO)]);
@@ -238,14 +254,14 @@ export async function commitContent(data: {
       content: JSON.stringify(next.records),
     },
   ];
-  if (data.action !== "draft")
+  if (data.action !== "draft" || current.publishedNeedsMigration)
     entries.push({
       path: "data/published.json",
       mode: "100644",
       type: "blob",
       content: JSON.stringify(next.published),
     });
-  if (plan !== current.plan)
+  if (plan !== current.plan || current.planNeedsMigration)
     entries.push({
       path: "data/seo-plan.json",
       mode: "100644",
