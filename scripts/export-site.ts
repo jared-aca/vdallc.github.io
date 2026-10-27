@@ -1,4 +1,4 @@
-import { mkdir, writeFile, rm } from "node:fs/promises";
+import { mkdir, writeFile, rm, readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import config from "../cms.config.json";
 import cms from "../data/cms.json";
@@ -31,6 +31,16 @@ async function main() {
     await mkdir(dirname(file), { recursive: true });
     await writeFile(file, renderPage(content, pages, config.siteUrl));
   }
+  if (process.env.VDA_ARTICLE_REDIRECT_STAGE !== "final") {
+    for (const [alias, canonical] of Object.entries(legacyArticleRoutes)) {
+      const canonicalFile = `out${canonical}`;
+      const aliasFile = `out${alias}`;
+      await mkdir(dirname(aliasFile), { recursive: true });
+      // Until the edge 301 routes are active, preserve each audited legacy URL
+      // as the same article HTML with its existing /blog/ canonical metadata.
+      await writeFile(aliasFile, await readFile(canonicalFile, "utf8"));
+    }
+  }
   await writeFile("out/sitemap.xml", renderSitemap(pages, config.siteUrl));
   await writeFile(
     "out/robots.txt",
@@ -38,6 +48,21 @@ async function main() {
   );
   await writeFile("out/.nojekyll", "");
   await writeFile("out/CNAME", new URL(config.siteUrl).hostname + "\n");
+  await writeFile(
+    "out/vda-build.json",
+    JSON.stringify(
+      {
+        generator: "vda-next-static-export",
+        revision: process.env.GITHUB_SHA || "local",
+        articleRedirectStage:
+          process.env.VDA_ARTICLE_REDIRECT_STAGE === "final"
+            ? "final"
+            : "staged",
+      },
+      null,
+      2,
+    ) + "\n",
+  );
   await mkdir("out/cms/templates/pages", { recursive: true });
   await writeFile(
     "out/cms/templates/blog.html",
@@ -56,7 +81,7 @@ async function main() {
   // The admin is exported by Next.js; only published pages and public templates
   // enter this artifact. Draft records and OAuth secrets are never copied to it.
   console.log(
-    `Exported ${pages.length} public pages and the GitHub-backed /admin to out/.`,
+    `Exported ${pages.length} canonical pages, ${process.env.VDA_ARTICLE_REDIRECT_STAGE === "final" ? "no legacy aliases" : `${Object.keys(legacyArticleRoutes).length} canonical-tagged legacy aliases`}, and the GitHub-backed /admin to out/.`,
   );
 }
 main().catch((error) => {

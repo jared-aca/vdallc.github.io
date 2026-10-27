@@ -13,6 +13,8 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "content:import": "node --import tsx scripts/import-content.mjs",
     "qa": "node --import tsx scripts/qa.mjs",
+    "check:export": "tsx scripts/check-export-metadata.ts",
+    "check:staged-redirects": "node --import tsx scripts/check-staged-article-aliases.mjs",
     "oauth:dev": "wrangler dev --config oauth-worker/wrangler.jsonc",
     "oauth:deploy": "wrangler deploy --config oauth-worker/wrangler.jsonc",
     "export": "tsx scripts/export-site.ts",

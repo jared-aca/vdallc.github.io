@@ -29,6 +29,7 @@ The GitHub login button reports a setup message until the OAuth service is confi
 - **Keywords & clusters:** create, edit, archive and restore topic clusters; define primary and supporting keywords, questions, included/excluded topics and notes; assign one primary page and supporting pages; review missing assignments, draft body links and explicitly shared primary phrases. No search-volume/rank provider or AI generation is connected.
 - **Publishing:** save drafts, preview unsaved changes, publish, unpublish, and load up to ten recent saved versions. Existing URLs stay fixed after creation. Publish dates are display dates; publishing is immediate in the repository and goes live after the Pages workflow finishes.
 - Posts update the Insights listing and homepage. Services update homepage cards and desktop, mobile and footer navigation. The sitemap includes only published, indexable pages with a self-referencing canonical URL.
+- Every production build checks the exported HTML against published CMS titles, descriptions, canonicals, robots directives and sitemap eligibility. These values are read from the current `data/published.json`; SEO keyword clusters remain separate planning data.
 
 Standard pages and calculators expose metadata controls; the original layouts and calculator logic are retained. Images use `/img/` files or external HTTPS URLs; image uploads and a visual page-layout builder are outside this implementation.
 
@@ -56,10 +57,10 @@ For local OAuth development, copy `oauth-worker/.dev.vars.example` to `oauth-wor
 
 ## Publish through GitHub Pages
 
-1. Push this implementation to the repository's `main` branch.
-2. In **Repository Settings → Pages → Build and deployment**, select **GitHub Actions** as the source. Keep the existing custom domain `vdallc.com` and its DNS pointed at GitHub Pages.
-3. Run **Publish GitHub Pages** in the Actions tab, or push a source/published-content change. `.github/workflows/pages.yml` installs dependencies, checks types, runs tests, builds `out/`, and deploys that artifact to Pages.
-4. Verify the public site and `/admin/`, then complete one GitHub sign-in and publishing cycle with the configured OAuth app.
+1. In **Repository Settings → Pages → Build and deployment**, select **GitHub Actions** as the source. The branch source runs Jekyll over repository-root files and does not build the CMS export in `out/`.
+2. Normal content releases use the staged article mode: all ten audited root aliases are included as copies of their canonical `/blog/` pages with canonical metadata, and remain out of the sitemap. The preflight allows already-404 aliases with a clear report, preserves equivalent live 200 pages, and fails on unexpected statuses or content conflicts.
+3. Run **Publish GitHub Pages** in the Actions tab, or publish content through `/admin/`. The workflow builds and uploads only `out/`, then checks that the live Pages URL serves a build marker for the same commit. This catches a branch-source deployment replacing the Next.js artifact.
+4. After the approved edge 301 routes are active, manually run **Publish GitHub Pages** with `final_redirect_migration`. That mode keeps the strict all-ten-301 check and omits the temporary aliases. The standalone `npm run check:redirects` remains the strict production check.
 
 A draft commit changes `data/cms.json` and, when targeting changes, `data/seo-plan.json`. The Pages workflow ignores commits containing only these files. Cluster-only planning changes also skip deployment. Publish and unpublish atomically commit both `data/cms.json` and `data/published.json`; this triggers a Pages build. Publication takes effect after that workflow succeeds. If it fails, the last successful deployment stays live; check the Actions tab and rerun it after fixing the cause. The account must be allowed to commit directly to `main`; branch protection can prevent publishing.
 
@@ -83,13 +84,16 @@ Content saves use a consistent Git commit snapshot, validate revisions, create a
 npm run check
 npm test
 npm run build
+npm run check:export
+npm run check:links
+npm run check:staged-redirects
 npm start
 # In another terminal:
 npm run qa
 npm audit --omit=dev
 ```
 
-Browser QA uses a **mocked GitHub API**, never real repository writes or credentials. It checks the actual static admin and GitHub transport: draft-only commits, previews, publication commits, branch conflicts, posts/services, SEO edits, lists, sitemap, mobile layout, all 41 canonical URLs and ten legacy redirects, both calculators and logout. It restores the local output afterward. The OAuth callback has separate tests for state/PKCE, code exchange and repository authorization. A real GitHub sign-in still requires the owner's OAuth app setup above. Screenshots are in ignored `test-results/`.
+Browser QA uses a **mocked GitHub API**, never real repository writes or credentials. It checks the actual static admin and GitHub transport: draft-only commits, previews, publication commits, branch conflicts, posts/services, SEO edits, lists, sitemap, mobile layout, all 41 canonical URLs and ten local preview redirects, both calculators and logout. It restores the local output afterward. The OAuth callback has separate tests for state/PKCE, code exchange and repository authorization. A real GitHub sign-in still requires the owner's OAuth app setup above. Screenshots are in ignored `test-results/`.
 
 Keyword fields support editorial planning and content coverage. They are not emitted as a `meta keywords` tag: [Google ignores that tag for indexing and ranking](https://developers.google.com/search/docs/crawling-indexing/special-tags). Planning checks are prompts based on saved drafts, not measured search performance.
 

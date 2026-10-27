@@ -8,6 +8,15 @@ on:
       - README.md
       - "oauth-worker/**"
   workflow_dispatch:
+    inputs:
+      release_mode:
+        description: Use content mode for normal publishing; choose final only after all legacy 301s are active.
+        type: choice
+        options:
+          - content
+          - final_redirect_migration
+        default: content
+        required: true
 permissions:
   contents: read
   pages: write
@@ -27,7 +36,20 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
-      - run: npm run build
+      - name: Build the Next.js static export
+        run: npm run build
+        env:
+          VDA_ARTICLE_REDIRECT_STAGE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.release_mode == 'final_redirect_migration' && 'final' || 'staged' }}
+      - name: Verify generated CMS metadata and canonical compatibility pages
+        run: npm run check:export
+        env:
+          VDA_ARTICLE_REDIRECT_STAGE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.release_mode == 'final_redirect_migration' && 'final' || 'staged' }}
+      - name: Confirm the staged release preserves legacy article URLs
+        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.release_mode != 'final_redirect_migration' }}
+        run: npm run check:staged-redirects
+      - name: Require all direct HTTP 301s for the final article migration
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.release_mode == 'final_redirect_migration' }}
+        run: npm run check:redirects
       - run: npm run check:links
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
@@ -44,8 +66,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Verify permanent article redirects before publishing
-        run: node scripts/check-article-redirects.mjs
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify Pages is serving this Next.js export artifact
+        env:
+          PAGES_URL: ${{ steps.deployment.outputs.page_url }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: node scripts/check-deployed-pages-artifact.mjs
