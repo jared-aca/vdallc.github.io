@@ -741,9 +741,35 @@ tbody tr:hover {
 .visual-editor p {
   margin-bottom: 15px;
 }
+.visual-editor ul,
+.visual-editor ol {
+  margin: 0 0 18px;
+  padding-left: 1.6em;
+  line-height: 1.75;
+}
+.visual-editor ul { list-style: disc; }
+.visual-editor ol { list-style: decimal; }
+.visual-editor li {
+  display: list-item;
+  margin-bottom: 6px;
+}
+.visual-editor li > strong,
+.visual-editor li > b {
+  display: inline;
+}
 .visual-editor a {
-  color: #8a702f;
+  color: #1b4f91;
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.visual-editor a:hover,
+.visual-editor a:focus-visible {
+  color: #8e1926;
+}
+.visual-editor a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 .visual-editor img {
   max-width: 100%;
@@ -802,10 +828,14 @@ tbody tr:hover {
   line-height: 1.7;
 }
 .publishing-panel a {
+  color: #1b4f91;
   font-size: 11px;
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
   font-weight: 600;
 }
+.publishing-panel a:hover,
+.publishing-panel a:focus-visible { color: #8e1926; }
 .publishing-panel > small {
   display: block;
   border-top: 1px solid var(--line);
