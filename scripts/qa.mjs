@@ -182,6 +182,54 @@ try {
   await page
     .getByLabel("Introduction / excerpt", { exact: true })
     .fill("A useful introduction for the publishing check.");
+  await page.getByRole("tab", { name: "Content", exact: true }).click();
+  const markdownArticle = `## Markdown paste verification
+
+### Formatting and nesting
+This paragraph has **bold text**, *italic text*, ~~struck text~~, and a [safe link](https://example.com).
+
+- Parent item
+  - Nested item
+1. Numbered item
+
+| Condition | Evidence |
+| --- | --- |
+| PTSD | Medical opinion |
+
+> This blockquote should remain a blockquote.`;
+  const articleEditor = page.getByRole("textbox", { name: "Article content" });
+  await articleEditor.evaluate((editor, text) => {
+    editor.focus();
+    const range = document.createRange();
+    range.selectNodeContents(editor);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    const transfer = new DataTransfer();
+    transfer.setData("text/plain", text);
+    editor.dispatchEvent(
+      new ClipboardEvent("paste", {
+        bubbles: true,
+        cancelable: true,
+        clipboardData: transfer,
+      }),
+    );
+  }, markdownArticle);
+  for (const tag of [
+    "h2",
+    "h3",
+    "strong",
+    "em",
+    "s",
+    "a",
+    "ul",
+    "ol",
+    "table",
+    "thead",
+    "blockquote",
+  ])
+    assert.ok(await articleEditor.locator(tag).count(), `Missing pasted <${tag}>`);
+  assert.ok(await articleEditor.locator("ul ul li").count(), "Nested list was lost");
   await page.getByRole("tab", { name: "SEO & sharing" }).click();
   await page
     .getByLabel("SEO title", { exact: true })
@@ -195,6 +243,13 @@ try {
     .filter({ hasText: "Draft committed" })
     .waitFor();
   assert.deepEqual(changes.at(-1), ["data/cms.json"]);
+  await page.getByRole("button", { name: "Back to content" }).click();
+  await page.getByRole("button", { name: "QA Veterans Guide", exact: true }).click();
+  const reopenedEditor = page.getByRole("textbox", { name: "Article content" });
+  await reopenedEditor.locator("table thead th").first().waitFor();
+  assert.ok(await reopenedEditor.locator("table thead th").count());
+  assert.ok(await reopenedEditor.locator("blockquote").count());
+  assert.ok(await reopenedEditor.locator("ul ul li").count());
   assert.equal(
     (await context.request.get(`${base}/blog/qa-veterans-guide.html`)).status(),
     404,
@@ -226,6 +281,21 @@ try {
     await request.get(`${base}/blog/qa-veterans-guide.html`)
   ).text();
   assert.match(html, /<title>QA Search Title \| VDA LLC<\/title>/);
+  assert.match(html, /<table>[\s\S]*<thead>[\s\S]*Condition[\s\S]*<\/table>/);
+  assert.match(html, /<blockquote>/);
+  const articlePage = await context.newPage();
+  await articlePage.goto(`${base}/blog/qa-veterans-guide.html`);
+  assert.ok(await articlePage.locator(".service-content table thead th").count());
+  for (const width of [1440, 768, 390]) {
+    await articlePage.setViewportSize({ width, height: 900 });
+    assert.ok(
+      await articlePage.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+      `Public article overflows at ${width}px`,
+    );
+  }
+  await articlePage.close();
   assert.match(
     await (await request.get(base + "/blog.html")).text(),
     /\/blog\/qa-veterans-guide.html/,
@@ -527,7 +597,7 @@ try {
   );
   assert.deepEqual(errors, [], "No browser runtime errors");
   console.log(
-    "PASS: static-site browser QA using a mocked GitHub API: keyword targeting, cluster creation/assignment/archive/restore, planning-only commits, drafts, previews, atomic commits, branch conflicts, posts, services, SEO, listings, sitemap, mobile layout, 41 canonical routes and 10 legacy HTTP 301 redirects, both calculators, and logout.",
+    "PASS: static-site browser QA using a mocked GitHub API: keyword targeting, cluster creation/assignment/archive/restore, planning-only commits, drafts, previews, atomic commits, branch conflicts, posts, services, SEO, listings, sitemap, mobile layout, 42 canonical routes and 10 legacy HTTP 301 redirects, both calculators, and logout.",
   );
 } finally {
   await browser.close();

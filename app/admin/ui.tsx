@@ -10,6 +10,7 @@ import type {
 import { articlePath, canonicalUrl } from "@/lib/content-urls";
 import Field from "./field";
 import { cleanBody } from "@/lib/validation";
+import { preparePastedContent } from "@/lib/paste-content";
 import {
   getSession,
   signInWithGitHub,
@@ -183,11 +184,20 @@ function RichText({
             onInput={(e) => onChange(e.currentTarget.innerHTML)}
             onPaste={(e) => {
               e.preventDefault();
-              document.execCommand(
-                "insertText",
-                false,
+              const pasted = preparePastedContent(
                 e.clipboardData.getData("text/plain"),
+                e.clipboardData.getData("text/html"),
               );
+              if (pasted.kind !== "text") {
+                document.execCommand("delete", false);
+                document.execCommand("formatBlock", false, "p");
+              }
+              document.execCommand(
+                pasted.kind === "text" ? "insertText" : "insertHTML",
+                false,
+                pasted.kind === "text" ? pasted.text : pasted.html,
+              );
+              if (ref.current) onChange(ref.current.innerHTML);
             }}
           />
         </>

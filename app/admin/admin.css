@@ -776,7 +776,40 @@ tbody tr:hover {
   height: auto;
 }
 .visual-editor table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
   font-size: 12px;
+}
+.visual-editor th,
+.visual-editor td {
+  min-width: 110px;
+  border: 1px solid #d9dfe7;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.visual-editor th {
+  background: #f2f5f9;
+  font-weight: 700;
+}
+.visual-editor blockquote {
+  margin: 16px 0;
+  border-left: 3px solid #b22234;
+  padding: 10px 16px;
+  color: #526072;
+  background: #f8f7f4;
+}
+.visual-editor pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 12px;
+  background: #f2f5f9;
+}
+.visual-editor code {
+  overflow-wrap: anywhere;
 }
 .code-editor {
   width: 100%;
