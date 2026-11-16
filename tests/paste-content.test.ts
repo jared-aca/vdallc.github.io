@@ -63,6 +63,46 @@ test("prefers sanitized semantic HTML from the clipboard", () => {
   assert.doesNotMatch(result.html, /javascript:|<script/i);
 });
 
+test("converts Markdown carried inside wrapper-only clipboard HTML", () => {
+  const sample = `## Example Heading
+
+This paragraph contains **bold text**, *italic text* and a [hyperlink](https://www.va.gov/).
+
+### Example Subheading
+
+- First item
+- Second item
+
+| Condition | Evidence |
+|---|---|
+| Migraines | Medical records |
+| Sleep apnea | Sleep study |
+
+> Example blockquote.`;
+  const wrappedHtml = sample
+    .split("\n\n")
+    .map((paragraph) => `<p>${paragraph.replaceAll("\n", "<br>")}</p>`)
+    .join("");
+  const result = preparePastedContent(sample, wrappedHtml);
+
+  assert.equal(result.kind, "markdown");
+  assert.match(result.html, /<h2>Example Heading<\/h2>/);
+  assert.match(result.html, /<strong>bold text<\/strong>/);
+  assert.match(result.html, /<a href="https:\/\/www\.va\.gov\/">hyperlink<\/a>/);
+  assert.match(result.html, /<table>[\s\S]*Migraines[\s\S]*Sleep apnea/);
+  assert.match(result.html, /<blockquote>/);
+});
+
+test("does not convert already formatted HTML merely because plain text has Markdown", () => {
+  const result = preparePastedContent(
+    "## Example Heading\n\n**Bold**",
+    "<h2>Example Heading</h2><p><strong>Bold</strong></p>",
+  );
+
+  assert.equal(result.kind, "html");
+  assert.equal(result.html, "<h2>Example Heading</h2><p><strong>Bold</strong></p>");
+});
+
 test("leaves ordinary plain text alone", () => {
   const plain = "A simple sentence.\nAnother sentence.";
   assert.deepEqual(preparePastedContent(plain, ""), { kind: "text", text: plain });

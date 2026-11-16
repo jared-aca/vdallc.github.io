@@ -10,7 +10,10 @@ import type {
 import { articlePath, canonicalUrl } from "@/lib/content-urls";
 import Field from "./field";
 import { cleanBody } from "@/lib/validation";
-import { preparePastedContent } from "@/lib/paste-content";
+import {
+  markdownToSafeHtml,
+  preparePastedContent,
+} from "@/lib/paste-content";
 import {
   getSession,
   signInWithGitHub,
@@ -97,7 +100,10 @@ function RichText({
   disabled: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const selectionRef = useRef<Range | null>(null);
   const [htmlMode, setHtmlMode] = useState(false);
+  const [markdownDialog, setMarkdownDialog] = useState(false);
+  const [markdownInput, setMarkdownInput] = useState("");
   useEffect(() => {
     if (
       ref.current &&
@@ -111,6 +117,47 @@ function RichText({
     document.execCommand(name, false, argument);
     if (ref.current) onChange(ref.current.innerHTML);
   }
+  function rememberSelection() {
+    const editor = ref.current;
+    const selection = window.getSelection();
+    if (
+      editor &&
+      selection?.rangeCount &&
+      editor.contains(selection.anchorNode)
+    )
+      selectionRef.current = selection.getRangeAt(0).cloneRange();
+  }
+  function insertHtmlAtCursor(html: string, restoreSavedSelection = false) {
+    const editor = ref.current;
+    if (!editor) return;
+    editor.focus();
+    const selection = window.getSelection();
+    if (restoreSavedSelection && selection && selectionRef.current) {
+      const range = selectionRef.current;
+      if (editor.contains(range.commonAncestorContainer)) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+    if (!selection?.rangeCount || !editor.contains(selection.anchorNode)) {
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+    // insertHTML is supported by the browser's editing history, so paste can
+    // still be undone and redone with the normal keyboard shortcuts.
+    document.execCommand("insertHTML", false, html);
+    onChange(editor.innerHTML);
+    rememberSelection();
+  }
+  function insertMarkdown() {
+    if (!markdownInput.trim()) return;
+    insertHtmlAtCursor(markdownToSafeHtml(markdownInput), true);
+    setMarkdownInput("");
+    setMarkdownDialog(false);
+  }
   return (
     <div className="rich-editor">
       <div className="rich-toolbar">
@@ -122,6 +169,19 @@ function RichText({
         >
           {htmlMode ? "Visual editor" : "Edit HTML"}
         </button>
+        {!htmlMode && (
+          <button
+            type="button"
+            className="text-button"
+            onMouseDown={(event) => {
+              rememberSelection();
+              event.preventDefault();
+            }}
+            onClick={() => setMarkdownDialog(true)}
+          >
+            Paste Markdown
+          </button>
+        )}
       </div>
       {htmlMode ? (
         <textarea
@@ -182,25 +242,63 @@ function RichText({
             suppressContentEditableWarning
             className="visual-editor"
             onInput={(e) => onChange(e.currentTarget.innerHTML)}
+            onMouseUp={rememberSelection}
+            onKeyUp={rememberSelection}
             onPaste={(e) => {
               e.preventDefault();
               const pasted = preparePastedContent(
                 e.clipboardData.getData("text/plain"),
                 e.clipboardData.getData("text/html"),
               );
-              if (pasted.kind !== "text") {
-                document.execCommand("delete", false);
-                document.execCommand("formatBlock", false, "p");
-              }
-              document.execCommand(
-                pasted.kind === "text" ? "insertText" : "insertHTML",
-                false,
-                pasted.kind === "text" ? pasted.text : pasted.html,
-              );
-              if (ref.current) onChange(ref.current.innerHTML);
+              if (pasted.kind === "text") {
+                document.execCommand("insertText", false, pasted.text);
+                if (ref.current) onChange(ref.current.innerHTML);
+              } else insertHtmlAtCursor(pasted.html);
             }}
           />
         </>
+      )}
+      {markdownDialog && (
+        <div className="preview-backdrop" role="presentation">
+          <section
+            className="preview-dialog markdown-paste-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="markdown-paste-title"
+          >
+            <header>
+              <h2 id="markdown-paste-title">Paste Markdown</h2>
+            </header>
+            <label htmlFor="markdown-paste-input">
+              Paste your article below. It will be inserted at the editor cursor.
+            </label>
+            <textarea
+              id="markdown-paste-input"
+              aria-label="Markdown to paste"
+              autoFocus
+              value={markdownInput}
+              onChange={(event) => setMarkdownInput(event.target.value)}
+              spellCheck={false}
+            />
+            <footer>
+              <button
+                type="button"
+                className="secondary"
+                onClick={() => setMarkdownDialog(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="primary"
+                disabled={!markdownInput.trim()}
+                onClick={insertMarkdown}
+              >
+                Insert content
+              </button>
+            </footer>
+          </section>
+        </div>
       )}
     </div>
   );

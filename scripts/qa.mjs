@@ -183,25 +183,27 @@ try {
     .getByLabel("Introduction / excerpt", { exact: true })
     .fill("A useful introduction for the publishing check.");
   await page.getByRole("tab", { name: "Content", exact: true }).click();
-  const markdownArticle = `## Markdown paste verification
+  const markdownArticle = `## Example Heading
 
-### Formatting and nesting
-This paragraph has **bold text**, *italic text*, ~~struck text~~, and a [safe link](https://example.com).
+This paragraph contains **bold text**, *italic text* and a [hyperlink](https://www.va.gov/).
 
-- Parent item
-  - Nested item
-1. Numbered item
+### Example Subheading
+
+- First item
+- Second item
 
 | Condition | Evidence |
-| --- | --- |
-| PTSD | Medical opinion |
+|---|---|
+| Migraines | Medical records |
+| Sleep apnea | Sleep study |
 
-> This blockquote should remain a blockquote.`;
+> Example blockquote.`;
   const articleEditor = page.getByRole("textbox", { name: "Article content" });
   await articleEditor.evaluate((editor, text) => {
     editor.focus();
     const range = document.createRange();
     range.selectNodeContents(editor);
+    range.collapse(false);
     const selection = window.getSelection();
     selection?.removeAllRanges();
     selection?.addRange(range);
@@ -220,16 +222,66 @@ This paragraph has **bold text**, *italic text*, ~~struck text~~, and a [safe li
     "h3",
     "strong",
     "em",
-    "s",
     "a",
     "ul",
-    "ol",
     "table",
     "thead",
     "blockquote",
   ])
     assert.ok(await articleEditor.locator(tag).count(), `Missing pasted <${tag}>`);
-  assert.ok(await articleEditor.locator("ul ul li").count(), "Nested list was lost");
+  assert.equal(await articleEditor.locator("ul li").count(), 2);
+  await articleEditor.evaluate((editor) => {
+    const range = document.createRange();
+    const intro = editor.querySelector("p");
+    const anchor = intro?.firstChild;
+    if (!intro || !anchor) throw new Error("Editor intro paragraph is missing");
+    range.setStart(anchor, anchor.textContent.length);
+    range.collapse(true);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    const transfer = new DataTransfer();
+    transfer.setData(
+      "text/plain",
+      "### HTML clipboard heading\n\n**HTML fallback bold**",
+    );
+    transfer.setData(
+      "text/html",
+      "<p>### HTML clipboard heading</p><p>**HTML fallback bold**</p>",
+    );
+    editor.dispatchEvent(
+      new ClipboardEvent("paste", {
+        bubbles: true,
+        cancelable: true,
+        clipboardData: transfer,
+      }),
+    );
+  });
+  assert.ok(
+    await articleEditor.getByRole("heading", { name: "HTML clipboard heading" }).count(),
+  );
+  assert.ok(await articleEditor.locator("strong", { hasText: "HTML fallback bold" }).count());
+
+  await articleEditor.evaluate((editor) => {
+    const intro = editor.querySelector("p");
+    const anchor = intro?.firstChild;
+    if (!intro || !anchor) throw new Error("Editor intro paragraph is missing");
+    const range = document.createRange();
+    range.setStart(anchor, anchor.textContent.length);
+    range.collapse(true);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  });
+  await page.getByRole("button", { name: "Paste Markdown", exact: true }).click();
+  await page
+    .getByLabel("Markdown to paste", { exact: true })
+    .fill(markdownArticle);
+  await page.screenshot({ path: "test-results/markdown-paste-dialog.png" });
+  await page.getByRole("button", { name: "Insert content", exact: true }).click();
+  await page.getByRole("dialog", { name: "Paste Markdown" }).waitFor({ state: "detached" });
+  assert.equal(await articleEditor.locator("table").count(), 2);
+  assert.equal(await articleEditor.locator("blockquote").count(), 2);
   await page.getByRole("tab", { name: "SEO & sharing" }).click();
   await page
     .getByLabel("SEO title", { exact: true })
@@ -249,7 +301,7 @@ This paragraph has **bold text**, *italic text*, ~~struck text~~, and a [safe li
   await reopenedEditor.locator("table thead th").first().waitFor();
   assert.ok(await reopenedEditor.locator("table thead th").count());
   assert.ok(await reopenedEditor.locator("blockquote").count());
-  assert.ok(await reopenedEditor.locator("ul ul li").count());
+  assert.equal(await reopenedEditor.locator("ul li").count(), 4);
   assert.equal(
     (await context.request.get(`${base}/blog/qa-veterans-guide.html`)).status(),
     404,

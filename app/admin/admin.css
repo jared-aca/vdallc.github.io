@@ -958,6 +958,34 @@ tbody tr:hover {
   border: 0;
   background: white;
 }
+.markdown-paste-dialog {
+  width: min(100%, 760px);
+  height: auto;
+  max-height: calc(100vh - 32px);
+  padding-bottom: 18px;
+}
+.markdown-paste-dialog > label {
+  padding: 18px 24px 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.markdown-paste-dialog textarea {
+  display: block;
+  width: calc(100% - 48px);
+  min-height: min(52vh, 430px);
+  margin: 0 24px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 12px;
+  font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  resize: vertical;
+}
+.markdown-paste-dialog footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 14px 24px 0;
+}
 .sr-only {
   position: absolute;
   width: 1px;
